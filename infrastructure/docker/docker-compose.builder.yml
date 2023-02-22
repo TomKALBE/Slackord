@@ -20,6 +20,6 @@ services:
             - BUILD_NUMBER # Jenkins, TeamCity
             - RUN_ID # TaskCluster, dsari
         volumes:
-            - "../../${PROJECT_DIRECTORY}:/home/app/application:cached"
+            - "../../:/home/app/application:cached"
             - "${COMPOSER_CACHE_DIR}:/home/app/.composer/cache"
             - "builder-data:/home/app"

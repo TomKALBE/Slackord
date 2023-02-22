@@ -13,7 +13,7 @@ pypiwin32 = {version = "*", sys_platform = "== 'win32'"}
 pywin32 = {version = "*", sys_platform = "== 'win32'"}
 
 [requires]
-python_version = "3"
+python_version = "*"
 
 [scripts]
 # Alias fab to invoke to avoid BC break
