@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="h-screen w-screen overflow-hidden">
+  <div class="h-screen w-screen flex flex-col">
     <!-- SECTION Server Part -->
     <div class="flex w-100 h-16 bg-slate-300">
       <div class="flex w-3/4 bg-slate-800 items-center">
@@ -55,11 +55,11 @@
         <!-- SECTION SearchBar -->
         <div class="flex w-4/12 items-center justify-center relative">
           <font-awesome-icon
-            class="h-4 w-4 text-slate-300 absolute lg:left-32 md:left-6 left-4"
+            class="h-4 w-4 text-slate-300 absolute xl:left-24 lg:left-16 md:left-6 left-4"
             icon="magnifying-glass"
           />
           <input
-            class="w-10/12 text-center text-white bg-slate-700 border border-slate-400 placeholder:text-slate-300 rounded-md"
+            class="w-10/12 text-center text-white bg-slate-700 border focus:outline-none border-slate-400 placeholder:text-slate-300 rounded-md"
             placeholder="Find someone"
           />
         </div>
@@ -92,7 +92,7 @@
     </div>
     <!-- !SECTION -->
     <!-- SECTION Channel Part -->
-    <div class="flex h-full">
+    <div class="flex-1 flex">
       <div
         class="lg:w-3/12 sm:w-4/12 bg-slate-700 border-r-2 border-t-2 border-slate-800"
       >
@@ -120,13 +120,14 @@
         </div>
         <!-- !SECTION -->
         <!-- SECTION Channel list -->
-        <div class="flex h-full justify-center">
+        <div class="flex justify-center">
           <div class="flex-col w-11/12 mt-4 space-y-3">
-            <div class="flex w-full bg-slate-550 rounded-md h-10 items-center justify-between">
+            <div
+              class="flex w-full bg-slate-550 rounded-md h-10 items-center justify-between"
+            >
               <p class="text-slate-150 ml-8"># Channel 1</p>
               <font-awesome-icon
-                class="w-4 text-gray-300 hover:text-gray-100 cursor-pointer
-                 mr-2"
+                class="w-4 text-gray-300 hover:text-gray-100 cursor-pointer mr-2"
                 icon="fa-gear"
               />
             </div>
@@ -144,7 +145,9 @@
         <!-- !SECTION -->
       </div>
       <!-- SECTION Chat Part -->
-      <div class="lg:w-9/12 sm:w-8/12 bg-slate-650 border-t-2 border-slate-800">
+      <div
+        class="flex flex-col lg:w-9/12 sm:w-8/12 bg-slate-650 border-t-2 border-slate-800"
+      >
         <!-- SECTION Channel info -->
         <div
           class="flex w-full h-14 border-b-2 border-slate-800 bg-slate-650 items-center justify-between"
@@ -152,16 +155,62 @@
           <p class="ml-6 text-xl text-white"># Channel 1</p>
           <div class="mr-6">
             <font-awesome-icon
-                class="w-5 h-5 text-slate-150 mr-4"
-                :icon="['fa', 'bell']"
-              />
+              class="w-5 h-5 text-slate-150 mr-4"
+              :icon="['fa', 'bell']"
+            />
             <font-awesome-icon
-                class="w-5 h-5 text-slate-150"
-                :icon="['fa', 'user-group']"
-              />
+              class="w-5 h-5 text-slate-150"
+              :icon="['fa', 'user-group']"
+            />
           </div>
         </div>
+        <!-- !SECTION -->
+        <!-- SECTION Chat -->
+        <div class="flex-1 flex">
+          <div class="flex flex-col w-full mx-10 justify-end">
+            <!-- SECTION Messages -->
+            <div class="flex flex-1 flex-col-reverse overflow-y-scroll">
+              <!-- Todo Gérer l'overflow -->
+              <div v-for="i in 15" :key="i" class="flex h-14">
+                <div class="flex w-14 justify-center items-center">
+                  <div
+                    class="flex w-8 h-8 rounded-full bg-slate-500 justify-center items-center"
+                  >
+                    <font-awesome-icon
+                      class="h-4 w-4 text-white"
+                      :icon="['far', 'user']"
+                    />
+                  </div>
+                </div>
+                <div class="flex-1 flex items-center text-slate-200">
+                  Bonjour je suis très heureux d'être ici
+                </div>
+              </div>
+            </div>
+            <!-- !SECTION -->
+            <!-- SECTION Input -->
+            <div
+              class="flex w-10/12 my-8 h-10 border-2 border-slate-500 rounded-md self-center justify-end items-center"
+            >
+              <div class="flex justify-center w-1/12">
+                <div
+                  class="w-6 h-6 flex items-center justify-center rounded-full bg-slate-300 hover:bg-slate-50 cursor-pointer"
+                >
+                  <font-awesome-icon class="w-4 text-slate-700" icon="plus" />
+                </div>
+              </div>
+
+              <input
+                placeholder="Envoyez un message"
+                class="w-11/12 h-full border-none bg-transparent text-white placeholder:text-slate-300 pb-1 focus:outline-none"
+              />
+            </div>
+            <!-- !SECTION -->
+          </div>
+        </div>
+        <!-- !SECTION -->
       </div>
+
       <!-- !SECTION  -->
     </div>
     <!-- !SECTION -->
