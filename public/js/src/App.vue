@@ -1,4 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { initDropdowns } from "flowbite";
+
+// initialize components based on data attribute selectors
+onMounted(() => {
+  initDropdowns();
+});
+</script>
 
 <template>
   <div class="h-screen w-screen flex flex-col">
@@ -127,9 +135,35 @@
             >
               <p class="text-slate-150 ml-8"># Channel 1</p>
               <font-awesome-icon
+                id="dropdownDefaultButton"
+                data-dropdown-toggle="dropdown"
                 class="w-4 text-gray-300 hover:text-gray-100 cursor-pointer mr-2"
                 icon="fa-gear"
               />
+              <div
+                id="dropdown"
+                class="z-10 hidden bg-slate-800 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+              >
+                <ul
+                  class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownDefaultButton"
+                >
+                  <li>
+                    <a
+                      href="#"
+                      class="block px-4 py-2 font-semibold text-slate-200 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >Modifier</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="block px-4 py-2 font-semibold text-orange-500 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                      >Supprimer</a
+                    >
+                  </li>
+                </ul>
+              </div>
             </div>
             <div class="flex w-full h-10 items-center">
               <p class="text-slate-150 ml-8"># Channel 2</p>
