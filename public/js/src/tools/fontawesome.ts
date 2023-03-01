@@ -5,10 +5,12 @@ import {
   faPlus,
   faUser,
   faChevronDown,
+  faChevronLeft,
   faBell,
   faMagnifyingGlass,
   faUserGroup,
-  faGear
+  faGear,
+  faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser as faRegularUser,
@@ -20,9 +22,11 @@ library.add(
   faUser,
   faRegularUser,
   faChevronDown,
+  faChevronLeft,
   faBell,
   faRegularBell,
   faMagnifyingGlass,
   faUserGroup,
-  faGear
+  faGear,
+  faSignOut
 );
