@@ -23,6 +23,9 @@ onMounted(() => {
             <div
               class="w-10 h-10 rounded-lg bg-orange-400 cursor-pointer"
             ></div>
+            <div
+              class="w-6 h-2 rounded-lg bg-slate-200 absolute -top-1"
+            ></div>
           </div>
           <div
             class="flex w-12 h-12 ml-2 items-center justify-center rounded-xl hover:border-2 hover:border-spacing-4 hover:border-gray-300"
@@ -113,10 +116,7 @@ onMounted(() => {
       id="profilDropdown"
       class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-48 bg-slate-800 border-2 border-slate-600"
     >
-      <ul
-        class="py-2 text-sm text-gray-200"
-        aria-labelledby="profilDropdown"
-      >
+      <ul class="py-2 text-sm text-gray-200" aria-labelledby="profilDropdown">
         <li
           class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
           data-dropdown-toggle="dropdownUserStatus"
@@ -133,63 +133,68 @@ onMounted(() => {
             >
             <span class="ml-2 w-3 h-3 mt-[3px] bg-red-400 rounded-full"></span>
           </div>
+          <div
+            id="dropdownUserStatus"
+            class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-44 bg-slate-800 border-2 border-slate-600"
+          >
+            <ul
+              class="py-2 text-sm text-gray-200"
+              aria-labelledby="dropdownUserStatus"
+            >
+              <li
+                class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+              >
+                <span class="w-3 h-3 bg-green-400 rounded-full"></span>
+                <a href="#" class="ml-2 font-semibold text-slate-200"
+                  >En ligne</a
+                >
+              </li>
+              <li
+                class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+                data-dropdown-toggle="dropdownUserStatus"
+                data-dropdown-target="dropdownUserStatus"
+              >
+                <span class="w-3 h-3 bg-yellow-400 rounded-full"></span>
+                <div
+                  class="flex ml-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
+                >
+                  Inactif
+                </div>
+              </li>
+              <li
+                class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+              >
+                <span class="w-3 h-3 bg-red-400 rounded-full"></span>
+                <a
+                  href="#"
+                  class="flex ml-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
+                  >Ne pas déranger</a
+                >
+              </li>
+              <li
+                class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+              >
+                <span class="w-3 h-3 bg-gray-400 rounded-full"></span>
+                <a
+                  href="#"
+                  class="flex ml-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
+                  >Invisible</a
+                >
+              </li>
+            </ul>
+          </div>
         </li>
-        <li class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer">
+        <li
+          class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+        >
           <font-awesome-icon icon="sign-out" class="w-auto mr-3 rotate-180" />
-          <a
-            href="#"
-            class="flex font-semibold text-orange-500"
+          <a href="#" class="flex font-semibold text-orange-500"
             >Se déconnecter</a
           >
         </li>
       </ul>
     </div>
-    <div
-      id="dropdownUserStatus"
-      class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-44 bg-slate-800 border-2 border-slate-600"
-    >
-      <ul
-        class="py-2 text-sm text-gray-200"
-        aria-labelledby="dropdownUserStatus"
-      >
-        <li
-          class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
-        >
-          <span class="w-3 h-3 bg-green-400 rounded-full"></span>
-          <a href="#" class="ml-2 font-semibold text-slate-200">En ligne</a>
-        </li>
-        <li
-          class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
-        >
-          <span class="w-3 h-3 bg-yellow-400 rounded-full"></span>
-          <a
-            href="#"
-            class="flex ml-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
-            >Inactif</a
-          >
-        </li>
-        <li
-          class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
-        >
-          <span class="w-3 h-3 bg-red-400 rounded-full"></span>
-          <a
-            href="#"
-            class="flex ml-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
-            >Ne pas déranger</a
-          >
-        </li>
-        <li
-          class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
-        >
-          <span class="w-3 h-3 bg-gray-400 rounded-full"></span>
-          <a
-            href="#"
-            class="flex ml-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
-            >Invisible</a
-          >
-        </li>
-      </ul>
-    </div>
+
     <!-- !SECTION Server Part-->
     <!-- SECTION Channel Part -->
     <div class="flex-1 flex">
@@ -431,40 +436,51 @@ onMounted(() => {
 .chat-max-height {
   max-height: calc(100vh - 2.5rem - 3.5rem - 4rem - 4rem);
 }
+
 .scrollbar-y-hide {
   overflow-x: hidden;
 }
+
 .scrollbar\:bg-transparent::-webkit-scrollbar {
   background-color: transparent;
 }
+
 ::-webkit-scrollbar-track {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
 .scrollbar\:\!w-1\.5::-webkit-scrollbar {
   width: 0.475rem !important;
 }
+
 .scrollbar\:\!h-1\.5::-webkit-scrollbar {
   height: 0.375rem !important;
 }
+
 .dark .dark\:scrollbar-thumb\:\!bg-slate-500\/50::-webkit-scrollbar-thumb {
   background-color: red !important;
 }
+
 .scrollbar-thumb\:\!bg-slate-300::-webkit-scrollbar-thumb {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(128, 143, 164) !important;
 }
+
 .scrollbar-thumb\:\!rounded::-webkit-scrollbar-thumb {
   border-radius: 0.25rem !important;
 }
+
 .dark
   .dark\:scrollbar-track\:\!bg-slate-500\/\[0\.16\]::-webkit-scrollbar-track {
   background-color: rgba(80, 96, 119, 0.6) !important;
 }
+
 .scrollbar-track\:\!bg-slate-100::-webkit-scrollbar-track {
   --tw-bg-opacity: 1 !important;
   background-color: rgba(80, 96, 119, 0.6) !important;
 }
+
 .scrollbar-track\:\!rounded::-webkit-scrollbar-track {
   border-radius: 0.25rem !important;
 }
