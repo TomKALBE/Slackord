@@ -2,11 +2,17 @@
 import { onMounted } from "vue";
 import { initDropdowns, initModals } from "flowbite";
 import { ADD_SERVER_MODAL } from "@/tools/modal";
-// initialize components based on data attribute selectors
+import ServerList from "@/components/home/ServerList.vue";
 onMounted(() => {
   initDropdowns();
   initModals();
+  setChatScrollBarBottom();
 });
+
+const setChatScrollBarBottom = () => {
+  const chat = document.getElementById('chat') as HTMLDivElement;
+  chat.scrollTop = chat?.scrollHeight;
+}
 </script>
 
 <template>
@@ -15,56 +21,7 @@ onMounted(() => {
     <div class="flex w-100 h-16 bg-slate-300">
       <div class="flex w-3/4 bg-slate-800 items-center">
         <!-- SECTION Server List -->
-        <div class="flex w-8/12 items-center">
-          <!-- SECTION Server without notification -->
-          <div
-            class="flex w-12 h-12 ml-2 items-center justify-center rounded-xl hover:border-2 hover:border-spacing-4 hover:border-gray-300"
-          >
-            <div
-              class="w-10 h-10 rounded-lg bg-orange-400 cursor-pointer"
-            ></div>
-            <div
-              class="w-6 h-2 rounded-lg bg-slate-200 absolute -top-1"
-            ></div>
-          </div>
-          <div
-            class="flex w-12 h-12 ml-2 items-center justify-center rounded-xl hover:border-2 hover:border-spacing-4 hover:border-gray-300"
-          >
-            <div
-              class="w-10 h-10 rounded-lg bg-indigo-400 cursor-pointer"
-            ></div>
-          </div>
-          <!-- !SECTION Server without notification-->
-          <!-- SECTION Server with notification -->
-          <div
-            class="flex w-12 h-12 ml-2 items-center justify-center rounded-xl hover:border-2 hover:border-spacing-4 hover:border-gray-300"
-          >
-            <div
-              class="w-10 h-10 rounded-lg bg-green-400 cursor-pointer relative"
-            >
-              <div
-                class="w-4 h-4 absolute bg-slate-100 border-2 border-slate-800 rounded-full right-[-0.375rem] top-[-0.375rem]"
-              ></div>
-            </div>
-          </div>
-          <!-- !SECTION Server with notification-->
-          <!-- SECTION Add new Server -->
-          <div
-            class="flex w-12 h-12 ml-2 items-center justify-center rounded-xl hover:border-2 hover:border-spacing-4 hover:border-gray-300"
-          >
-            <div
-              :data-modal-target="ADD_SERVER_MODAL"
-              :data-modal-toggle="ADD_SERVER_MODAL"
-              class="flex items-center justify-center w-10 h-10 rounded-lg cursor-pointer border border-gray-400"
-            >
-              <font-awesome-icon
-                class="h-6 w-6 text-gray-100"
-                :icon="`fa-plus`"
-              />
-            </div>
-          </div>
-          <!-- !SECTION Add new Server-->
-        </div>
+        <ServerList />
         <!-- !SECTION Server List-->
         <!-- SECTION SearchBar -->
         <div class="flex w-4/12 items-center justify-center relative">
@@ -298,6 +255,7 @@ onMounted(() => {
         <!-- SECTION Chat -->
         <div class="max-h-full max-w-full flex flex-1">
           <div
+            id="chat"
             class="fixed flex-col-reverse chat-max-height scrollbar-y-hide scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded scrollbar-track:!bg-slate-500/[0.16] scrollbar-thumb:!bg-slate-500/50 max-h-96 lg:supports-scrollbars:pr-2 overflow-scroll max-w-full mx-8"
           >
             <!-- SECTION Messages -->
@@ -355,80 +313,7 @@ onMounted(() => {
     </div>
     <!-- !SECTION Channel Part-->
     <!-- SECTION Server add Modal -->
-    <div
-      :id="ADD_SERVER_MODAL"
-      tabindex="-1"
-      aria-hidden="true"
-      class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
-    >
-      <div class="relative w-full h-full max-w-2xl md:h-auto">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow bg-gray-700">
-          <!-- Modal header -->
-          <div
-            class="flex items-start justify-between p-4 border-b rounded-t border-gray-600"
-          >
-            <h3 class="text-xl font-semibold text-gray-900 text-white">
-              Terms of Service
-            </h3>
-            <button
-              type="button"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white"
-              :data-modal-hide="ADD_SERVER_MODAL"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-              <span class="sr-only">Close modal</span>
-            </button>
-          </div>
-          <!-- Modal body -->
-          <div class="p-6 space-y-6">
-            <p class="text-base leading-relaxed text-gray-500 text-gray-400">
-              With less than a month to go before the European Union enacts new
-              consumer privacy laws for its citizens, companies around the world
-              are updating their terms of service agreements to comply.
-            </p>
-            <p class="text-base leading-relaxed text-gray-500 text-gray-400">
-              The European Union’s General Data Protection Regulation (G.D.P.R.)
-              goes into effect on May 25 and is meant to ensure a common set of
-              data rights in the European Union. It requires organizations to
-              notify users as soon as possible of high-risk data breaches that
-              could personally affect them.
-            </p>
-          </div>
-          <!-- Modal footer -->
-          <div
-            class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b border-gray-600"
-          >
-            <button
-              :data-modal-hide="ADD_SERVER_MODAL"
-              type="button"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
-            >
-              I accept
-            </button>
-            <button
-              :data-modal-hide="ADD_SERVER_MODAL"
-              type="button"
-              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600"
-            >
-              Decline
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    
     <!-- !SECTION Server add Modal -->
   </div>
 </template>
