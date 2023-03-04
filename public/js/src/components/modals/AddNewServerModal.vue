@@ -11,17 +11,19 @@ import { ADD_SERVER_MODAL } from "@/tools/modal";
   >
     <div class="relative w-full h-full max-w-2xl md:h-auto">
       <!-- Modal content -->
-      <div class="relative rounded-lg shadow bg-gray-700">
+      <div
+        class="relative rounded-lg shadow bg-slate-800 border-2 border-slate-600"
+      >
         <!-- Modal header -->
-        <div
-          class="flex items-start justify-between p-4 border-b rounded-t border-gray-600"
-        >
-          <h3 class="text-xl font-semibold text-white">
-            Terms of Service
+        <div class="flex p-4 border-b rounded-t border-gray-600">
+          <h3
+            class="text-xl ml-auto mr-auto font-semibold text-white text-center"
+          >
+            Créer un serveur
           </h3>
           <button
             type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center hover:bg-gray-600 hover:text-white"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center hover:bg-gray-600 hover:text-white"
             :data-modal-hide="ADD_SERVER_MODAL"
           >
             <svg
@@ -42,12 +44,12 @@ import { ADD_SERVER_MODAL } from "@/tools/modal";
         </div>
         <!-- Modal body -->
         <div class="p-6 space-y-6">
-          <p class="text-base leading-relaxed text-gray-500 text-gray-400">
+          <p class="text-base leading-relaxed text-slate-250">
             With less than a month to go before the European Union enacts new
             consumer privacy laws for its citizens, companies around the world
             are updating their terms of service agreements to comply.
           </p>
-          <p class="text-base leading-relaxed text-gray-500 text-gray-400">
+          <p class="text-base leading-relaxed text-slate-250">
             The European Union’s General Data Protection Regulation (G.D.P.R.)
             goes into effect on May 25 and is meant to ensure a common set of
             data rights in the European Union. It requires organizations to
@@ -62,17 +64,24 @@ import { ADD_SERVER_MODAL } from "@/tools/modal";
           <button
             :data-modal-hide="ADD_SERVER_MODAL"
             type="button"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+            class="text-white bg-rose-600 active:bg-rose-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
-            I accept
+            Créer un serveur
           </button>
           <button
             :data-modal-hide="ADD_SERVER_MODAL"
             type="button"
-            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600"
+            class="text-white bg-rose-600 active:bg-rose-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Rejoindre un serveur
+          </button>
+          <!-- <button
+            :data-modal-hide="ADD_SERVER_MODAL"
+            type="button"
+            class="text-gray-500 indigo bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 bg-gray-700 text-gray-300 border-gray-500 hover:text-white hover:bg-gray-600 focus:ring-gray-600"
           >
             Decline
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
