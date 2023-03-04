@@ -3,41 +3,24 @@ import { ADD_SERVER_MODAL } from "@/tools/modal";
 </script>
 
 <template>
-  <div
-    :id="ADD_SERVER_MODAL"
-    tabindex="-1"
-    aria-hidden="true"
-    class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full"
-  >
+  <div :id="ADD_SERVER_MODAL" tabindex="-1" aria-hidden="true"
+    class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
     <div class="relative w-full h-full max-w-2xl md:h-auto">
       <!-- Modal content -->
-      <div
-        class="relative rounded-lg shadow bg-slate-800 border-2 border-slate-600"
-      >
+      <div class="relative rounded-lg shadow bg-slate-800 border-2 border-slate-600">
         <!-- Modal header -->
         <div class="flex p-4 border-b rounded-t border-gray-600">
-          <h3
-            class="text-xl ml-auto mr-auto font-semibold text-white text-center"
-          >
+          <h3 class="text-xl ml-auto mr-auto font-semibold text-white text-center">
             Créer un serveur
           </h3>
-          <button
-            type="button"
+          <button type="button"
             class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 inline-flex items-center hover:bg-gray-600 hover:text-white"
-            :data-modal-hide="ADD_SERVER_MODAL"
-          >
-            <svg
-              aria-hidden="true"
-              class="w-5 h-5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
+            :data-modal-hide="ADD_SERVER_MODAL">
+            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
                 d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clip-rule="evenodd"
-              ></path>
+                clip-rule="evenodd"></path>
             </svg>
             <span class="sr-only">Close modal</span>
           </button>
@@ -58,21 +41,13 @@ import { ADD_SERVER_MODAL } from "@/tools/modal";
           </p>
         </div>
         <!-- Modal footer -->
-        <div
-          class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b border-gray-600"
-        >
-          <button
-            :data-modal-hide="ADD_SERVER_MODAL"
-            type="button"
-            class="text-white bg-rose-600 active:bg-rose-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
+        <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b border-gray-600">
+          <button :data-modal-hide="ADD_SERVER_MODAL" type="button"
+            class="text-white bg-rose-600 active:bg-rose-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
             Créer un serveur
           </button>
-          <button
-            :data-modal-hide="ADD_SERVER_MODAL"
-            type="button"
-            class="text-white bg-rose-600 active:bg-rose-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
+          <button :data-modal-hide="ADD_SERVER_MODAL" type="button"
+            class="text-white bg-rose-600 active:bg-rose-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
             Rejoindre un serveur
           </button>
           <!-- <button

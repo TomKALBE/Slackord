@@ -1,45 +1,22 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { initModals, initDropdowns } from "flowbite";
+import { onMounted } from "vue";
+import { initDropdowns, initModals } from "flowbite";
 import { ADD_SERVER_MODAL } from "@/tools/modal";
 import ServerList from "@/components/home/ServerList.vue";
-import LoadingScreen from "@/components/LoadingScreen.vue";
-import Toast from "@/components/Toast.vue";
-import Login from "./components/auth/Login.vue";
-const notification = ref(false);
-const connected = ref(false);
-onMounted(async () => {
-
-  setTimeout(() => {
-    // notification.value = true
-  }, 2000);
-
-
+onMounted(() => {
+  initDropdowns();
+  initModals();
+  setChatScrollBarBottom();
 });
+
 const setChatScrollBarBottom = () => {
-  const chat = document.getElementById("chat") as HTMLDivElement;
+  const chat = document.getElementById('chat') as HTMLDivElement;
   chat.scrollTop = chat?.scrollHeight;
-};
-const handleClick = () => {
-  notification.value = !notification.value
-}
-const maFonction = () => {
-  connected.value = true;
-  notification.value = true;
-  setTimeout(() => {
-    setChatScrollBarBottom();
-    initDropdowns();
-    initModals();
-  }, 10);
-  setTimeout(() => {
-    notification.value = false
-  }, 5000);
 }
 </script>
 
 <template>
-  <Login v-if="!connected" :maFonction="maFonction" />
-  <div v-else class="h-screen w-screen flex flex-col">
+  <div class="h-screen w-screen flex flex-col">
     <!-- SECTION Server Part -->
     <div class="flex w-100 h-16 bg-slate-300">
       <div class="flex w-3/4 bg-slate-800 items-center">
@@ -58,7 +35,7 @@ const maFonction = () => {
       </div>
       <!-- SECTION Profile part-->
       <div class="flex group w-1/4 h-full bg-slate-700 items-center border-l-2 border-gray-400">
-        <div data-dropdown-toggle="profilDropdown2" data-dropdown-placement="bottom"
+        <div data-dropdown-toggle="profilDropdown" data-dropdown-placement="bottom"
           class="w-auto flex justify-center items-center">
           <div
             class="flex w-12 h-12 rounded-full border-2 cursor-pointer bg-gray-400 mx-2 justify-center items-center relative">
@@ -74,7 +51,7 @@ const maFonction = () => {
         </div>
       </div>
     </div>
-    <div id="profilDropdown2"
+    <div id="profilDropdown"
       class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-48 bg-slate-800 border-2 border-slate-600">
       <ul class="py-2 text-sm text-gray-200" aria-labelledby="profilDropdown">
         <li class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
@@ -129,13 +106,11 @@ const maFonction = () => {
         <!-- SECTION Header -->
         <div class="w-full h-14 flex items-center border-b-2 border-slate-800">
           <div class="ml-4 flex w-full items-center justify-around">
-            <div class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer"
-              @click="handleClick">
+            <div class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer">
               <p class="text-xl text-white">Zombo Com</p>
               <font-awesome-icon class="w-4 text-gray-100 ml-2" :icon="`fa-chevron-down`" />
             </div>
-            <div id="mon-bouton"
-              class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10">
+            <div class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10">
               <font-awesome-icon class="w-5 h-5 text-white" :icon="['far', 'bell']" />
             </div>
           </div>
@@ -148,8 +123,7 @@ const maFonction = () => {
               <p class="text-slate-150 ml-8"># Channel 1</p>
               <font-awesome-icon data-dropdown-toggle="dropdown"
                 class="w-4 text-gray-300 hover:text-gray-100 cursor-pointer mr-2" icon="fa-gear" />
-              <div id="dropdown"
-                class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-44 bg-slate-800 border-2 border-slate-600">
+              <div id="dropdown" class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-44 bg-gray-700">
                 <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownDefaultButton">
                   <li>
                     <a href="#"
@@ -230,20 +204,16 @@ const maFonction = () => {
         </div>
         <!-- !SECTION Input-->
       </div>
-      <!-- !SECTION  -->
-      <Toast color="emerald" v-if="notification" />
-    </div>
 
+      <!-- !SECTION  -->
+    </div>
     <!-- !SECTION Channel Part-->
     <!-- SECTION Server add Modal -->
+
     <!-- !SECTION Server add Modal -->
   </div>
 </template>
 <style scoped>
-::selection {
-  background-color: rgb(121, 144, 243);
-}
-
 .chat-max-height {
   max-height: calc(100vh - 2.5rem - 3.5rem - 4rem - 4rem);
 }
