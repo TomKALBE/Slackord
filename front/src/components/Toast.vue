@@ -311,7 +311,7 @@ function timeout(ms: number) {
   opacity: 1;
 }
 </style>
-<!-- 
+<!--
     text-slate-500
     text-gray-500
     text-zinc-500
