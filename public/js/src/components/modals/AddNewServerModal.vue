@@ -87,3 +87,4 @@ import { ADD_SERVER_MODAL } from "@/tools/modal";
     </div>
   </div>
 </template>
+<!-- bg-rose-400 -->
