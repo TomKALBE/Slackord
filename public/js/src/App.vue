@@ -1,9 +1,34 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { initDropdowns, initModals } from "flowbite";
 import { ADD_SERVER_MODAL } from "@/tools/modal";
 import ServerList from "@/components/home/ServerList.vue";
-onMounted(() => {
+
+const notifClassesFirstTransition = [
+  "animation-spawn-first-card",
+  "h-[67px]",
+  "p-4",
+  "space-x-4",
+  "w-[80px]",
+  "text-gray-100",
+  "divide-x",
+  "divide-gray-200",
+  "rounded-lg",
+  "shadow",
+  "divide-gray-700",
+  "space-x",
+];
+const notifClassesSecondTransition = [
+  "animation-spawn-second-card",
+  "w-full",
+  "max-w-xs",
+];
+
+const showTextNotif = ref<any>(false);
+
+const notificationContent = ref<any>("Le message à été envoyé.");
+
+onMounted(async () => {
   initDropdowns();
   initModals();
   setChatScrollBarBottom();
@@ -13,24 +38,95 @@ onMounted(() => {
     monBouton.addEventListener("click", () => {
       monElement.classList.remove("hidden");
       setTimeout(() => {
-        monElement.classList.add(
-          "mon-element-transition",
-          "mon-element-decale"
-        );
+        console.log("Je passe la");
+        monElement.classList.add("mon-element-cercle", "mon-element-decale");
       }, 0);
     });
   }
   const fermerBouton = document.getElementById("fermer-bouton");
   if (fermerBouton && monBouton && monElement) {
     fermerBouton.addEventListener("click", () => {
-      monElement.classList.remove('mon-element-decale');
-      monElement.classList.add('mon-element-cache');
-      monElement.addEventListener('transitionend', () => {
-        monElement.classList.add('hidden');
-        monElement.classList.remove('mon-element-transition', 'mon-element-cache');
-      }, {once: true});
+      if(monElement.classList.contains("animation-end-second-card")){
+        monElement.classList.remove("mon-element-decale");
+        monElement.classList.add("mon-element-cache");
+        monElement.addEventListener(
+          "transitionend",
+          () => {
+            monElement.classList.add("hidden");
+            monElement.children[1].classList.add("hidden");
+            monElement.classList.remove("animation-end-second-card");
+            
+            for (let i = 0; i < notifClassesSecondTransition.length; i++) {
+              monElement.classList.remove(notifClassesSecondTransition[i]);
+            }
+            
+          },
+          { once: true }
+        );
+      }
     });
+
+    monElement.addEventListener("transitionend", () => {
+      console.log("terminé");
+      if (monElement.classList.contains("mon-element-cercle")) {
+        console.log("remove cercle");
+        for (let i = 0; i < notifClassesFirstTransition.length; i++) {
+          monElement.classList.add(notifClassesFirstTransition[i]);
+        }
+        monElement.classList.remove("mon-element-cercle");
+      } else if (
+        monElement.classList.contains("animation-spawn-first-card") &&
+        monElement.offsetWidth == 80
+      ) {
+        console.log("js ai pas e", monElement.classList);
+        monElement.classList.remove("h-[67px]");
+        monElement.classList.remove("w-[80px]");
+        monElement.classList.remove("animation-spawn-first-card");
+
+        for (let i = 0; i < notifClassesSecondTransition.length; i++) {
+          monElement.classList.add(notifClassesSecondTransition[i]);
+        }
+        setTimeout(() => {
+          showTextNotif.value = true;
+          monElement.classList.remove("animation-spawn-second-card");
+          monElement.classList.add("animation-end-second-card");
+        }, 500);
+        setTimeout(() => {
+          monElement.children[1].classList.remove("hidden");
+        }, 500);
+      }
+    });
+    // monElement.addEventListener(
+    //   "transitionend",
+    //   () => {
+
+    //   },
+    //   { once: true }
+    // );
   }
+
+  // Stocke le texte du paragraphe dans une variable
+  // const texte = mon_para.value;
+
+  // console.log(mon_para.value.textContent)
+  // // Efface le texte du paragraphe
+  // if (texte) {
+  //   // mon_para.value.textContent = "";
+  //   const span = document.createElement("span");
+  //   span.mount(mon_para.value)
+  //   // Boucle sur chaque lettre du texte
+  //   for (let i = 0; i < texte.length; i++) {
+  //     // Crée une nouvelle balise "span"
+  //     const span = document.createElement("span");
+  //     // Ajoute la lettre courante à la balise "span"
+  //     span.textContent = texte[i];
+  //     // Ajoute la balise "span" au paragraphe
+  //     mon_para.value.appendChild(span);
+  //     // Ajoute un délai à l'animation pour chaque lettre
+  //     span.style.animationDelay = i * 50 + "ms";
+  //   }
+  // }
+  // displayNotificationText();
 });
 
 const setChatScrollBarBottom = () => {
@@ -335,13 +431,13 @@ const setChatScrollBarBottom = () => {
       </div>
       <div
         id="mon-element"
-        class="hidden opacity-40 absolute right-0 left-0 ml-auto mr-auto top-0 flex items-center w-full max-w-xs p-4 space-x-4 text-gray-100 divide-x divide-gray-200 rounded-lg shadow text-gray-400 divide-gray-700 space-x bg-slate-800 border-2 border-slate-600"
+        class="hidden absolute absolute right-0 left-0 ml-auto mr-auto top-0 flex items-center justify-center bg-slate-800 border-2 border-slate-600 opacity-40"
         role="alert"
       >
         <svg
           id=""
           aria-hidden="true"
-          class="w-5 h-5 text-blue-500"
+          class="w-5 h-5 text-blue-500 "
           focusable="false"
           data-prefix="fas"
           data-icon="paper-plane"
@@ -354,11 +450,23 @@ const setChatScrollBarBottom = () => {
             d="M511.6 36.86l-64 415.1c-1.5 9.734-7.375 18.22-15.97 23.05c-4.844 2.719-10.27 4.097-15.68 4.097c-4.188 0-8.319-.8154-12.29-2.472l-122.6-51.1l-50.86 76.29C226.3 508.5 219.8 512 212.8 512C201.3 512 192 502.7 192 491.2v-96.18c0-7.115 2.372-14.03 6.742-19.64L416 96l-293.7 264.3L19.69 317.5C8.438 312.8 .8125 302.2 .0625 289.1s5.469-23.72 16.06-29.77l448-255.1c10.69-6.109 23.88-5.547 34 1.406S513.5 24.72 511.6 36.86z"
           ></path>
         </svg>
-        <div class="flex items-center justify-between w-full">
-          <p class="pl-4 text-sm font-normal">Message sent successfully.</p>
+        <div class="flex items-center justify-between w-full hidden">
+          <p id="textAnimation" class="ml-3">
+            <span
+              v-show="showTextNotif"
+              v-for="(c, i) in notificationContent"
+              :key="c"
+              :style="
+                'animation-delay:' +
+                (2000 / notificationContent.length) * i +
+                'ms'
+              "
+              >{{ c }}</span
+            >
+          </p>
 
           <button
-          id="fermer-bouton"
+            id="fermer-bouton"
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center hover:bg-gray-600 hover:text-white"
             :data-modal-hide="ADD_SERVER_MODAL"
@@ -382,15 +490,54 @@ const setChatScrollBarBottom = () => {
       </div>
       <!-- !SECTION  -->
     </div>
+
     <!-- !SECTION Channel Part-->
     <!-- SECTION Server add Modal -->
-
     <!-- !SECTION Server add Modal -->
   </div>
 </template>
 <style scoped>
+#textAnimation span {
+  opacity: 0;
+  animation: fade-in 0s ease-in-out forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .mon-element-transition {
   transition: transform 0.3s ease, opacity 0.17s ease;
+}
+
+.mon-element-cercle {
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  opacity: 1;
+  transition: transform 0.6s ease, opacity 1s ease;
+}
+
+.mon-element-cercle svg {
+  display: block;
+}
+
+.mon-element-cercle div {
+  display: none;
+}
+
+.animation-spawn-first-card {
+  transition: all 0.2s ease-in;
+}
+.animation-spawn-second-card {
+  transition: all 3s ease-in-out;
+}
+.animation-end-second-card {
+  transition: all 1s ease-in-out;
 }
 
 /* On décale l'élément de -100% vers le haut par défaut */
@@ -398,9 +545,11 @@ const setChatScrollBarBottom = () => {
   transform: translateY(50%);
   opacity: 1;
 }
+
 ::selection {
   background-color: rgb(141, 162, 251);
 }
+
 .chat-max-height {
   max-height: calc(100vh - 2.5rem - 3.5rem - 4rem - 4rem);
 }
