@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { icon } from "@fortawesome/fontawesome-svg-core";
-import { onActivated, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 
 defineProps<{
   color:
@@ -45,8 +45,7 @@ const notifClassesSecondTransition = [
   "divide-x",
   "divide-gray-700",
 ];
-const notificationContent = ref<any>("Bienvenue sur zombo.com");
-
+const notificationContent = ref<any>("Le message à été envoyé.");
 onMounted(() => {
   console.log("toast loaded")
   const root = document.documentElement;
@@ -56,16 +55,13 @@ onMounted(() => {
   root.style.setProperty("--border-toast-color", iconColor);
   const monElement = document.getElementById("mon-element");
   const monBouton = document.getElementById("mon-bouton");
-  const fermerBouton = document.getElementById("fermer-bouton");
-  setTimeout(() => {
-    fermerBouton?.click();
-  }, 4000)
   if (monBouton && monElement) {
     monElement.classList.remove("hidden");
     setTimeout(() => {
       monElement.classList.add("mon-element-cercle", "mon-element-decale");
-    }, 100);
+    }, 0);
   }
+  const fermerBouton = document.getElementById("fermer-bouton");
   if (fermerBouton && monBouton && monElement) {
     fermerBouton.addEventListener("click", () => {
       if (monElement.classList.contains("animation-end-second-card")) {
@@ -88,7 +84,9 @@ onMounted(() => {
             }
             for (let i = 0; i < notificationContent.value.length; i++) {
               hideSpan(
-                monElement.children[1].children[0].children[i] as HTMLSpanElement
+                monElement.children[1].children[0].children[
+                i
+                ] as HTMLSpanElement
               );
             }
           },
@@ -145,7 +143,7 @@ function timeout(ms: number) {
 </script>
 <template>
   <div id="mon-element"
-    class="hidden absolute right-0 left-0 w-10 ml-auto mr-auto top-0 flex items-center justify-center bg-slate-800 opacity-40 overflow-hidden z-10"
+    class="hidden absolute right-0 left-0 ml-auto mr-auto top-0 flex items-center justify-center bg-slate-800 opacity-40 overflow-hidden z-10"
     role="alert">
     <svg id="toast-icon" aria-hidden="true" class="w-5 h-5 min-w-[1.25rem]" :class="'text-' + color + '-500'"
       focusable="false" data-prefix="fas" data-icon="paper-plane" role="img" xmlns="http://www.w3.org/2000/svg"
