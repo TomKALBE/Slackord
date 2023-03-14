@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { initDropdowns, initModals } from "flowbite";
 import { ADD_SERVER_MODAL } from "@/tools/modal";
 import ServerList from "@/components/home/ServerList.vue";
-onMounted(() => {
+import Toast from "@/components/Toast.vue";
+const notification = ref(false);
+onMounted(async () => {
   initDropdowns();
   initModals();
   setChatScrollBarBottom();
-});
+  setTimeout(() => {
+    notification.value = true
+  }, 2000);
 
+
+});
 const setChatScrollBarBottom = () => {
-  const chat = document.getElementById('chat') as HTMLDivElement;
+  const chat = document.getElementById("chat") as HTMLDivElement;
   chat.scrollTop = chat?.scrollHeight;
-}
+};
 </script>
 
 <template>
@@ -110,7 +116,8 @@ const setChatScrollBarBottom = () => {
               <p class="text-xl text-white">Zombo Com</p>
               <font-awesome-icon class="w-4 text-gray-100 ml-2" :icon="`fa-chevron-down`" />
             </div>
-            <div class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10">
+            <div id="mon-bouton"
+              class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10">
               <font-awesome-icon class="w-5 h-5 text-white" :icon="['far', 'bell']" />
             </div>
           </div>
@@ -123,7 +130,8 @@ const setChatScrollBarBottom = () => {
               <p class="text-slate-150 ml-8"># Channel 1</p>
               <font-awesome-icon data-dropdown-toggle="dropdown"
                 class="w-4 text-gray-300 hover:text-gray-100 cursor-pointer mr-2" icon="fa-gear" />
-              <div id="dropdown" class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-44 bg-gray-700">
+              <div id="dropdown"
+                class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-44 bg-slate-800 border-2 border-slate-600">
                 <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownDefaultButton">
                   <li>
                     <a href="#"
@@ -204,16 +212,20 @@ const setChatScrollBarBottom = () => {
         </div>
         <!-- !SECTION Input-->
       </div>
-
       <!-- !SECTION  -->
     </div>
+
+    <Toast color="blue" />
     <!-- !SECTION Channel Part-->
     <!-- SECTION Server add Modal -->
-
     <!-- !SECTION Server add Modal -->
   </div>
 </template>
 <style scoped>
+::selection {
+  background-color: rgb(141, 162, 251);
+}
+
 .chat-max-height {
   max-height: calc(100vh - 2.5rem - 3.5rem - 4rem - 4rem);
 }
