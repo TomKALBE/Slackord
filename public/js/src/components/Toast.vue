@@ -45,7 +45,7 @@ const notifClassesSecondTransition = [
   "divide-x",
   "divide-gray-700",
 ];
-const notificationContent = ref<any>("Le message à été envoyé.");
+const notificationContent = ref<any>("Bienvenue sur zombo.com");
 onMounted(() => {
     console.log("toast loaded")
   const root = document.documentElement;
@@ -59,7 +59,7 @@ onMounted(() => {
       monElement.classList.remove("hidden");
       setTimeout(() => {
         monElement.classList.add("mon-element-cercle", "mon-element-decale");
-      }, 0);
+      }, 100);
   }
   const fermerBouton = document.getElementById("fermer-bouton");
   if (fermerBouton && monBouton && monElement) {
@@ -144,7 +144,7 @@ function timeout(ms: number) {
 <template>
   <div
     id="mon-element"
-    class="hidden absolute right-0 left-0 ml-auto mr-auto top-0 flex items-center justify-center bg-slate-800 opacity-40 overflow-hidden z-10"
+    class="hidden absolute right-0 left-0 w-10 ml-auto mr-auto top-0 flex items-center justify-center bg-slate-800 opacity-40 overflow-hidden z-10"
     role="alert"
   >
     <svg

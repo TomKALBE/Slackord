@@ -10,7 +10,7 @@ onMounted(async () => {
   initModals();
   setChatScrollBarBottom();
   setTimeout(() => {
-    notification.value = true
+    // notification.value = true
   }, 2000);
 
 
@@ -19,6 +19,9 @@ const setChatScrollBarBottom = () => {
   const chat = document.getElementById("chat") as HTMLDivElement;
   chat.scrollTop = chat?.scrollHeight;
 };
+const handleClick = () => {
+  notification.value = !notification.value
+}
 </script>
 
 <template>
@@ -169,6 +172,7 @@ const setChatScrollBarBottom = () => {
           <div class="ml-4 flex w-full items-center justify-around">
             <div
               class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer"
+              @click="handleClick"
             >
               <p class="text-xl text-white">Zombo Com</p>
               <font-awesome-icon
@@ -316,9 +320,9 @@ const setChatScrollBarBottom = () => {
         <!-- !SECTION Input-->
       </div>
       <!-- !SECTION  -->
+      <Toast color="amber" v-if="notification"/>
     </div>
     
-    <Toast color="blue"/>
     <!-- !SECTION Channel Part-->
     <!-- SECTION Server add Modal -->
     <!-- !SECTION Server add Modal -->
