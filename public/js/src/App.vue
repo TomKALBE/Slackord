@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { initDropdowns, initModals } from "flowbite";
+import { initModals, initDropdowns  } from "flowbite";
 import { ADD_SERVER_MODAL } from "@/tools/modal";
 import ServerList from "@/components/home/ServerList.vue";
 import LoadingScreen from "@/components/LoadingScreen.vue";
@@ -8,18 +8,19 @@ import Toast from "@/components/Toast.vue";
 
 const loading = ref(true);
 const notification = ref(false);
-onMounted(async () => {
+onMounted(() => {
   initDropdowns();
   initModals();
+  wait()
+});
+const wait = () => {
   setTimeout(() => {
     loading.value = false;
   }, 3500);
   setTimeout(() => {
     setChatScrollBarBottom();
   }, 3510);
-
-
-});
+}
 const setChatScrollBarBottom = () => {
   const chat = document.getElementById("chat") as HTMLDivElement;
   chat.scrollTop = chat?.scrollHeight;
@@ -56,7 +57,7 @@ const handleClick = () => {
         class="flex group w-1/4 h-full bg-slate-700 items-center border-l-2 border-gray-400"
       >
         <div
-          data-dropdown-toggle="profilDropdown"
+          data-dropdown-toggle="profilDropdown2"
           data-dropdown-placement="bottom"
           class="w-auto flex justify-center items-center"
         >
@@ -85,7 +86,7 @@ const handleClick = () => {
       </div>
     </div>
     <div
-      id="profilDropdown"
+      id="profilDropdown2"
       class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-48 bg-slate-800 border-2 border-slate-600"
     >
       <ul class="py-2 text-sm text-gray-200" aria-labelledby="profilDropdown">
