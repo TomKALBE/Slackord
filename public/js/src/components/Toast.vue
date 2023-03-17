@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { icon } from "@fortawesome/fontawesome-svg-core";
-import { onMounted, ref } from "vue";
+import { onActivated, onMounted, ref } from "vue";
 
 defineProps<{
   color:

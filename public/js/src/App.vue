@@ -3,15 +3,20 @@ import { onMounted, ref } from "vue";
 import { initDropdowns, initModals } from "flowbite";
 import { ADD_SERVER_MODAL } from "@/tools/modal";
 import ServerList from "@/components/home/ServerList.vue";
+import LoadingScreen from "@/components/LoadingScreen.vue";
 import Toast from "@/components/Toast.vue";
+
+const loading = ref(true);
 const notification = ref(false);
 onMounted(async () => {
   initDropdowns();
   initModals();
-  setChatScrollBarBottom();
   setTimeout(() => {
-    // notification.value = true
-  }, 2000);
+    loading.value = false;
+  }, 3500);
+  setTimeout(() => {
+    setChatScrollBarBottom();
+  }, 3510);
 
 
 });
@@ -25,7 +30,8 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="h-screen w-screen flex flex-col">
+  <LoadingScreen :isLoading="loading" v-if="loading"/>
+  <div v-else class="h-screen w-screen flex flex-col">
     <!-- SECTION Server Part -->
     <div class="flex w-100 h-16 bg-slate-300">
       <div class="flex w-3/4 bg-slate-800 items-center">
@@ -331,7 +337,7 @@ const handleClick = () => {
 <style scoped>
 
 ::selection {
-  background-color: rgb(141, 162, 251);
+  background-color: rgb(121, 144, 243);
 }
 
 .chat-max-height {

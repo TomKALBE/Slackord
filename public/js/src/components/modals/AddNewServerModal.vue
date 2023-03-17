@@ -23,7 +23,7 @@ import { ADD_SERVER_MODAL } from "@/tools/modal";
           </h3>
           <button
             type="button"
-            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center hover:bg-gray-600 hover:text-white"
+            class="text-gray-400 bg-transparent rounded-lg text-sm p-1.5 inline-flex items-center hover:bg-gray-600 hover:text-white"
             :data-modal-hide="ADD_SERVER_MODAL"
           >
             <svg
