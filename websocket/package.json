@@ -1,0 +1,16 @@
+{
+  "name": "websocket",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc -w & node --watch dist/main.js"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "socket.io": "^4.6.1"
+  }
+}
