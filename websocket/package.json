@@ -2,7 +2,7 @@
   "name": "websocket",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "tsc -w & node --watch dist/main.js"
   },

@@ -1,14 +1,32 @@
-import * as dotenv from 'dotenv';
-
+import { createServer } from "http";
 import { Server } from "socket.io";
+import Env from "./utils/env";
+import { MessageResource } from "./data/resources";
 
-dotenv.config();
+interface ServerToClientEvents {
 
-console.log(process.env.PORT);
+}
 
+interface ClientToServerEvents {
+    "client.new-message": (data: MessageResource) => void;
+}
 
-const io = new Server(Number(process.env.PORT));
+interface InterServerEvents {
+    ping: () => void;
+}
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
+interface SocketData { }
+
+const httpServer = createServer();
+
+const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>(httpServer, {
+    cors: {
+        origin: "*",
+    },
+}).on("connection", async (socket) => {
+    socket.on("client.new-message", async (data) => {
+        console.log('new message received')
+    });
 });
+
+httpServer.listen(Number(Env.PORT));
