@@ -16,8 +16,11 @@ module.exports = {
           650: "rgb(61, 74, 91)",
           750: "rgb(41, 54, 71)",
           850: "rgb(20, 30, 45)",
-        },
+        }
       },
+      textColor: {
+        white: "rgb(238, 244, 249)"
+      }
     },
   },
   plugins: [require("flowbite/plugin")],
