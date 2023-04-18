@@ -4,7 +4,9 @@ import { initDropdowns, initModals } from "flowbite";
 import { ADD_SERVER_MODAL } from "@/tools/modal";
 import ServerList from "@/components/home/ServerList.vue";
 import Toast from "@/components/Toast.vue";
+import Login from "./components/auth/Login.vue";
 const notification = ref(false);
+const connected = ref(false);
 onMounted(async () => {
   initDropdowns();
   initModals();
@@ -25,7 +27,8 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="h-screen w-screen flex flex-col">
+  <Login v-if="!connected" />
+  <div v-else class="h-screen w-screen flex flex-col">
     <!-- SECTION Server Part -->
     <div class="flex w-100 h-16 bg-slate-300">
       <div class="flex w-3/4 bg-slate-800 items-center">
