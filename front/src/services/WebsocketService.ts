@@ -11,12 +11,21 @@ export type MessageResource = {
   receiver_id: Number;
 };
 
+export type UserResource = {
+  id: number,
+  firstname: string;
+  lastname: string;
+  state: "ONLINE" | "AFK" | "DO NOT DISTURB" | "INVISIBLE"
+};
+
 interface ServerToClientEvents {
   "server.new-message": (data: MessageResource) => void;
+  "server.new-state": (data: Partial<UserResource>) => void;
 }
 
 interface ClientToServerEvents {
   "client.new-message": (data: MessageResource) => void;
+  "client.new-state": (data: Partial<UserResource>) => void;
   "ping": (data: number) => void;
 }
 
@@ -32,6 +41,11 @@ clientSocket.on("server.new-message", (data) => {
   console.log(data)
 });
 
+clientSocket.on("server.new-state", (data) => {
+  console.log(data)
+});
+
+
 clientSocket.on("disconnect", () => {
   console.log(clientSocket.connected); // false
 });
@@ -40,6 +54,10 @@ export const SocketService = {
   sendMessage: (clientSocket: ClientSocket, data: MessageResource) => {
     clientSocket.emit("client.new-message", data);
   },
+
+  updateState: (clientSocket: ClientSocket, data: Partial<UserResource>) => {
+    clientSocket.emit('client.new-state', data)
+  }
 };
 
 export default clientSocket;
