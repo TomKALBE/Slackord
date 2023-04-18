@@ -29,7 +29,9 @@ services:
     postgres:
         build: services/postgres
         environment:
-            - POSTGRES_USER=app
-            - POSTGRES_PASSWORD=app
+            - POSTGRES_USER=zombocom
+            - POSTGRES_PASSWORD=zombocom
+            - POSTGRES_DB=zombocom
+
         volumes:
             - postgres-data:/var/lib/postgresql/data
