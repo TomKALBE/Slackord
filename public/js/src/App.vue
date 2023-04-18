@@ -8,14 +8,12 @@ import Login from "./components/auth/Login.vue";
 const notification = ref(false);
 const connected = ref(false);
 onMounted(async () => {
-  initDropdowns();
-  initModals();
-  setChatScrollBarBottom();
+  
   setTimeout(() => {
     // notification.value = true
   }, 2000);
-
-
+  
+  
 });
 const setChatScrollBarBottom = () => {
   const chat = document.getElementById("chat") as HTMLDivElement;
@@ -24,10 +22,22 @@ const setChatScrollBarBottom = () => {
 const handleClick = () => {
   notification.value = !notification.value
 }
+const maFonction = () => {
+  connected.value = true;
+  notification.value = true;
+  setTimeout(() => {
+    setChatScrollBarBottom();
+    initDropdowns();
+  initModals();
+  }, 10);
+    setTimeout(() => {
+    notification.value = false
+  }, 5000);
+}
 </script>
 
 <template>
-  <Login v-if="!connected"/>
+  <Login v-if="!connected" :maFonction="maFonction"/>
   <div v-else class="h-screen w-screen flex flex-col">
     <!-- SECTION Server Part -->
     <div class="flex w-100 h-16 bg-slate-300">
@@ -323,7 +333,7 @@ const handleClick = () => {
         <!-- !SECTION Input-->
       </div>
       <!-- !SECTION  -->
-      <Toast color="amber" v-if="notification"/>
+      <Toast color="emerald" v-if="notification"/>
     </div>
     
     <!-- !SECTION Channel Part-->
