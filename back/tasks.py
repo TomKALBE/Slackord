@@ -78,8 +78,8 @@ def cache_clear(c):
     """
     Clear the application cache
     """
-    # with Builder(c):
-    #     docker_compose_run(c, 'rm -rf var/cache/ && php bin/console cache:warmup', no_deps=True)
+    with Builder(c):
+        docker_compose_run(c, 'rm -rf var/cache/ && php bin/console cache:warmup', no_deps=True)
 
 
 @task
@@ -87,9 +87,9 @@ def migrate(c):
     """
     Migrate database schema
     """
-    # with Builder(c):
-    #     docker_compose_run(c, 'php bin/console doctrine:database:create --if-not-exists')
-    #     docker_compose_run(c, 'php bin/console doctrine:migration:migrate -n --allow-no-migration')
+    with Builder(c):
+        docker_compose_run(c, 'php bin/console doctrine:database:create --if-not-exists')
+        docker_compose_run(c, 'php bin/console doctrine:migration:migrate -n --allow-no-migration')
 
 
 @task
@@ -237,6 +237,7 @@ def generate_certificates(c, force=False):
             return
 
         c.run('infrastructure/docker/services/router/generate-ssl.sh')
+        c.run('bin/console lexik:jwt:generate-keypair')
 
         print(Fore.GREEN + 'Successfully generated self-signed SSL certificates in infrastructure/docker/services/router/etc/ssl/certs/*.pem.')
         print(Fore.YELLOW + 'Consider installing mkcert to generate locally trusted SSL certificates and run "inv generate-certificates --force".')
