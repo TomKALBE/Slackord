@@ -1,3 +1,17 @@
+<script setup>
+import getClientSocket from './utils/WebSocketService';
+
+const nuxtApp = useNuxtApp()
+nuxtApp.provide('socket', getClientSocket(useRuntimeConfig().public.socketUrl))
+
+
+const { autoLogin } = useAuth();
+
+onMounted(async () => {
+  await autoLogin();
+})
+
+</script>
 <template>
   <div class="main h-screen w-screen flex justify-center items-center bg-slate-650">
     <NuxtLayout>
@@ -16,10 +30,3 @@
   filter: opacity(0);
 }
 </style>
-<script setup>
-import getClientSocket from './utils/WebSocketService';
-
-const nuxtApp = useNuxtApp()
-nuxtApp.provide('socket', getClientSocket(useRuntimeConfig().public.socketUrl))
-
-</script>
