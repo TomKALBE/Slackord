@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { icon } from "@fortawesome/fontawesome-svg-core";
-import { onMounted, ref } from "vue";
+import { onActivated, onMounted, ref } from "vue";
 
 defineProps<{
   color:
@@ -46,6 +46,7 @@ const notifClassesSecondTransition = [
   "divide-gray-700",
 ];
 const notificationContent = ref<any>("Bienvenue sur zombo.com");
+
 onMounted(() => {
   console.log("toast loaded")
   const root = document.documentElement;
@@ -55,13 +56,16 @@ onMounted(() => {
   root.style.setProperty("--border-toast-color", iconColor);
   const monElement = document.getElementById("mon-element");
   const monBouton = document.getElementById("mon-bouton");
+  const fermerBouton = document.getElementById("fermer-bouton");
+  setTimeout(() => {
+    fermerBouton?.click();
+  }, 4000)
   if (monBouton && monElement) {
     monElement.classList.remove("hidden");
     setTimeout(() => {
       monElement.classList.add("mon-element-cercle", "mon-element-decale");
     }, 100);
   }
-  const fermerBouton = document.getElementById("fermer-bouton");
   if (fermerBouton && monBouton && monElement) {
     fermerBouton.addEventListener("click", () => {
       if (monElement.classList.contains("animation-end-second-card")) {
@@ -84,9 +88,7 @@ onMounted(() => {
             }
             for (let i = 0; i < notificationContent.value.length; i++) {
               hideSpan(
-                monElement.children[1].children[0].children[
-                i
-                ] as HTMLSpanElement
+                monElement.children[1].children[0].children[i] as HTMLSpanElement
               );
             }
           },
