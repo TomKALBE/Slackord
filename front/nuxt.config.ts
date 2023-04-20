@@ -11,7 +11,7 @@ export default defineNuxtConfig({
         viewer: true,
     },
     modules: [
-        '@nuxtjs/tailwindcss'
+        '@nuxtjs/tailwindcss',
     ],
     build: {
         transpile: [
@@ -28,16 +28,16 @@ export default defineNuxtConfig({
         '@fortawesome/fontawesome-svg-core/styles.css', 
     ],
 
-    // vite: {
-    //     server: {
-    //         proxy: {
-    //             "^/api/.*": {
-    //                 target: "https://local.zombocom.app/api/register",
-    //                 changeOrigin: true,
-    //                 secure: false,
-    //                 rewrite: (path) => path.replace(/^\/api/, ""),
-    //             },
-    //         },
-    //     },
-    // },
+    vite: {
+        server: {
+            proxy: {
+                "^/api/.*": {
+                    target: "https://local.zombocom.app/api/",
+                    changeOrigin: true,
+                    secure: false,
+                    rewrite: (path) => path.replace(/^\/api/, ""),
+                },
+            },
+        },
+    },
 });
