@@ -1,6 +1,8 @@
 export default defineNuxtRouteMiddleware((to, from) => {
-    if (to.name === 'index' && useState('user')?.value?.isAuthenticated !== true) {
-      return navigateTo('/login')
-    }
-    // return navigateTo('/')
+  console.log(to)
+  if (to.name === 'index' && !useState('user')?.value?.isAuthenticated) {
+    console.log("middleware", useState('user')?.value?.isAuthenticated)
+    return navigateTo('/register')
+  }
+  // return navigateTo('/')
 })

@@ -8,26 +8,18 @@ export const useAuth = () => {
 };
 
 const status = () => {
-    // const user = localStorage.getItem('user')
-    // if (user) {
-    //     const parsedUser = JSON.parse(user)
-    //     parsedUser.isAuthenticated = true
-    //     useState('user').value = parsedUser
-    //     return parsedUser
-    // } else {
-    //     return { isAuthenticated: false }
-    // }
-    return "coucou";
+    const user = localStorage.getItem('user')
+    if (user) {
+        const parsedUser = JSON.parse(user)
+        useState('user').value = { ...parsedUser, isAuthenticated: true }
+        return true
+    } else {
+        return false
+    }
 };
-const login = () => {
-    useState("user").value = {
-        isAuthenticated: true,
-    };
-    return true;
-};
-const register = async (data) => {
+async function login(data: LoginForm) {
     try {
-        const res = await fetch("https://local.zombocom.app/api/register", {
+        const res = await fetch("/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -36,11 +28,31 @@ const register = async (data) => {
             redirect: "follow",
         });
         const json = await res.json();
-        if(!json)
+        if (!json)
             return
-        localStorage.setItem("user", json);
-        useState('user').value = json
-        useState('user').value.isAuthenticated = true
+        localStorage.setItem("user", JSON.stringify(json));
+        console.log(json)
+        useState('user').value = { ...json, isAuthenticated: true }
+        navigateTo('/')
+    } catch (e) {
+        console.log(e);
+    }
+};
+async function register(data: RegisterForm) {
+    try {
+        const res = await fetch("/api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+            redirect: "follow",
+        });
+        const json = await res.json();
+        if (!json)
+            return
+        localStorage.setItem("user", JSON.stringify(json));
+        useState('user').value = { ...json, isAuthenticated: true }
         navigateTo('/')
     } catch (e) {
         console.log(e);
@@ -50,6 +62,7 @@ const logout = () => {
     useState("user").value = {
         isAuthenticated: false,
     };
+    localStorage.removeItem("user");
     navigateTo("/login");
     return true;
 };

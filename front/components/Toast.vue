@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { icon } from "@fortawesome/fontawesome-svg-core";
+import { onActivated, onMounted, ref } from "vue";
+
 defineProps<{
   color:
   | "slate"
@@ -57,14 +60,13 @@ onMounted(() => {
   setTimeout(() => {
     fermerBouton?.click();
   }, 4000)
-  console.log(monElement)
-  if (monElement) {
+  if (monBouton && monElement) {
     monElement.classList.remove("hidden");
     setTimeout(() => {
       monElement.classList.add("mon-element-cercle", "mon-element-decale");
     }, 100);
   }
-  if (fermerBouton && monElement) {
+  if (fermerBouton && monBouton && monElement) {
     fermerBouton.addEventListener("click", () => {
       if (monElement.classList.contains("animation-end-second-card")) {
         monElement.classList.remove("mon-element-decale");
