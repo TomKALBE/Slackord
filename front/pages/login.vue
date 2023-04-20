@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-const props = defineProps({
-  maFonction: Function,
+const loginForm = ref({
+  pseudo:'Test',
+  username:'test@test.com',
+  password:'12345678'
 })
 const handleClick = () => {
     const res = useAuth().login()
@@ -8,23 +10,7 @@ const handleClick = () => {
         navigateTo('/')
 }
 const login = async () => {
-  try {
-      const res = await fetch('https://local.zombocom.app/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "email": "xxxtz",
-          "password": "xxx",
-          "pseudo": "xxxtz"
-        }),
-    })
-    const json = await res.json()
-    console.log(json)
-   }catch(e) {
-      console.log(e)
-    }
+  useAuth().login(loginForm.value)
 }
 onMounted(()=>{
     
@@ -52,6 +38,20 @@ onMounted(()=>{
             id="email"
             class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
             placeholder="name@zombo.com"
+            v-model="loginForm.username"
+            required
+          />
+        </div>
+        <div class="mb-6">
+          <label for="email" class="block mb-2 text-sm font-medium text-white"
+            >Pseudo</label
+          >
+          <input
+            type="email"
+            id="email"
+            class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+            placeholder="name@zombo.com"
+            v-model="loginForm.pseudo"
             required
           />
         </div>
@@ -65,11 +65,12 @@ onMounted(()=>{
             type="password"
             id="password"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+            v-model="loginForm.password"
             required
           />
         </div>
         <button
-          @click="handleClick"
+          @click="login"
           type="button"
           class="text-white bg-indigo-600 active:bg-indigo-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >

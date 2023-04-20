@@ -2,6 +2,9 @@
 import { initModals, initDropdowns } from "flowbite";
 const notification = ref(false);
 onMounted(async () => {
+    if(!localStorage.getItem('user')){
+        navigateTo('/login')
+    }
     notification.value = true;
     setTimeout(() => {
         setChatScrollBarBottom();
@@ -24,7 +27,9 @@ const logout = () => {
 }
 definePageMeta({
     middleware: [
-        'auth',
+        function (){
+            
+        },
     ],
 });
 </script>

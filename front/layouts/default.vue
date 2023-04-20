@@ -1,7 +1,11 @@
 <script setup>
+import { use } from 'h3';
+
 const notification = ref(false)
 
 onMounted(() => {
+    console.log("ici", useAuth().status())
+    console.log(useState('user').value)
 })
 
 watch(useState('user'), (newVal) => {

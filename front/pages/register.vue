@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-const registerForm = ref({
-    email: '',
-    pseudo: '',
-    password: ''
+const registerForm = ref<RegisterForm>({
+    email: 'test@test.com',
+    pseudo: 'Test',
+    password: '12345678'
 
 })
 const handleClick = () => {
@@ -11,17 +11,17 @@ const handleClick = () => {
         navigateTo('/')
 }
 const register = async () => {
-//     const res = await fetch("https://local.zombocom.app/api/register", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(registerForm.value),
-//         redirect: "follow",
-//     });
+    // const res = await fetch("/api/register", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(registerForm.value),
+    //     redirect: "follow",
+    // });
 //     const json = await res.json();
-    const res = await fetch('https://local.zombocom.app/api/test')
-//   useAuth().register(registerForm.value)
+    // const res = await fetch('https://local.zombocom.app/api/test')
+  useAuth().register(registerForm.value)
 }
 onMounted(()=>{
     

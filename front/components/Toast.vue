@@ -45,7 +45,6 @@ const notifClassesSecondTransition = [
 const notificationContent = ref<any>("Bienvenue sur zombo.com");
 
 onMounted(() => {
-  console.log("toast loaded")
   const root = document.documentElement;
   const toastIcon = document.getElementById("toast-icon");
   const style = window.getComputedStyle(toastIcon);
@@ -57,7 +56,6 @@ onMounted(() => {
   setTimeout(() => {
     fermerBouton?.click();
   }, 4000)
-  console.log(monElement)
   if (monElement) {
     monElement.classList.remove("hidden");
     setTimeout(() => {
@@ -72,8 +70,6 @@ onMounted(() => {
         monElement.addEventListener(
           "transitionend",
           async () => {
-            console.log("close button");
-
             monElement.classList.add("hidden");
             monElement.children[1].classList.add("hidden");
             monElement.classList.remove("animation-end-second-card");
@@ -97,7 +93,6 @@ onMounted(() => {
 
     monElement.addEventListener("transitionend", async () => {
       if (monElement.classList.contains("mon-element-cercle")) {
-        console.log("animation cercle");
         for (let i = 0; i < notifClassesFirstTransition.length; i++) {
           monElement.classList.add(notifClassesFirstTransition[i]);
         }
@@ -106,7 +101,6 @@ onMounted(() => {
         monElement.classList.contains("animation-spawn-first-card") &&
         monElement.offsetWidth == 80
       ) {
-        console.log("animation second card");
         monElement.classList.remove("w-[80px]");
         monElement.classList.remove("animation-spawn-first-card");
 

@@ -1,17 +1,15 @@
 <template>
-  <div>
+  <div class="main h-screen w-screen flex justify-center items-center bg-slate-650">
     <NuxtLayout>
       <NuxtPage/>
     </NuxtLayout>
   </div>
 </template>
 <style>
-/* .fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+.fade-enter-active, .fade-leave-active {
+    transition: all 0.4s;
 }
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-} */
+.fade-enter-from, .fade-leave-to {
+  filter: opacity(0);
+}
 </style>
