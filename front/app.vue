@@ -1,3 +1,9 @@
+<script setup>
+const { autoLogin } = useAuth();
+onMounted(async () =>{
+  await autoLogin();
+})
+</script>
 <template>
   <div class="main h-screen w-screen flex justify-center items-center bg-slate-650">
     <NuxtLayout>
