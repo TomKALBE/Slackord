@@ -11,7 +11,7 @@ export default defineNuxtConfig({
         viewer: true,
     },
     modules: [
-        '@nuxtjs/tailwindcss'
+        '@nuxtjs/tailwindcss',
     ],
     build: {
         transpile: [
@@ -28,18 +28,18 @@ export default defineNuxtConfig({
         '@fortawesome/fontawesome-svg-core/styles.css',
     ],
 
-    // vite: {
-    //     server: {
-    //         proxy: {
-    //             "^/api/.*": {
-    //                 target: "https://local.zombocom.app/api/register",
-    //                 changeOrigin: true,
-    //                 secure: false,
-    //                 rewrite: (path) => path.replace(/^\/api/, ""),
-    //             },
-    //         },
-    //     },
-    // },
+    vite: {
+        server: {
+            proxy: {
+                "^/api/.*": {
+                    target: process.env.API_URL,
+                    changeOrigin: true,
+                    secure: false,
+                    rewrite: (path) => path.replace(/^\/api/, ""),
+                },
+            },
+        },
+    },
 
     runtimeConfig: {
         apiSecret: '', // can be overridden by NUXT_API_SECRET environment variable
