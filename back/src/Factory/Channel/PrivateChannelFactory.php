@@ -2,11 +2,13 @@
 
 namespace App\Factory\Channel;
 
-use App\Entity\Channel\PrivateChannel;
-use App\Repository\PrivateChannelRepository;
-use Zenstruck\Foundry\ModelFactory;
+use App\Factory\UserFactory;
 use Zenstruck\Foundry\Proxy;
+use App\Factory\MessageFactory;
+use Zenstruck\Foundry\ModelFactory;
+use App\Entity\Channel\PrivateChannel;
 use Zenstruck\Foundry\RepositoryProxy;
+use App\Repository\PrivateChannelRepository;
 
 /**
  * @extends ModelFactory<PrivateChannel>
@@ -57,8 +59,24 @@ final class PrivateChannelFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            // ->afterInstantiate(function(PrivateChannel $privateChannel): void {})
-        ;
+            ->afterPersist(function (PrivateChannel $privateChannel): void {
+                foreach (range(5, random_int(5, 25)) as $timesUsersPosted) {
+                    foreach (UserFactory::randomSet(random_int(2, 5)) as $user) {
+                        $privateChannel->addMember($user->object());
+                        $messagePostedAt = \DateTimeImmutable::createFromMutable(MessageFactory::faker()->dateTimeThisYear());
+
+                        foreach (range(1, random_int(1, 4)) as $successiveMessagesCount) {
+                            $messagePostedAt = $messagePostedAt->modify(sprintf('+%d seconds', random_int(45, 300)));
+
+                            MessageFactory::createOne([
+                                'author' => $user,
+                                'channel' => $privateChannel,
+                                'postedAt' => $messagePostedAt,
+                            ]);
+                        }
+                    }
+                }
+            });
     }
 
     protected static function getClass(): string

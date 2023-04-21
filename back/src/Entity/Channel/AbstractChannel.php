@@ -25,7 +25,12 @@ abstract class AbstractChannel
     #[ORM\Column(length: 255, nullable: true)]
     protected ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'channel', targetEntity: Message::class, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'channel',
+        targetEntity: Message::class,
+        orphanRemoval: true,
+        cascade: ['persist', 'remove']
+    )]
     protected Collection $messages;
 
     public function __construct()
