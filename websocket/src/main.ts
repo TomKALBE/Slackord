@@ -24,9 +24,13 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
         origin: "*",
     },
 }).on("connection", async (socket) => {
+    console.log("new connection");
     socket.on("client.new-message", async (data) => {
         console.log('new message received')
     });
 });
 
-httpServer.listen(Number(Env.PORT));
+httpServer.listen({port: Number(Env.PORT)}, () => {
+    console.log('Server running on port', Env.PORT, '...')
+});
+

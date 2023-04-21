@@ -22,7 +22,7 @@ const getClientSocket = (url: string) => {
     const clientSocket: ClientSocket = io(url);
 
     clientSocket.on("connect", () => {
-        console.log(clientSocket.connected); // false
+        console.log(clientSocket.connected); // true
     });
 
     clientSocket.on("disconnect", () => {
