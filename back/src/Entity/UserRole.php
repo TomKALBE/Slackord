@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRoleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\UserRoleRepository;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: UserRoleRepository::class)]
 class UserRole
 {
