@@ -1,33 +1,21 @@
-<script setup>
-import { use } from 'h3';
-
-const notification = ref(false)
-
+<script setup lang="ts">
+const toasts = useState<IToast[]>("toasts");
 onMounted(() => {
-    console.log("ici", useAuth().status())
-    console.log(useState('user').value)
-})
-
-watch(useState('user'), (newVal) => {
-    console.log('coucou', newVal.isAuthenticated)
-    if (newVal.isAuthenticated) {
-        notification.value = true
-        setTimeout(() => {
-            notification.value = false
-        }, 5000);
-    } else {
-        notification.value = true
-        setTimeout(() => {
-            notification.value = false
-        }, 5000);
-    }
-})
+    useToast().add({
+        color: "emerald",
+        message: "Bienvenue sur ZomboCom",
+        icon: "circle-check",
+    });
+});
 </script>
 <template>
     <div>
-        <Toast color="emerald" v-if="notification" />
-        <slot>
-
-        </slot>
+        <Toast
+            :icon="toasts[0].icon"
+            :message="toasts[0].message"
+            :color="toasts[0].color"
+            v-if="toasts && toasts[0]"
+        />
+        <slot> </slot>
     </div>
 </template>
