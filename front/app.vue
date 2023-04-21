@@ -2,12 +2,13 @@
 import getClientSocket from './utils/WebSocketService';
 
 const nuxtApp = useNuxtApp()
-nuxtApp.provide('socket', getClientSocket(useRuntimeConfig().public.socketUrl))
 
 
 const { autoLogin } = useAuth();
 
 onMounted(async () => {
+  console.log(useRuntimeConfig().public)
+  nuxtApp.provide('socket', getClientSocket(useRuntimeConfig().public.socketUrl))
   await autoLogin();
 })
 
