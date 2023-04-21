@@ -41,13 +41,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $channel_roles;
 
     #[ORM\ManyToMany(targetEntity: PrivateChannel::class, mappedBy: 'members')]
-    private Collection $PrivateChannels;
+    private Collection $privateChannels;
 
     public function __construct()
     {
         $this->servers = new ArrayCollection();
         $this->channel_roles = new ArrayCollection();
-        $this->PrivateChannels = new ArrayCollection();
+        $this->privateChannels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,23 +188,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getPrivateChannels(): Collection
     {
-        return $this->PrivateChannels;
+        return $this->privateChannels;
     }
 
-    public function addPrivateChannel(PrivateChannel $PrivateChannel): self
+    public function addPrivateChannel(PrivateChannel $privateChannel): self
     {
-        if (!$this->PrivateChannels->contains($PrivateChannel)) {
-            $this->PrivateChannels->add($PrivateChannel);
-            $PrivateChannel->addMember($this);
+        if (!$this->privateChannels->contains($privateChannel)) {
+            $this->privateChannels->add($privateChannel);
+            $privateChannel->addMember($this);
         }
 
         return $this;
     }
 
-    public function removePrivateChannel(PrivateChannel $PrivateChannel): self
+    public function removePrivateChannel(PrivateChannel $privateChannel): self
     {
-        if ($this->PrivateChannels->removeElement($PrivateChannel)) {
-            $PrivateChannel->removeMember($this);
+        if ($this->privateChannels->removeElement($privateChannel)) {
+            $privateChannel->removeMember($this);
         }
 
         return $this;

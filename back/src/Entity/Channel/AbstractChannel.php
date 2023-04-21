@@ -20,13 +20,13 @@ abstract class AbstractChannel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    protected ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    protected ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'channel', targetEntity: Message::class, orphanRemoval: true)]
-    private Collection $messages;
+    protected Collection $messages;
 
     public function __construct()
     {
