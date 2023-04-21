@@ -4,10 +4,12 @@ namespace App\Entity\Channel;
 
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\PrivateChannelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: PrivateChannelRepository::class)]
 class PrivateChannel extends AbstractChannel
 {
