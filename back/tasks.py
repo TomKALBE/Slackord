@@ -93,6 +93,18 @@ def migrate(c):
 
 
 @task
+def fixtures(c, no_reset=False):
+    """
+    Loads the fixtures
+    """
+    with Builder(c):
+        if not no_reset:
+            docker_compose_run(c, 'php bin/console doctrine:database:drop --if-exists --force')
+            migrate(c)
+        docker_compose_run(c, 'php bin/console doctrine:fixtures:load -n')
+
+
+@task
 def builder(c, user="app"):
     """
     Open a shell (bash) into a builder container
