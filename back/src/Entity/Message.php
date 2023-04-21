@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
-use App\Entity\Channel\AbstractChannel;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\MessageRepository;
+use App\Entity\Channel\AbstractChannel;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {

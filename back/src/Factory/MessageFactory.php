@@ -46,12 +46,14 @@ final class MessageFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $postedAt = \DateTimeImmutable::createFromMutable(self::faker()->dateTimeThisYear());
+
         return [
-            'author' => UserFactory::new(),
-            'channel' => ChannelFactory::new(),
-            'content' => self::faker()->text(50000),
-            'postedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'updatedAt' => self::faker()->dateTime(),
+            'content' => self::faker()->realTextBetween(5, 200),
+            'postedAt' => $postedAt,
+            'updatedAt' => self::faker()->numberBetween(1, 10) < 10 ?
+                \DateTime::createFromImmutable($postedAt) :
+                \DateTime::createFromImmutable($postedAt)->modify(sprintf('+%d minutes', self::faker()->numberBetween(1, 6000))),
         ];
     }
 
