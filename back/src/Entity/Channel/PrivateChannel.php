@@ -13,7 +13,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 #[ORM\Entity(repositoryClass: PrivateChannelRepository::class)]
 class PrivateChannel extends AbstractChannel
 {
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'privateChannels')]
+    #[ORM\ManyToMany(
+        targetEntity: User::class,
+        inversedBy: 'privateChannels'
+    )]
     private Collection $members;
 
     public function __construct()
@@ -33,6 +36,7 @@ class PrivateChannel extends AbstractChannel
     {
         if (!$this->members->contains($member)) {
             $this->members->add($member);
+            $member->addPrivateChannel($this);
         }
 
         return $this;
@@ -40,7 +44,9 @@ class PrivateChannel extends AbstractChannel
 
     public function removeMember(User $member): self
     {
-        $this->members->removeElement($member);
+        if ($this->members->removeElement($member)) {
+            $member->removePrivateChannel($this);
+        }
 
         return $this;
     }
