@@ -30,7 +30,7 @@ export default () => {
                 redirect: "follow",
             });
             const json = await res.json();
-            if (!json)
+            if (!json || json.code === 401)
                 return navigateTo('/login')
             localStorage.setItem("user", JSON.stringify({ ...json, ...data }));
             console.log(json)
