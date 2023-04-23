@@ -17,7 +17,7 @@ class ServerChannel extends AbstractChannel
     #[ORM\ManyToMany(targetEntity: UserRole::class)]
     private Collection $authorized_roles;
 
-    #[ORM\ManyToOne(inversedBy: 'channels')]
+    #[ORM\ManyToOne(inversedBy: 'channels', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?ChannelGroup $channelGroup = null;
 

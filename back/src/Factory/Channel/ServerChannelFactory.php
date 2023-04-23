@@ -55,8 +55,13 @@ final class ServerChannelFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            // ->afterInstantiate(function(ServerChannel $serverChannel): void {})
-        ;
+            ->afterInstantiate(function (ServerChannel $serverChannel): void {
+                $roles = $serverChannel->getChannelGroup()->getAuthorizedRoles();
+
+                foreach (self::faker()->randomElements($roles, self::faker()->numberBetween(1, \count($roles))) as $role) {
+                    $serverChannel->addAuthorizedRole($role);
+                }
+            });
     }
 
     protected static function getClass(): string

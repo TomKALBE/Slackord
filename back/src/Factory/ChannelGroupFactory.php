@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\ChannelGroup;
+use App\Factory\Channel\ServerChannelFactory;
 use App\Repository\ChannelGroupRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
@@ -47,8 +48,8 @@ final class ChannelGroupFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'name' => self::faker()->text(255),
-            'server' => ServerFactory::new(),
+            'name' => self::faker()->word(),
+            'server' => ServerFactory::randomOrCreate(),
         ];
     }
 
@@ -58,8 +59,11 @@ final class ChannelGroupFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            // ->afterInstantiate(function(ChannelGroup $channelGroup): void {})
-        ;
+            ->afterInstantiate(function (ChannelGroup $channelGroup): void {
+                ServerChannelFactory::createMany(self::faker()->numberBetween(2, 5), [
+                    'channelGroup' => $channelGroup,
+                ]);
+            });
     }
 
     protected static function getClass(): string
