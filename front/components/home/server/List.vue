@@ -2,11 +2,17 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { initModals } from "flowbite";
 
+const emit = defineEmits(['handleServerChange'])
+
 onMounted(() => {
   initModals();
 });
 
 const serverList = [
+  {
+    bgColor: "gray",
+    hasNotification: null,
+  },
   {
     bgColor: "orange",
     hasNotification: null,
@@ -26,7 +32,7 @@ const setSelectedServer = (index:number) => {
   selectedServer.value = index;
   if (serverList[index].hasNotification)
     serverList[index].hasNotification = false;
-  console.log(index);
+  emit("handleServerChange", index);
 };
 </script>
 <template>

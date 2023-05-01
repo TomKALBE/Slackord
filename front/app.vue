@@ -7,7 +7,6 @@ const nuxtApp = useNuxtApp()
 const { autoLogin } = useAuth();
 
 onMounted(async () => {
-  console.log(useRuntimeConfig().public)
   nuxtApp.provide('socket', getClientSocket(useRuntimeConfig().public.socketUrl))
   await autoLogin();
 })

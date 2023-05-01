@@ -37,4 +37,16 @@ declare global {
         message: string;
         icon: "paper-plane" | "bell" | "circle-check" | "circle-exclamation";
     }
+    interface IUser {
+        id: number;
+        email: string;
+        pseudo: string;
+        roles: string[];
+        password: string;
+        servers: string[];
+        channel_roles: string[];
+        privateChannels: string[];
+        userIdentifier: string;
+        channelRoles: string[];
+    }
 }
