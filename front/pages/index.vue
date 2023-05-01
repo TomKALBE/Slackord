@@ -1,37 +1,33 @@
 <script setup lang="ts">
 import { initModals, initDropdowns } from "flowbite";
-const notification = ref(false);
+
+const currentServer = ref(0);
+const currentConversation = ref(0);
+
+const { users, getRelatedUsers } = useUser();
 onMounted(async () => {
-    if (!localStorage.getItem('user')) {
-        navigateTo('/login')
-    }
-    notification.value = true;
     setTimeout(() => {
-        setChatScrollBarBottom();
+        // setChatScrollBarBottom();
         initDropdowns();
         initModals();
+        getRelatedUsers(1);
     }, 10);
-    setTimeout(() => {
-        notification.value = false
-    }, 5000);
 });
+
 const setChatScrollBarBottom = () => {
     const chat = document.getElementById("chat") as HTMLDivElement;
     chat.scrollTop = chat?.scrollHeight;
 };
-const handleClick = () => {
-    notification.value = !notification.value
-}
+
 const logout = () => {
     useAuth().logout();
 }
-definePageMeta({
-    middleware: [
-        function () {
-
-        },
-    ],
-});
+const handleServerChange = (server: number) => {
+    currentServer.value = server;
+}
+const handleConversationChange = (conversation:number) => {
+    currentConversation.value = conversation;
+}
 </script>
 <template>
     <div class="h-screen w-screen flex flex-col">
@@ -39,7 +35,7 @@ definePageMeta({
         <div class="flex w-100 h-16 bg-slate-300">
             <div class="flex w-3/4 bg-slate-800 items-center">
                 <!-- SECTION Server List -->
-                <HomeServerList />
+                <HomeServerList @handleServerChange="(server) => handleServerChange(server)"/>
                 <!-- !SECTION Server List-->
                 <!-- SECTION SearchBar -->
                 <div class="flex w-4/12 items-center justify-center relative">
@@ -125,93 +121,57 @@ definePageMeta({
         <div class="flex-1 flex">
             <div class="lg:w-3/12 sm:w-4/12 bg-slate-700 border-r-2 border-t-2 border-slate-800">
                 <!-- SECTION Header -->
-                <div class="w-full h-14 flex items-center border-b-2 border-slate-800">
-                    <div class="ml-4 flex w-full items-center justify-around">
-                        <div class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer"
-                            @click="handleClick">
-                            <p class="text-xl text-white">Zombo Com</p>
-                            <FontAwesomeIcon class="w-4 text-gray-100 ml-2" :icon="`fa-chevron-down`" />
-                        </div>
-                        <div id="mon-bouton"
-                            class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10">
-                            <FontAwesomeIcon class="w-5 h-5 text-white" :icon="['far', 'bell']" />
-                        </div>
-                    </div>
-                </div>
-                <!-- !SECTION Header-->
-                <!-- SECTION Channel list -->
-                <div class="flex justify-center">
-                    <div class="flex-col w-11/12 mt-4 space-y-3">
-                        <div class="flex w-full bg-slate-550 rounded-md h-10 items-center justify-between">
-                            <p class="text-slate-150 ml-8"># Channel 1</p>
-                            <FontAwesomeIcon data-dropdown-toggle="dropdown"
-                                class="w-4 text-gray-300 hover:text-gray-100 cursor-pointer mr-2" icon="fa-gear" />
-                            <div id="dropdown"
-                                class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-44 bg-slate-800 border-2 border-slate-600">
-                                <ul class="py-2 text-sm text-gray-200" aria-labelledby="dropdownDefaultButton">
-                                    <li>
-                                        <a href="#"
-                                            class="block px-4 py-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white">Modifier</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            class="block px-4 py-2 font-semibold text-orange-500 hover:bg-gray-100 hover:bg-gray-600 hover:text-white">Supprimer</a>
-                                    </li>
-                                </ul>
+                <template v-if="currentServer">
+                    <div class="w-full h-14 flex items-center border-b-2 border-slate-800">
+                        <div class="ml-4 flex w-full items-center justify-around">
+                            <div class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer"
+                                @click="handleClick">
+                                <p class="text-xl text-white">Zombo Com</p>
+                                <FontAwesomeIcon class="w-4 text-gray-100 ml-2" :icon="`fa-chevron-down`" />
+                            </div>
+                            <div id="mon-bouton"
+                                class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10">
+                                <FontAwesomeIcon class="w-5 h-5 text-white" :icon="['far', 'bell']" />
                             </div>
                         </div>
-                        <div class="flex w-full h-10 items-center">
-                            <p class="text-slate-150 ml-8"># Channel 2</p>
-                        </div>
-                        <div class="flex w-full h-10 items-center">
-                            <p class="text-slate-150 ml-8"># Channel 3</p>
-                        </div>
-                        <div class="flex w-full h-10 items-center">
-                            <p class="text-slate-150 ml-8"># Channel 4</p>
+                    </div>
+                    <!-- !SECTION Header-->
+                    <!-- SECTION Channel list -->
+                    <HomeChannelList />
+                    <!-- !SECTION Channel list-->
+                </template>
+                <template v-else>
+                    <div class="w-full h-14 flex items-center border-b-2 border-slate-800">
+                        <div class="ml-4 flex w-full items-center justify-around">
+                            <div class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer">
+                                <p class="text-xl text-white">Messages privés</p>
+                            </div>
+                            <div id="mon-bouton"
+                                class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10">
+                                <FontAwesomeIcon class="w-5 h-5 text-white" :icon="['fa', 'plus']" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- !SECTION Channel list-->
+                    <HomeUserList @handleConversationChange="(conversation) => handleConversationChange(conversation)"/>
+                </template>
             </div>
             <!-- SECTION Chat Part -->
             <div class="flex flex-col lg:w-9/12 sm:w-8/12 bg-slate-650 border-t-2 border-slate-800">
                 <!-- SECTION Channel info -->
-                <div class="flex w-full h-14 border-b-2 border-slate-800 items-center justify-between">
+
+                <div v-if="currentServer !== PRIVATE_CONVERSATION" class="flex w-full h-14 border-b-2 border-slate-800 items-center justify-between">
                     <p class="ml-6 text-xl text-white"># Channel 1</p>
                     <div class="mr-6">
                         <FontAwesomeIcon class="w-5 h-5 text-slate-150 mr-4" :icon="['fa', 'bell']" />
                         <FontAwesomeIcon class="w-5 h-5 text-slate-150" :icon="['fa', 'user-group']" />
                     </div>
                 </div>
+                <div v-else class="flex w-full h-14 border-b-2 border-slate-800 items-center justify-between">
+                    <p class="ml-6 text-xl text-white">@ {{ users[currentConversation]?.pseudo }}</p>
+                </div>
                 <!-- !SECTION Channel info-->
                 <!-- SECTION Chat -->
-                <div class="max-h-full max-w-full flex flex-1">
-                    <div id="chat"
-                        class="fixed flex-col-reverse chat-max-height scrollbar-y-hide scrollbar:!w-1.5 scrollbar:!h-1.5 scrollbar:bg-transparent scrollbar-track:!bg-slate-100 scrollbar-thumb:!rounded scrollbar-thumb:!bg-slate-300 scrollbar-track:!rounded scrollbar-track:!bg-slate-500/[0.16] scrollbar-thumb:!bg-slate-500/50 max-h-96 lg:supports-scrollbars:pr-2 overflow-scroll max-w-full mx-8">
-                        <!-- SECTION Messages -->
-                        <!-- Todo Gérer l'overflow -->
-                        <div v-for="i in 25" :key="i" class="flex min-h-[3.5rem] my-5">
-                            <div class="flex w-14 justify-center items-center">
-                                <div
-                                    class="flex w-8 h-8 rounded-full bg-slate-500 justify-center items-center self-start mt-2">
-                                    <FontAwesomeIcon class="h-4 w-4 text-white" :icon="['far', 'user']" />
-                                </div>
-                            </div>
-                            <div class="flex-1 flex-row items-center text-slate-200">
-                                <div class="flex items-center">
-                                    <p class="text-md font-semibold">Pseudo {{ i }}</p>
-                                    <p class="text-xs ml-5">24/02/2023 16:22</p>
-                                </div>
-                                <p>
-                                    Bonjour je suis très heureux d'être Bonjour je suis très
-                                    heureux d'être Bonjour je suis très heureux d'être Bonjour je
-                                    suis très heureux d'être Bonjour je suis très heureux d'être
-                                </p>
-                            </div>
-                        </div>
-                        <!-- !SECTION Messages-->
-                    </div>
-                </div>
+                <HomeMessageList v-if="users?.length > 0" :user="users[currentConversation]"/>
                 <!-- !SECTION Chat -->
                 <!-- SECTION Input -->
                 <div class="w-full flex bg-slate-650 justify-center z-10">
@@ -238,3 +198,8 @@ definePageMeta({
         <!-- !SECTION Server add Modal -->
     </div>
 </template>
+<style scoped>
+.chat-max-height {
+  max-height: calc(100vh - 2.5rem - 3.5rem - 4rem - 4rem);
+}
+</style>

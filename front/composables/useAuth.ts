@@ -1,23 +1,39 @@
 export default () => {
+    const user = useState<IUser | null>("user", () => null);
     const status = () => {
-        const user = localStorage.getItem('user')
-        if (user) {
-            const parsedUser = JSON.parse(user)
-            useState('user').value = { ...parsedUser, isAuthenticated: true }
-            return true
+        const _user = localStorage.getItem("user");
+        if (_user) {
+            const parsedUser = JSON.parse(_user);
+            user.value = { ...parsedUser, isAuthenticated: true };
+            return true;
         } else {
-            return false
+            return false;
         }
     };
     async function autoLogin() {
-        console.log('coucou')
-        if (localStorage.getItem('user')) {
-            const _user = JSON.parse(localStorage.getItem('user'))
-            delete _user.token;
-            await nextTick();
-            await login(_user)
+        if (useRuntimeConfig().public.appEnv === "production") {
+            if (localStorage.getItem("user")) {
+                const _user = JSON.parse(localStorage.getItem("user"));
+                delete _user.token;
+                await nextTick();
+                await login(_user);
+            }
+        } else {
+            if (localStorage.getItem("user")) {
+                const _user = JSON.parse(localStorage.getItem("user"));
+                await nextTick();
+                useState('user').value = _user;
+            } else {
+                const _user = {
+                    id: 1,
+                    email: "test1@test.com",
+                    pseudo: "test1",
+                };
+                localStorage.setItem("user", JSON.stringify(_user));
+                await nextTick();
+                useState('user').value = _user;
+            }
         }
-
     }
     async function login(data: LoginForm) {
         try {
@@ -30,16 +46,15 @@ export default () => {
                 redirect: "follow",
             });
             const json = await res.json();
-            if (!json || json.code === 401)
-                return navigateTo('/login')
+            if (!json || json.code === 401) return navigateTo("/login");
             localStorage.setItem("user", JSON.stringify({ ...json, ...data }));
-            console.log(json)
-            useState('user').value = { ...json, isAuthenticated: true }
-            navigateTo('/')
+            console.log(json);
+            user.value = { ...json, isAuthenticated: true };
+            navigateTo("/");
         } catch (e) {
             console.log(e);
         }
-    };
+    }
     async function register(data: RegisterForm) {
         try {
             const res = await fetch("/api/register", {
@@ -51,17 +66,16 @@ export default () => {
                 redirect: "follow",
             });
             const json = await res.json();
-            if (!json)
-                return
+            if (!json) return;
             localStorage.setItem("user", JSON.stringify(json));
-            useState('user').value = { ...json, isAuthenticated: true }
-            navigateTo('/')
+            user.value = { ...json, isAuthenticated: true };
+            navigateTo("/");
         } catch (e) {
             console.log(e);
         }
-    };
+    }
     const logout = () => {
-        useState("user").value = {
+        user.value = {
             isAuthenticated: false,
         };
         localStorage.removeItem("user");
@@ -69,10 +83,11 @@ export default () => {
         return true;
     };
     return {
+        user,
         status,
         register,
         login,
         logout,
-        autoLogin
+        autoLogin,
     };
 };
