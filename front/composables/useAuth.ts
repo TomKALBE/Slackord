@@ -11,21 +11,22 @@ export default () => {
         }
     };
     async function autoLogin() {
+        let _user = null;
         if (useRuntimeConfig().public.appEnv === "production") {
             if (localStorage.getItem("user")) {
-                const _user = JSON.parse(localStorage.getItem("user"));
+                _user = JSON.parse(localStorage.getItem("user"));
                 delete _user.token;
                 await nextTick();
                 await login(_user);
             }
         } else {
             if (localStorage.getItem("user")) {
-                const _user = JSON.parse(localStorage.getItem("user"));
+                _user = JSON.parse(localStorage.getItem("user"));
                 await nextTick();
                 useState('user').value = _user;
             } else {
-                const _user = {
-                    id: 1,
+                _user = {
+                    id: 2,
                     email: "test1@test.com",
                     pseudo: "test1",
                 };
@@ -33,7 +34,10 @@ export default () => {
                 await nextTick();
                 useState('user').value = _user;
             }
+
         }
+        
+        SocketService.registerUserSocket( useNuxtApp().$socket ,_user.id);
     }
     async function login(data: LoginForm) {
         try {

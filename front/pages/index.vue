@@ -5,12 +5,13 @@ const currentServer = ref(0);
 const currentConversation = ref(0);
 
 const { users, getRelatedUsers } = useUser();
+const { user } = useAuth();
 onMounted(async () => {
     setTimeout(() => {
         // setChatScrollBarBottom();
         initDropdowns();
         initModals();
-        getRelatedUsers(1);
+        getRelatedUsers(user.value?.id);
     }, 10);
 });
 
@@ -173,22 +174,6 @@ const handleConversationChange = (conversation:number) => {
                 <!-- SECTION Chat -->
                 <HomeMessageList v-if="users?.length > 0" :user="users[currentConversation]"/>
                 <!-- !SECTION Chat -->
-                <!-- SECTION Input -->
-                <div class="w-full flex bg-slate-650 justify-center z-10">
-                    <div
-                        class="flex w-10/12 my-8 h-10 border-2 border-slate-500 rounded-md self-center justify-end items-center">
-                        <div class="flex justify-center w-1/12">
-                            <div
-                                class="w-6 h-6 flex items-center justify-center rounded-full bg-slate-300 hover:bg-slate-50 cursor-pointer">
-                                <FontAwesomeIcon class="w-4 text-slate-700" icon="plus" />
-                            </div>
-                        </div>
-                        <!-- TODO mettre une textarea -->
-                        <input placeholder="Envoyez un message"
-                            class="w-11/12 h-full border-none bg-transparent text-white placeholder:text-slate-300 pb-1 focus:outline-none" />
-                    </div>
-                </div>
-                <!-- !SECTION Input-->
             </div>
             <!-- !SECTION  -->
         </div>

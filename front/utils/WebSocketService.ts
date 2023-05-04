@@ -11,10 +11,13 @@ export type Message = {
     receiver_id: Number;
 };
 
-interface ServerToClientEvents { }
+interface ServerToClientEvents {
+    "server.new-message": (data: Message) => void;
+ }
 
 interface ClientToServerEvents {
     "client.new-message": (data: Message) => void;
+    "ping": (data: number) => void;
 }
 
 const getClientSocket = (url: string) => {
@@ -23,6 +26,13 @@ const getClientSocket = (url: string) => {
 
     clientSocket.on("connect", () => {
         console.log(clientSocket.connected); // true
+    });
+
+    clientSocket.on("server.new-message", (data) => {
+        const { addMessageToConversation } = useMessage();
+        addMessageToConversation(data);
+        //TODO - faire une fonction qui ajoute un message à la conversation
+        console.log("server.new-message :", data)
     });
 
     clientSocket.on("disconnect", () => {
@@ -40,6 +50,9 @@ type ClientSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 export const SocketService = {
     sendMessage: (clientSocket: ClientSocket, data: Message) => {
         clientSocket.emit("client.new-message", data);
+    },
+    registerUserSocket: (clientSocket: ClientSocket, data: number) => {
+        clientSocket.emit("ping", data);
     },
 };
 

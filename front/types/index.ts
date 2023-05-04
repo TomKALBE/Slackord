@@ -49,4 +49,15 @@ declare global {
         userIdentifier: string;
         channelRoles: string[];
     }
+
+    interface IMessageResource {
+        content: string;
+        upvote: number | null;
+        type: "PRIVATE" | "PUBLIC" | "CHANNEL";
+        created_at: number;
+        updated_at: number;
+        deleted_at: number | null;
+        user_id: number;
+        receiver_id: number;
+    }   
 }
