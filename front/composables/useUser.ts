@@ -12,7 +12,7 @@ export default () => {
                 const json = await res.json();
                 users.value = json;
             }else{
-                const res = await fetch('/api/users?id_gte=2',{
+                const res = await fetch('/api/users?id_ne=' + id,{
                     headers: {
                         "Media-Type": "application/json",
                     }
