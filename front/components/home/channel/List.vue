@@ -2,7 +2,7 @@
 
 </script>
 <template>
-    <div class="flex justify-center">
+    <div class="flex justify-center scrollbar channel-max-height overflow-y-scroll">
         <div class="flex-col w-11/12 mt-4 space-y-3">
             <div
                 class="flex w-full bg-slate-550 rounded-md h-10 items-center justify-between"
@@ -51,9 +51,12 @@
     </div>
 </template>
 <style scoped>
-/* 
-bg-green-400
-bg-indigo-400
-bg-orange-400
-*/
+.channel-max-height {
+    max-height: calc(100vh - 2.5rem - 3.5rem - 2rem);
+    min-height: calc(100vh - 2.5rem - 3.5rem - 2rem);
+}
+.scrollbar::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: transparent;
+}
 </style>

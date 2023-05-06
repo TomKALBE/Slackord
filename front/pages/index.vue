@@ -120,7 +120,7 @@ const handleConversationChange = (conversation:number) => {
         <!-- !SECTION Server Part-->
         <!-- SECTION Channel Part -->
         <div class="flex-1 flex">
-            <div class="lg:w-3/12 sm:w-4/12 bg-slate-700 border-r-2 border-t-2 border-slate-800">
+            <div class="lg:w-3/12 w-4/12 bg-slate-700 border-r-2 border-t-2 border-slate-800">
                 <!-- SECTION Header -->
                 <template v-if="currentServer">
                     <div class="w-full h-14 flex items-center border-b-2 border-slate-800">
@@ -157,7 +157,7 @@ const handleConversationChange = (conversation:number) => {
                 </template>
             </div>
             <!-- SECTION Chat Part -->
-            <div class="flex flex-col lg:w-9/12 sm:w-8/12 bg-slate-650 border-t-2 border-slate-800">
+            <div class="flex flex-col lg:w-9/12 w-8/12 bg-slate-650 border-t-2 border-slate-800">
                 <!-- SECTION Channel info -->
 
                 <div v-if="currentServer !== PRIVATE_CONVERSATION" class="flex w-full h-14 border-b-2 border-slate-800 items-center justify-between">
@@ -172,7 +172,7 @@ const handleConversationChange = (conversation:number) => {
                 </div>
                 <!-- !SECTION Channel info-->
                 <!-- SECTION Chat -->
-                <HomeMessageList v-if="users?.length > 0" :user="users[currentConversation]"/>
+                <HomeMessageList v-if="users?.length > 0" :user="users[currentConversation]" />
                 <!-- !SECTION Chat -->
             </div>
             <!-- !SECTION  -->
