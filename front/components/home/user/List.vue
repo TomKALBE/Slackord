@@ -9,7 +9,7 @@ const setSelectedUser = (index: number) => {
 };
 </script>
 <template>
-    <div class="flex justify-center channel-max-height overflow-scroll">
+    <div class="flex justify-center scrollbar channel-max-height overflow-y-scroll">
         <div class="flex-col w-11/12 mt-4 space-y-3">
             <div
                 v-if="users"
@@ -44,5 +44,9 @@ const setSelectedUser = (index: number) => {
 .channel-max-height {
     max-height: calc(100vh - 2.5rem - 3.5rem - 2rem);
     min-height: calc(100vh - 2.5rem - 3.5rem - 2rem);
+}
+.scrollbar::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: transparent;
 }
 </style>
