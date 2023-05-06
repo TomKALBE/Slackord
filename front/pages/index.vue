@@ -62,7 +62,7 @@ const handleConversationChange = (conversation:number) => {
                     </div>
                     <div class="flex-1 mr-1">
                         <p class="text-white group-hover:border-b-2 cursor-pointer inline-block">
-                            DieuDonné Allognon
+                            DieuDonné Allognon {{ useAuth().user.value?.id }}
                         </p>
                     </div>
                 </div>
