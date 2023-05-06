@@ -49,7 +49,6 @@ declare global {
         userIdentifier: string;
         channelRoles: string[];
     }
-
     interface IMessageResource {
         content: string;
         upvote: number | null;
@@ -59,5 +58,39 @@ declare global {
         deleted_at: number | null;
         user_id: number;
         receiver_id: number;
+    } 
+    interface INotification {
+        content: string;
+        type: ENotificationType;
+        date: number;
+        user_id: number;
+        color:
+            | "slate"
+            | "gray"
+            | "zinc"
+            | "neutral"
+            | "stone"
+            | "red"
+            | "orange"
+            | "amber"
+            | "yellow"
+            | "lime"
+            | "green"
+            | "emerald"
+            | "teal"
+            | "cyan"
+            | "sky"
+            | "blue"
+            | "indigo"
+            | "purple"
+            | "fuchsia"
+            | "pink"
+            | "rose";
+        icon: "paper-plane" | "bell" | "circle-check" | "circle-exclamation";
     }   
+    enum ENotificationType {
+        PRIVATE = "PRIVATE",
+        PUBLIC = "PUBLIC",
+        CHANNEL = "CHANNEL"
+    }
 }
