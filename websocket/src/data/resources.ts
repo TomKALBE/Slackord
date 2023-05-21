@@ -20,3 +20,10 @@ export type UserResource = {
     lastname: string;
     state: "ONLINE" | "AFK" | "DO NOT DISTURB" | "INVISIBLE"
 };
+
+export type RelationshipResource = {
+    id: number;
+    sender_id: number,
+    receiver_id: number
+    request_status: "ACCEPTED" | "DECLINED"
+};

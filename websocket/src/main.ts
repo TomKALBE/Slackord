@@ -1,14 +1,18 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import Env from "./utils/env";
-import { MessageResource, ChannelResource } from "./data/resources";
+import { MessageResource, ChannelResource, RelationshipResource } from "./data/resources";
 
 interface ServerToClientEvents {
     "server.new-message": (data: MessageResource) => void;
+    "server.new-friend-request": (data: RelationshipResource) => void;
+    "server.answer-friend-request": (data: RelationshipResource) => void;
 }
 
 interface ClientToServerEvents {
     "client.new-message": (data: MessageResource) => void;
+    "client.new-friend-request": (data: RelationshipResource) => void;
+    "client.answer-friend-request": (data: RelationshipResource) => void;
     ping: (data: number) => void;
 }
 
@@ -47,7 +51,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
             }).then(async (response) => {
                 if (response.ok) {
-
                     if (data.type === 'PRIVATE') {
                         const receiverSocketId = socketsMap.get(data.receiver_id);
 
@@ -81,6 +84,48 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                 console.error(error);
             })
     });
+
+    socket.on("client.new-friend-request", async (data) => {
+        fetch(`${Env.API_URL}/relationships`,
+            {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(data)
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+                const receiverSocketId = socketsMap.get(data.receiver_id);
+
+                if (receiverSocketId)
+                    io.to(receiverSocketId)
+                        .emit('server.new-friend-request', data)
+            }
+
+        }).catch((error) => {
+            console.error(error);
+        })
+    })
+
+    socket.on("client.answer-friend-request", async (data) => {
+        fetch(`${Env.API_URL}/relationships${data.id}`,
+            {
+                method: "PATCH",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(data.request_status)
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+                const receiverSocketId = socketsMap.get(data.sender_id);
+
+                if (receiverSocketId)
+                    io.to(receiverSocketId)
+                        .emit('server.answer-friend-request', data)
+            }
+
+        }).catch((error) => {
+            console.error(error);
+        })
+    })
 });
 
 httpServer.listen({ port: Number(Env.PORT) }, () => {
