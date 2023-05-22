@@ -9,14 +9,20 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServerChannelRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-#[ApiResource]
+#[ApiResource(normalizationContext: ['groups' => ['server_channel'], 'enable_max_depth' => true])]
 #[ORM\Entity(repositoryClass: ServerChannelRepository::class)]
 class ServerChannel extends AbstractChannel
 {
+    #[Groups(['server_channel'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: UserRole::class)]
     private Collection $authorized_roles;
 
+    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'channels', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?ChannelGroup $channelGroup = null;

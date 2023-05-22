@@ -2,14 +2,17 @@
 
 namespace App\Entity;
 
+use App\Entity\UserRole;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Channel\ServerChannel;
 use App\Repository\ChannelGroupRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-#[ApiResource]
+#[ApiResource(normalizationContext: ['groups' => ['channel_group'], 'enable_max_depth' => true])]
 #[ORM\Entity(repositoryClass: ChannelGroupRepository::class)]
 class ChannelGroup
 {
@@ -18,15 +21,23 @@ class ChannelGroup
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[MaxDepth(1)]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups(['channel_group'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: UserRole::class)]
     private Collection $authorized_roles;
 
+    #[Groups(['channel_group'])]
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'channelGroup', targetEntity: ServerChannel::class, orphanRemoval: true)]
     private Collection $channels;
 
+    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'channelGroups')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Server $server = null;

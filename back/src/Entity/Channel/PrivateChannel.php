@@ -5,14 +5,19 @@ namespace App\Entity\Channel;
 use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use App\Entity\Channel\AbstractChannel;
 use Doctrine\Common\Collections\Collection;
 use App\Repository\PrivateChannelRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-#[ApiResource]
+#[ApiResource(normalizationContext: ['groups' => ['private_channel'], 'enable_max_depth' => true])]
 #[ORM\Entity(repositoryClass: PrivateChannelRepository::class)]
 class PrivateChannel extends AbstractChannel
 {
+    #[Groups(['private_channel'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToMany(
         targetEntity: User::class,
         inversedBy: 'privateChannels'
