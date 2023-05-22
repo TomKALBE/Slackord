@@ -1,6 +1,7 @@
 {
   "messages": [
     {
+      "id": 1,
       "content": "Premier messsage",
       "upvote": null,
       "type": "PRIVATE",
@@ -11,6 +12,7 @@
       "receiver_id": 2
     },
     {
+      "id": 2,
       "content": "Deuxieme messsage",
       "upvote": null,
       "type": "PRIVATE",
@@ -21,6 +23,7 @@
       "receiver_id": 1
     },
     {
+      "id": 3,
       "content": "Premier messsage",
       "upvote": null,
       "type": "PRIVATE",
@@ -29,20 +32,9 @@
       "deleted_at": null,
       "user_id": 3,
       "receiver_id": 1
-    },
-    {
-      "content": "Troisieme messsage",
-      "upvote": null,
-      "type": "PRIVATE",
-      "created_at": 17263571256731,
-      "updated_at": 17263571256731,
-      "deleted_at": null,
-      "user_id": 2,
-      "receiver_id": 1
     }
   ],
-  
-  "users":[
+  "users": [
     {
       "id": 1,
       "email": "test1@test.com",
@@ -50,23 +42,16 @@
       "privateChannels": 2,
       "users": [
         {
-          "id": 2
-        },
-        {
           "id": 3
         }
-      ] 
+      ]
     },
     {
       "id": 2,
       "email": "test2@test.com",
       "pseudo": "test2",
       "privateChannels": 1,
-      "users": [
-        {
-          "id": 1
-        }
-      ]
+      "users": []
     },
     {
       "id": 3,
@@ -78,6 +63,26 @@
           "id": 1
         }
       ]
+    }
+  ],
+  "relationships": [
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 1
+    },
+    {
+      "sender_id": 1,
+      "receiver_id": 2,
+      "request_status": "PENDING",
+      "id": 2
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "ACCEPTED",
+      "id": 3
     }
   ]
 }

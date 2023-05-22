@@ -93,4 +93,10 @@ declare global {
         PUBLIC = "PUBLIC",
         CHANNEL = "CHANNEL"
     }
+    interface IRelationship {
+        sender_id: number,
+        receiver_id: number
+        request_status: "ACCEPTED" | "DECLINED" | "PENDING"
+    }
+    
 }

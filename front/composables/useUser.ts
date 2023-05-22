@@ -24,9 +24,29 @@ export default () => {
             console.log(e)
         }
     }
-
+    async function sendFriendRequest(id: number){
+        try{
+            const res = await fetch('/api/relationships',{
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    sender_id: useAuth().user.value?.id,
+                    receiver_id: id,
+                    request_status: "PENDING"
+                })
+            });
+            const json = await res.json();
+            if(json)
+                useToast().add({ color:"emerald", icon:"circle-check", message:"Demande d'ami envoyée !" })
+        }catch(e){
+            console.log(e)
+        }
+    }
     return {
         users,
-        getRelatedUsers
+        getRelatedUsers,
+        sendFriendRequest
     }
 }

@@ -11,22 +11,17 @@ export type Message = {
     receiver_id: Number;
 };
 
-export type Relationship = {
-    sender_id: number,
-    receiver_id: number
-    request_status: "ACCEPTED" | "DECLINED"
-};
 
 interface ServerToClientEvents {
     "server.new-message": (data: Message) => void;
-    "server.new-friend-request": (data: Relationship) => void;
-    "server.answer-friend-request": (data: Relationship) => void;
+    "server.new-friend-request": (data: IRelationship) => void;
+    "server.answer-friend-request": (data: IRelationship) => void;
 }
 
 interface ClientToServerEvents {
     "client.new-message": (data: Message) => void;
-    "client.new-friend-request": (data: Relationship) => void;
-    "client.answer-friend-request": (data: Relationship) => void;
+    "client.new-friend-request": (data: IRelationship) => void;
+    "client.answer-friend-request": (data: IRelationship) => void;
     "ping": (data: number) => void;
 }
 
@@ -43,6 +38,10 @@ const getClientSocket = (url: string) => {
         addMessageToConversation(data);
         //TODO - faire une fonction qui ajoute un message à la conversation
         console.log("server.new-message :", data)
+    });
+
+    clientSocket.on("server.answer-friend-request", (data:IRelationship) => {
+        console.log("response friend request :", data)
     });
 
     clientSocket.on("disconnect", () => {
@@ -62,10 +61,11 @@ export const SocketService = {
     registerUserSocket: (clientSocket: ClientSocket, data: number) => {
         clientSocket.emit("ping", data);
     },
-    sendFriendRequest: (clientSocket: ClientSocket, data: Relationship) => {
+    sendFriendRequest: (clientSocket: ClientSocket, data: IRelationship) => {
         clientSocket.emit("client.new-friend-request", data);
     },
-    answerFriendRequest: (clientSocket: ClientSocket, data: Relationship) => {
+    answerFriendRequest: (clientSocket: ClientSocket, data: IRelationship) => {
+        console.log('answerFriendRequest', data)
         clientSocket.emit("client.answer-friend-request", data);
     }
 };

@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import Env from "./utils/env";
-import { MessageResource, ChannelResource, RelationshipResource } from "./data/resources";
+import type { MessageResource, ChannelResource, RelationshipResource } from "./data/resources";
 
 interface ServerToClientEvents {
     "server.new-message": (data: MessageResource) => void;
@@ -111,7 +111,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
             {
                 method: "PATCH",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify(data.request_status)
+                body: JSON.stringify({request_status: data.request_status})
             }
         ).then(async (response) => {
             if (response.ok) {

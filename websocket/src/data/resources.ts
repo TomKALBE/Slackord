@@ -25,5 +25,5 @@ export type RelationshipResource = {
     id: number;
     sender_id: number,
     receiver_id: number
-    request_status: "ACCEPTED" | "DECLINED"
+    request_status: "ACCEPTED" | "DECLINED" | "PENDING"
 };
