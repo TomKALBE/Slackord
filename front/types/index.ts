@@ -1,4 +1,4 @@
-export {};
+export { };
 
 declare global {
     interface RegisterForm {
@@ -13,27 +13,27 @@ declare global {
     }
     interface IToast {
         color:
-            | "slate"
-            | "gray"
-            | "zinc"
-            | "neutral"
-            | "stone"
-            | "red"
-            | "orange"
-            | "amber"
-            | "yellow"
-            | "lime"
-            | "green"
-            | "emerald"
-            | "teal"
-            | "cyan"
-            | "sky"
-            | "blue"
-            | "indigo"
-            | "purple"
-            | "fuchsia"
-            | "pink"
-            | "rose";
+        | "slate"
+        | "gray"
+        | "zinc"
+        | "neutral"
+        | "stone"
+        | "red"
+        | "orange"
+        | "amber"
+        | "yellow"
+        | "lime"
+        | "green"
+        | "emerald"
+        | "teal"
+        | "cyan"
+        | "sky"
+        | "blue"
+        | "indigo"
+        | "purple"
+        | "fuchsia"
+        | "pink"
+        | "rose";
         message: string;
         icon: "paper-plane" | "bell" | "circle-check" | "circle-exclamation";
     }
@@ -49,7 +49,7 @@ declare global {
         userIdentifier: string;
         channelRoles: string[];
     }
-    interface IMessageResource {
+    interface IMessage {
         content: string;
         upvote: number | null;
         type: "PRIVATE" | "PUBLIC" | "CHANNEL";
@@ -58,36 +58,36 @@ declare global {
         deleted_at: number | null;
         user_id: number;
         receiver_id: number;
-    } 
+    }
     interface INotification {
         content: string;
         type: ENotificationType;
         date: number;
         user_id: number;
         color:
-            | "slate"
-            | "gray"
-            | "zinc"
-            | "neutral"
-            | "stone"
-            | "red"
-            | "orange"
-            | "amber"
-            | "yellow"
-            | "lime"
-            | "green"
-            | "emerald"
-            | "teal"
-            | "cyan"
-            | "sky"
-            | "blue"
-            | "indigo"
-            | "purple"
-            | "fuchsia"
-            | "pink"
-            | "rose";
+        | "slate"
+        | "gray"
+        | "zinc"
+        | "neutral"
+        | "stone"
+        | "red"
+        | "orange"
+        | "amber"
+        | "yellow"
+        | "lime"
+        | "green"
+        | "emerald"
+        | "teal"
+        | "cyan"
+        | "sky"
+        | "blue"
+        | "indigo"
+        | "purple"
+        | "fuchsia"
+        | "pink"
+        | "rose";
         icon: "paper-plane" | "bell" | "circle-check" | "circle-exclamation";
-    }   
+    }
     enum ENotificationType {
         PRIVATE = "PRIVATE",
         PUBLIC = "PUBLIC",
@@ -98,5 +98,5 @@ declare global {
         receiver_id: number
         request_status: "ACCEPTED" | "DECLINED" | "PENDING"
     }
-    
+
 }
