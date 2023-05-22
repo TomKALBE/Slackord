@@ -4,16 +4,16 @@ import Env from "./utils/env";
 import type { MessageResource, ChannelResource, RelationshipResource } from "./data/resources";
 
 interface ServerToClientEvents {
-    "server.new-message": (data: MessageResource) => void;
-    "server.new-friend-request": (data: RelationshipResource) => void;
-    "server.answer-friend-request": (data: RelationshipResource) => void;
+    "server.new-message": (data: MessageResource, callback?: Function) => void;
+    "server.new-friend-request": (data: RelationshipResource, callback?: Function) => void;
+    "server.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
 }
 
 interface ClientToServerEvents {
-    "client.new-message": (data: MessageResource) => void;
-    "client.new-friend-request": (data: RelationshipResource) => void;
-    "client.answer-friend-request": (data: RelationshipResource) => void;
-    ping: (data: number) => void;
+    "client.new-message": (data: MessageResource, callback?: Function) => void;
+    "client.new-friend-request": (data: RelationshipResource, callback?: Function) => void;
+    "client.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
+    ping: (data: number, callback?: any) => void;
 }
 
 interface InterServerEvents {
@@ -38,11 +38,16 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
     socket.data.channelsId = new Map();
 
-    socket.on("ping", async (userId: number) => {
+    socket.on("ping", async (userId: number, callback) => {
+
         socketsMap.set(userId, socket.id);
+
+        if (callback) {
+            callback({ ok: true });
+        }
     });
 
-    socket.on("client.new-message", async (data) => {
+    socket.on("client.new-message", async (data, callback) => {
         fetch(`${Env.API_URL}/messages`,
             {
                 method: "POST",
@@ -80,12 +85,20 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                     }
                 }
 
+                if (callback) {
+                    callback({ ok: true });
+                }
+
             }).catch((error) => {
                 console.error(error);
+
+                if (callback) {
+                    callback({ ok: false, msg: "Une erreur s'est produite" });
+                }
             })
     });
 
-    socket.on("client.new-friend-request", async (data) => {
+    socket.on("client.new-friend-request", async (data, callback) => {
         fetch(`${Env.API_URL}/relationships`,
             {
                 method: "POST",
@@ -99,19 +112,29 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                 if (receiverSocketId)
                     io.to(receiverSocketId)
                         .emit('server.new-friend-request', data)
+
+                if (callback) {
+                    callback({ ok: true });
+                }
+
             }
 
         }).catch((error) => {
             console.error(error);
+
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+
         })
     })
 
-    socket.on("client.answer-friend-request", async (data) => {
-        fetch(`${Env.API_URL}/relationships${data.id}`,
+    socket.on("client.answer-friend-request", async (data, callback) => {
+        fetch(`${Env.API_URL}/relationships/${data.id}`,
             {
                 method: "PATCH",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify({request_status: data.request_status})
+                body: JSON.stringify({ request_status: data.request_status })
             }
         ).then(async (response) => {
             if (response.ok) {
@@ -120,10 +143,20 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                 if (receiverSocketId)
                     io.to(receiverSocketId)
                         .emit('server.answer-friend-request', data)
+
+                if (callback) {
+                    callback({ ok: true });
+                }
+
             }
 
         }).catch((error) => {
             console.error(error);
+
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+
         })
     })
 });
