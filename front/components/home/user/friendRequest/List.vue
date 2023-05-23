@@ -4,19 +4,14 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 type Props = {
     friendRequests: IRelationship[];
 };
+const { answerFriendRequest, sendFriendRequest } = useUser();
 defineProps<Props>();
 const friendId = ref("");
-const sendFriendRequest = () => {
+const _sendFriendRequest = () => {
     if (friendId.value !== "") {
         console.log(friendId.value);
-        useUser().sendFriendRequest(friendId.value);
+        sendFriendRequest(friendId.value);
     }
-};
-const nuxtApp = useNuxtApp();
-
-const answerFriendRequest = (friendRequest: IRelationship, status: 'DECLINED' | 'ACCEPTED') => {
-    friendRequest.request_status = status;
-    SocketService.answerFriendRequest(nuxtApp.$socket ,friendRequest)
 };
 </script>
 <template>
@@ -31,41 +26,41 @@ const answerFriendRequest = (friendRequest: IRelationship, status: 'DECLINED' | 
             </span>
             <p class="ml-3 text-white">Nouvelles demandes d'ami</p>
         </div> -->
-        <div
-            v-if="friendRequests"
-            v-for="friendRequest in friendRequests"
-            class="w-100 my-2 rounded-md p-2 flex items-center justify-between hover:bg-slate-600 cursor-pointer"
-        >
-            <div class="py-2 text-slate-200">
-                {{ friendRequest.sender_id }} -
-                {{ friendRequest.request_status }}
+        <template v-if="friendRequests" v-for="friendRequest in friendRequests">
+            <div
+                v-if="friendRequest.request_status === 'PENDING'"
+                class="w-100 my-2 rounded-md p-2 flex items-center justify-between hover:bg-slate-600 cursor-pointer"
+            >
+                <div class="py-2 text-slate-200">
+                    {{ friendRequest.sender_id }} -
+                    {{ friendRequest.request_status }}
+                </div>
+                <div class="">
+                    <button
+                        class="group bg-slate-850 rounded-full flex-col justify-center items-center w-6 h-6 hover:bg-slate-750 active:bg-slate-550"
+                        @click="answerFriendRequest(friendRequest, 'ACCEPTED')"
+                    >
+                        <FontAwesomeIcon
+                            :icon="['fa', 'check']"
+                            class="text-slate-200 group-hover:text-emerald-400"
+                        />
+                    </button>
+                    <button
+                        class="group bg-slate-850 rounded-full flex-col justify-center items-center w-6 h-6 ml-3 hover:bg-slate-750 active:bg-slate-550"
+                        @click="answerFriendRequest(friendRequest, 'DECLINED')"
+                    >
+                        <FontAwesomeIcon
+                            :icon="['fa', 'xmark']"
+                            class="text-slate-200 group-hover:text-rose-600"
+                        />
+                    </button>
+                </div>
             </div>
-            <div class="">
-                <button
-                    class="group bg-slate-850 rounded-full flex-col justify-center items-center w-6 h-6 hover:bg-slate-750 active:bg-slate-550"
-                    @click="answerFriendRequest(friendRequest, 'ACCEPTED')"
-
-                >
-                    <FontAwesomeIcon
-                        :icon="['fa', 'check']"
-                        class="text-slate-200 group-hover:text-emerald-400"
-                    />
-                </button>
-                <button
-                    class="group bg-slate-850 rounded-full flex-col justify-center items-center w-6 h-6 ml-3 hover:bg-slate-750 active:bg-slate-550"
-                    @click="answerFriendRequest(friendRequest, 'DECLINED')"
-                >
-                    <FontAwesomeIcon
-                        :icon="['fa', 'xmark']"
-                        class="text-slate-200 group-hover:text-rose-600"
-                    />
-                </button>
-            </div>
-        </div>
+        </template>
         <div class="">
             <label>Ajouter un ami avec son id</label>
             <input type="number" v-model="friendId" />
-            <button @click="sendFriendRequest">Ajouter</button>
+            <button @click="_sendFriendRequest">Ajouter</button>
         </div>
     </div>
 </template>

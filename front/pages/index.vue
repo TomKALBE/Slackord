@@ -4,20 +4,15 @@ import { initModals, initDropdowns } from "flowbite";
 const currentServer = ref(0);
 const currentConversation = ref(0);
 
-const { users, getRelatedUsers } = useUser();
+const { users, friendRequests, getRelatedUsers, getFriendRequests } = useUser();
 const { user } = useAuth();
-const friendRequests = ref<IRelationship[]>([]);
 onMounted(async () => {
     setTimeout(async () => {
         // setChatScrollBarBottom();
         initDropdowns();
         initModals();
-        getRelatedUsers(user.value?.id);
-        const currentUserId = user.value?.id ?? 1;
-        const res = await fetch(
-            "/api/relationships?receiver_id=" + user.value?.id
-        );
-        friendRequests.value = (await res.json()) as IRelationship[];
+        getRelatedUsers();
+        getFriendRequests();
     }, 10);
 });
 
@@ -35,6 +30,11 @@ const handleServerChange = (server: number) => {
 const handleConversationChange = (conversation: number) => {
     currentConversation.value = conversation;
 };
+const numberOfFriendRequests = computed(() => {
+    return friendRequests.value.filter(
+        (friendRequest) => friendRequest.request_status === "PENDING"
+    ).length;
+});
 </script>
 <template>
     <div class="h-screen w-screen flex flex-col">
@@ -305,10 +305,10 @@ const handleConversationChange = (conversation: number) => {
                     <span
                         class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-red-500 rounded-full"
                     >
-                        {{ friendRequests.length }}
+                        {{ numberOfFriendRequests }}
                     </span>
                     <div class="text-slate-200 ml-3">
-                        Nouvelle{{ friendRequests.length > 1 ? "s" : "" }} demande{{ friendRequests.length > 1 ? "s" : "" }} d'ami
+                        Nouvelle{{ numberOfFriendRequests > 1 ? "s" : "" }} demande{{ numberOfFriendRequests > 1 ? "s" : "" }} d'ami
                     </div>
                 </div>
 
