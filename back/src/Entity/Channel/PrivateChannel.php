@@ -12,11 +12,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-#[ApiResource(normalizationContext: ['groups' => ['private_channel'], 'enable_max_depth' => true])]
+#[ApiResource(normalizationContext: ['groups' => ['private_channel:read'], 'enable_max_depth' => true])]
 #[ORM\Entity(repositoryClass: PrivateChannelRepository::class)]
 class PrivateChannel extends AbstractChannel
 {
-    #[Groups(['private_channel'])]
+    #[Groups(['private_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\ManyToMany(
         targetEntity: User::class,

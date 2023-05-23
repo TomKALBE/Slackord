@@ -13,7 +13,9 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-#[ApiResource(normalizationContext: ['groups' => ['user'], 'enable_max_depth' => true])]
+#[ApiResource(
+    normalizationContext: ['groups' => ['user:read'], 'enable_max_depth' => true]
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -23,37 +25,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private int $id;
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[Groups(['user:read', 'private_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\Column(length: 180, unique: true, nullable: false)]
     private string $email;
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[Groups(['user:read', 'private_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\Column(length: 180, unique: true, nullable: false)]
     private string $pseudo;
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
     #[MaxDepth(1)]
     #[ORM\Column]
     private array $roles = [];
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
     #[MaxDepth(1)]
     #[ORM\Column]
     private string $password;
 
-    #[Groups(['user'])]
+    #[Groups(['user:read'])]
     #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: Server::class, mappedBy: 'members')]
     private Collection $servers;
 
-    #[Groups(['user'])]
     #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: UserRole::class)]
     private Collection $channel_roles;
 
-    #[Groups(['user'])]
+    #[Groups(['user:read'])]
     #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: PrivateChannel::class, mappedBy: 'members')]
     private Collection $privateChannels;
