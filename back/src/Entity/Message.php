@@ -19,29 +19,28 @@ class Message
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[Groups(['private_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
     #[MaxDepth(1)]
     #[ORM\ManyToOne(inversedBy: 'messages', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?AbstractChannel $channel = null;
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[Groups(['private_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\Column(length: 50000)]
     private ?string $content = null;
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[Groups(['private_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\Column]
     private ?\DateTimeImmutable $postedAt = null;
 
-    #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
+    #[Groups(['private_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
