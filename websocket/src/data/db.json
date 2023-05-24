@@ -32,6 +32,13 @@
       "deleted_at": null,
       "user_id": 3,
       "receiver_id": 1
+    },
+    {
+      "content": "bonjour",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "PRIVATE",
+      "id": 4
     }
   ],
   "users": [
@@ -83,6 +90,36 @@
       "receiver_id": 1,
       "request_status": "ACCEPTED",
       "id": 3
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 4
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 5
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 6
+    },
+    {
+      "sender_id": 1,
+      "receiver_id": " ",
+      "request_status": "PENDING",
+      "id": 7
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": "1",
+      "request_status": "PENDING",
+      "id": 8
     }
   ]
 }

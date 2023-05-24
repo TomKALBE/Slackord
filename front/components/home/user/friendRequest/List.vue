@@ -26,6 +26,22 @@ const _sendFriendRequest = () => {
             </span>
             <p class="ml-3 text-white">Nouvelles demandes d'ami</p>
         </div> -->
+        <div class="flex flex-col w-100">
+            <label class="text-slate-200">Ajouter un ami avec son id : </label>
+            <div class="flex-col justify-center items-center h-64">
+                <input
+                    class="mt-2 w-2/12 border border-slate-500 rounded-md bg-slate-750 focus:border-none active:border-none"
+                    v-model="friendId"
+                />
+                <button
+                    type="button"
+                    class="text-slate-200 ml-3 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    @click="_sendFriendRequest"
+                    >
+                    <FontAwesomeIcon :icon="['fa', 'plus']" />
+                </button>
+            </div>
+        </div>
         <template v-if="friendRequests" v-for="friendRequest in friendRequests">
             <div
                 v-if="friendRequest.request_status === 'PENDING'"
@@ -57,11 +73,6 @@ const _sendFriendRequest = () => {
                 </div>
             </div>
         </template>
-        <div class="">
-            <label>Ajouter un ami avec son id</label>
-            <input type="number" v-model="friendId" />
-            <button @click="_sendFriendRequest">Ajouter</button>
-        </div>
     </div>
 </template>
 <style scoped>

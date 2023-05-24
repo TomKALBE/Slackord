@@ -302,11 +302,11 @@ const numberOfFriendRequests = computed(() => {
                     v-else
                     class="flex w-full h-14 border-b-2 border-slate-800 items-center justify-start"
                 >
-                    <span
-                        class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-white bg-red-500 rounded-full"
+                    <div
+                        class="flex items-center justify-center w-4 h-4 ml-6 text-xs font-semibold text-white bg-red-500 rounded-full"
                     >
-                        {{ numberOfFriendRequests }}
-                    </span>
+                        <p>{{ numberOfFriendRequests }}</p>
+                    </div>
                     <div class="text-slate-200 ml-3">
                         Nouvelle{{ numberOfFriendRequests > 1 ? "s" : "" }} demande{{ numberOfFriendRequests > 1 ? "s" : "" }} d'ami
                     </div>
