@@ -24,12 +24,12 @@ abstract class AbstractChannel
     #[ORM\Column]
     protected ?int $id = null;
 
-    #[Groups(['private_channel:read'])]
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\Column(length: 255, nullable: true)]
     protected ?string $name = null;
 
-    #[Groups(['private_channel:read'])]
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\OneToMany(
         mappedBy: 'channel',

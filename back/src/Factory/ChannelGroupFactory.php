@@ -49,7 +49,7 @@ final class ChannelGroupFactory extends ModelFactory
     {
         return [
             'name' => self::faker()->word(),
-            'server' => ServerFactory::randomOrCreate(),
+            'server' => ServerFactory::random(),
         ];
     }
 

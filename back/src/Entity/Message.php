@@ -14,12 +14,13 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['private_channel:read'])]
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[MaxDepth(1)]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -30,18 +31,15 @@ class Message
     #[ORM\JoinColumn(nullable: false)]
     private ?AbstractChannel $channel = null;
 
-    #[Groups(['private_channel:read'])]
-    #[MaxDepth(1)]
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[ORM\Column(length: 50000)]
     private ?string $content = null;
 
-    #[Groups(['private_channel:read'])]
-    #[MaxDepth(1)]
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $postedAt = null;
 
-    #[Groups(['private_channel:read'])]
-    #[MaxDepth(1)]
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
