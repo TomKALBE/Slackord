@@ -48,10 +48,10 @@ def start(c):
             c.run('docker-machine ssh dinghy "echo \'nameserver 8.8.8.8\' | sudo tee -a /etc/resolv.conf && sudo /etc/init.d/docker restart"')
 
     stop_workers(c)
-    generate_certificates(c)
     up(c)
     cache_clear(c)
     install(c)
+    generate_certificates(c)
     migrate(c)
     start_workers(c)
 
