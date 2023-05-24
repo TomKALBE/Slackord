@@ -31,11 +31,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true, nullable: false)]
     private string $email;
 
-    #[Groups(['user:read', 'private_channel:read'])]
+    #[Groups(['user:read', 'private_channel:read', 'server:read'])]
     #[MaxDepth(1)]
     #[ORM\Column(length: 180, unique: true, nullable: false)]
     private string $pseudo;
 
+    #[Groups(['server:read'])]
     #[MaxDepth(1)]
     #[ORM\Column]
     private array $roles = [];
