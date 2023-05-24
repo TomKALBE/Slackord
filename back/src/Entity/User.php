@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[Groups(['user:read', 'private_channel:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -57,11 +58,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: PrivateChannel::class, mappedBy: 'members')]
     private Collection $privateChannels;
 
+    #[ORM\OneToMany(mappedBy: 'issuer', targetEntity: FriendRequest::class, orphanRemoval: true)]
+    private Collection $outboundFriendRequests;
+
+    #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: FriendRequest::class, orphanRemoval: true)]
+    private Collection $inboundFriendRequests;
+
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'friends')]
+    private Collection $friends;
+
     public function __construct()
     {
         $this->servers = new ArrayCollection();
         $this->channel_roles = new ArrayCollection();
         $this->privateChannels = new ArrayCollection();
+        $this->outboundFriendRequests = new ArrayCollection();
+        $this->inboundFriendRequests = new ArrayCollection();
+        $this->friends = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -220,6 +233,90 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->privateChannels->removeElement($privateChannel)) {
             $privateChannel->removeMember($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FriendRequest>
+     */
+    public function getOutboundFriendRequests(): Collection
+    {
+        return $this->outboundFriendRequests;
+    }
+
+    public function addOutboundFriendRequest(FriendRequest $friendRequest): self
+    {
+        if (!$this->outboundFriendRequests->contains($friendRequest)) {
+            $this->outboundFriendRequests->add($friendRequest);
+            $friendRequest->setIssuer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOutboundFriendRequest(FriendRequest $friendRequest): self
+    {
+        if ($this->outboundFriendRequests->removeElement($friendRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($friendRequest->getIssuer() === $this) {
+                $friendRequest->setIssuer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FriendRequest>
+     */
+    public function getInboundFriendRequests(): Collection
+    {
+        return $this->inboundFriendRequests;
+    }
+
+    public function addInboundFriendRequest(FriendRequest $inboundFriendRequest): self
+    {
+        if (!$this->inboundFriendRequests->contains($inboundFriendRequest)) {
+            $this->inboundFriendRequests->add($inboundFriendRequest);
+            $inboundFriendRequest->setReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInboundFriendRequest(FriendRequest $inboundFriendRequest): self
+    {
+        if ($this->inboundFriendRequests->removeElement($inboundFriendRequest)) {
+            // set the owning side to null (unless already changed)
+            if ($inboundFriendRequest->getReceiver() === $this) {
+                $inboundFriendRequest->setReceiver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getFriends(): Collection
+    {
+        return $this->friends;
+    }
+
+    public function addFriend(self $friend): self
+    {
+        if (!$this->friends->contains($friend)) {
+            $this->friends->add($friend);
+        }
+
+        return $this;
+    }
+
+    public function removeFriend(self $friend): self
+    {
+        $this->friends->removeElement($friend);
 
         return $this;
     }
