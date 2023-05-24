@@ -18,10 +18,7 @@ class PrivateChannel extends AbstractChannel
 {
     #[Groups(['private_channel:read'])]
     #[MaxDepth(1)]
-    #[ORM\ManyToMany(
-        targetEntity: User::class,
-        inversedBy: 'privateChannels'
-    )]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'privateChannels')]
     private Collection $members;
 
     public function __construct()
