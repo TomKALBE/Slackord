@@ -9,6 +9,7 @@ use Zenstruck\Foundry\ModelFactory;
 use App\Entity\Channel\PrivateChannel;
 use Zenstruck\Foundry\RepositoryProxy;
 use App\Repository\PrivateChannelRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @extends ModelFactory<PrivateChannel>
@@ -36,8 +37,9 @@ final class PrivateChannelFactory extends ModelFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
+    public function __construct(
+        private EntityManagerInterface $em
+    ) {
         parent::__construct();
     }
 
@@ -59,17 +61,21 @@ final class PrivateChannelFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            ->afterPersist(function (PrivateChannel $privateChannel): void {
-                foreach (range(5, random_int(5, 25)) as $timesUsersPosted) {
-                    foreach (UserFactory::randomSet(random_int(2, 5)) as $user) {
-                        $privateChannel->addMember($user->object());
-                        $messagePostedAt = \DateTimeImmutable::createFromMutable(MessageFactory::faker()->dateTimeThisYear());
+            ->afterInstantiate(function (PrivateChannel $privateChannel): void {
+                foreach (range(2, random_int(2, 5)) as $usersCount) {
+                    $user = UserFactory::random()->object();
+                    $privateChannel->addMember($user);
+                }
 
+                foreach (range(5, random_int(5, 25)) as $timesUsersPosted) {
+                    $messagePostedAt = \DateTimeImmutable::createFromMutable(MessageFactory::faker()->dateTimeThisYear());
+
+                    foreach ($privateChannel->getMembers() as $member) {
                         foreach (range(1, random_int(1, 4)) as $successiveMessagesCount) {
                             $messagePostedAt = $messagePostedAt->modify(sprintf('+%d seconds', random_int(45, 300)));
 
                             MessageFactory::createOne([
-                                'author' => $user,
+                                'author' => $member,
                                 'channel' => $privateChannel,
                                 'postedAt' => $messagePostedAt,
                             ]);

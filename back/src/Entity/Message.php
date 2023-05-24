@@ -27,7 +27,7 @@ class Message
 
     #[Groups(['user', 'server', 'private_channel', 'server_channel', 'channel_group', 'message', 'user_role'])]
     #[MaxDepth(1)]
-    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\ManyToOne(inversedBy: 'messages', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?AbstractChannel $channel = null;
 
