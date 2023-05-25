@@ -3,32 +3,43 @@
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
-use App\Entity\Channel\AbstractChannel;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\MessageRepository;
+use App\Entity\Channel\AbstractChannel;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
+#[ApiResource(normalizationContext: ['groups' => ['message'], 'enable_max_depth' => true])]
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['private_channel:read', 'server_channel:read'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[MaxDepth(1)]
+    #[ORM\ManyToOne(inversedBy: 'messages', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?AbstractChannel $channel = null;
 
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[ORM\Column(length: 50000)]
     private ?string $content = null;
 
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $postedAt = null;
 
+    #[Groups(['private_channel:read', 'server_channel:read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 

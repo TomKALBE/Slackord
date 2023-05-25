@@ -47,8 +47,9 @@ final class ServerFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'admin' => UserFactory::new(),
-            'name' => self::faker()->text(255),
+            'admin' => UserFactory::random(),
+            'name' => self::faker()->domainWord(),
+            'members' => UserFactory::randomSet(self::faker()->numberBetween(5, 25)),
         ];
     }
 
@@ -58,8 +59,20 @@ final class ServerFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            // ->afterInstantiate(function(Server $server): void {})
-        ;
+            ->afterPersist(function (Server $server): void {
+                $userRoles = UserRoleFactory::createMany(self::faker()->numberBetween(2, 4), [
+                    'server' => $server,
+                ]);
+
+                foreach ($server->getMembers() as $member) {
+                    $member->addChannelRole(self::faker()->randomElement($userRoles)->object());
+                }
+
+                ChannelGroupFactory::createMany(self::faker()->numberBetween(2, 7), [
+                    'authorizedRoles' => self::faker()->randomElements($userRoles, self::faker()->numberBetween(1, \count($userRoles))),
+                    'server' => $server,
+                ]);
+            });;
     }
 
     protected static function getClass(): string

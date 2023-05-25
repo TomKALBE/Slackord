@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: ChannelRepository::class)]
 #[InheritanceType('SINGLE_TABLE')]
@@ -20,13 +22,22 @@ abstract class AbstractChannel
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    protected ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[Groups(['private_channel:read', 'server_channel:read'])]
+    #[MaxDepth(1)]
+    #[ORM\Column(length: 255, nullable: true)]
+    protected ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'channel', targetEntity: Message::class, orphanRemoval: true)]
-    private Collection $messages;
+    #[Groups(['private_channel:read', 'server_channel:read'])]
+    #[MaxDepth(1)]
+    #[ORM\OneToMany(
+        mappedBy: 'channel',
+        targetEntity: Message::class,
+        orphanRemoval: true,
+        cascade: ['persist', 'remove']
+    )]
+    protected Collection $messages;
 
     public function __construct()
     {

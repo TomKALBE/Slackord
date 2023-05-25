@@ -48,10 +48,10 @@ def start(c):
             c.run('docker-machine ssh dinghy "echo \'nameserver 8.8.8.8\' | sudo tee -a /etc/resolv.conf && sudo /etc/init.d/docker restart"')
 
     stop_workers(c)
-    generate_certificates(c)
     up(c)
     cache_clear(c)
     install(c)
+    generate_certificates(c)
     migrate(c)
     start_workers(c)
 
@@ -90,6 +90,18 @@ def migrate(c):
     with Builder(c):
         docker_compose_run(c, 'php bin/console doctrine:database:create --if-not-exists')
         docker_compose_run(c, 'php bin/console doctrine:migration:migrate -n --allow-no-migration')
+
+
+@task
+def fixtures(c, no_reset=False):
+    """
+    Loads the fixtures
+    """
+    with Builder(c):
+        if not no_reset:
+            docker_compose_run(c, 'php bin/console doctrine:database:drop --if-exists --force')
+            migrate(c)
+        docker_compose_run(c, 'php bin/console doctrine:fixtures:load -n')
 
 
 @task
