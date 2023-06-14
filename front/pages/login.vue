@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 const loginForm = ref({
-  pseudo:'Test',
-  username:'test@test.com',
-  password:'12345678'
+  email:'myTestAccount@zombo.com',
+  password:'zombocom'
 })
 
 const login = async () => {
@@ -27,27 +26,14 @@ onMounted(()=>{
       <form class="h-100 flex flex-col items-center justify-center mt-6">
         <div class="mb-6">
           <label for="email" class="block mb-2 text-sm font-medium text-white"
-            >Email</label
+            >E-mail</label
           >
           <input
             type="email"
             id="email"
             class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
             placeholder="name@zombo.com"
-            v-model="loginForm.username"
-            required
-          />
-        </div>
-        <div class="mb-6">
-          <label for="email" class="block mb-2 text-sm font-medium text-white"
-            >Pseudo</label
-          >
-          <input
-            type="email"
-            id="email"
-            class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
-            placeholder="name@zombo.com"
-            v-model="loginForm.pseudo"
+            v-model="loginForm.email"
             required
           />
         </div>

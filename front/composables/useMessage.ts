@@ -13,7 +13,13 @@ export default () => {
             if (getReceiverIdIndex(receiver_id) !== -1) return;
 
             if (useRuntimeConfig().public.appEnv === 'production') {
-                const res = await fetch('/api/users/id/messages/id');
+                const res = await fetch('/api/messages/' + receiver_id,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + useAuth().user.value?.token,
+                        'Accept': 'application/json'
+                    }
+                });
                 const json = await res.json();
                 return json;
             }

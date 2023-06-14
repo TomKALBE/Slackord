@@ -9,10 +9,13 @@ export default () => {
             if (useRuntimeConfig().public.appEnv === "production") {
                 const res = await fetch("/api/users", {
                     headers: {
-                        "Media-Type": "application/json",
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + useAuth().user.value?.token,
+                        "Accept": "application/json"
                     },
                 });
                 const json = await res.json();
+                console.log(json)
                 users.value = json;
             } else {
                 const res = await fetch(

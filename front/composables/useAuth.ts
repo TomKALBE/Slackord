@@ -15,9 +15,13 @@ export default () => {
         if (useRuntimeConfig().public.appEnv === "production") {
             if (localStorage.getItem("user")) {
                 _user = JSON.parse(localStorage.getItem("user"));
-                delete _user.token;
+                if(_user.token)
+                    user.value = _user;
+                else
+                    navigateTo("/login");
+                // delete _user.token;
                 await nextTick();
-                await login(_user);
+                // await login(_user);
             }
         } else {
             if (localStorage.getItem("user")) {
@@ -41,7 +45,7 @@ export default () => {
     }
     async function login(data: LoginForm) {
         try {
-            const res = await fetch("/api/login", {
+            const res = await fetch("/api/auth", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -51,13 +55,22 @@ export default () => {
             });
             const json = await res.json();
             if (!json || json.code === 401) return navigateTo("/login");
-            localStorage.setItem("user", JSON.stringify({ ...json, ...data }));
-            console.log(json);
-            user.value = { ...json, isAuthenticated: true };
+            const jsonParsed = parseJwt(json.token);
+            localStorage.setItem("user", JSON.stringify({ ...jsonParsed, ...json }));
+            user.value = { ...jsonParsed, token: json.token };
             navigateTo("/");
         } catch (e) {
             console.log(e);
         }
+    }
+    function parseJwt (token:string) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    
+        return JSON.parse(jsonPayload);
     }
     async function register(data: RegisterForm) {
         try {

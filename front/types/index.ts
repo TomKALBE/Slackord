@@ -7,8 +7,7 @@ declare global {
         password: string;
     }
     interface LoginForm {
-        username: string;
-        pseudo: string;
+        email: string;
         password: string;
     }
     interface IToast {

@@ -8,6 +8,7 @@
     "packages": [
         {
             "name": "api-platform/core",
+<<<<<<< HEAD
             "version": "v3.1.11",
             "source": {
                 "type": "git",
@@ -18,6 +19,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/api-platform/core/zipball/1fc611e59f7e87a89eb72ee069342916fc66c62d",
                 "reference": "1fc611e59f7e87a89eb72ee069342916fc66c62d",
+=======
+            "version": "v3.1.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/api-platform/core.git",
+                "reference": "1fe505a9d8fd235a8d7e4aa0f245f382f65578f8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/api-platform/core/zipball/1fe505a9d8fd235a8d7e4aa0f245f382f65578f8",
+                "reference": "1fe505a9d8fd235a8d7e4aa0f245f382f65578f8",
+>>>>>>> 30d2d1f (Fix login)
                 "shasum": ""
             },
             "require": {
@@ -166,7 +179,11 @@
             ],
             "support": {
                 "issues": "https://github.com/api-platform/core/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/api-platform/core/tree/v3.1.11"
+=======
+                "source": "https://github.com/api-platform/core/tree/v3.1.12"
+>>>>>>> 30d2d1f (Fix login)
             },
             "funding": [
                 {
@@ -174,7 +191,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2023-05-05T14:18:25+00:00"
+=======
+            "time": "2023-05-24T19:23:57+00:00"
+>>>>>>> 30d2d1f (Fix login)
         },
         {
             "name": "doctrine/annotations",

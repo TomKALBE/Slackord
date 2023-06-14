@@ -12,7 +12,6 @@ const setSelectedUser = (index: number) => {
 };
 
 onMounted(async () => {
-    
 });
 </script>
 <template>
