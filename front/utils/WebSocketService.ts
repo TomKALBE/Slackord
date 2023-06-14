@@ -10,6 +10,10 @@ interface ServerToClientEvents {
         data: IRelationship,
         callback?: Function
     ) => void;
+    "server.new-user-state": (
+        data: Partial<IUser>,
+        callback?: Function
+    ) => void;
 }
 
 interface ClientToServerEvents {
@@ -22,7 +26,12 @@ interface ClientToServerEvents {
         data: IRelationship,
         callback?: Function
     ) => Promise<any>;
+
     ping: (data: number, callback?: Function) => void;
+    "client.new-user-state": (
+        data: Partial<IUser>,
+        callback?: Function
+    ) => void;
 }
 
 const getClientSocket = (url: string) => {
@@ -66,6 +75,18 @@ const getClientSocket = (url: string) => {
             }
         }
     );
+
+    clientSocket.on(
+        "server.new-user-state",
+        (data: Partial<IUser>, callback) => {
+            console.log("new user state :", data);
+
+            if (callback) {
+                callback({ ok: true });
+            }
+        }
+    );
+
     return clientSocket;
 };
 
@@ -95,15 +116,20 @@ export const SocketService = {
     },
     answerFriendRequest: async (clientSocket: ClientSocket, data: IRelationship): Promise<undefined> => {
         return new Promise((resolve, reject) => {
-          clientSocket.emit(
-            "client.answer-friend-request",
-            data,
-            (response: any) => {
-              resolve(response);
-            }
-          );
+            clientSocket.emit(
+                "client.answer-friend-request",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
         })
-      }
+    },
+    sendNewUserState: (clientSocket: ClientSocket, data: IUser) => {
+        clientSocket.emit("client.new-user-state", data, (response: any) => {
+            // console.log(response);
+        });
+    },
 };
 
 export default getClientSocket;
