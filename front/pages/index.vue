@@ -76,11 +76,14 @@ const numberOfFriendRequests = computed(() => {
                             :icon="['far', 'user']"
                         />
                         <div
-                            class="w-3 h-3 absolute bg-red-400 bottom-[-0.125rem] left-[-0.125rem] rounded-full"
+                            class="w-3 h-3 absolute bottom-[-0.125rem] left-[-0.125rem] rounded-full"
+                            :class="{ 'bg-red-400': user?.state === 'DO NOT DISTURB', 'bg-green-400': user?.state === 'ONLINE','bg-gray-400' : user?.state === 'INVISIBLE' }"
                         ></div>
                         <div
-                            class="animate-ping w-3 h-3 absolute bg-red-400 bottom-[-0.125rem] left-[-0.125rem] rounded-full"
-                        ></div>
+                            class="animate-ping w-3 h-3 absolute bottom-[-0.125rem] left-[-0.125rem] rounded-full"
+                            :class="{ 'bg-red-400': user?.state === 'DO NOT DISTURB', 'bg-green-400': user?.state === 'ONLINE','bg-gray-400' : user?.state === 'INVISIBLE' }"
+
+                            ></div>
                     </div>
                     <div class="flex-1 mr-1">
                         <p

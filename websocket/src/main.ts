@@ -71,7 +71,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
         const response = await fetch(`${Env.API_URL}/relationships?senderId=${userId}&receiverId=${userId}`);
 
         const relationships = await response.json() as Array<any>;
-
         relationships.forEach(relationship => {
             if (relationship?.senderId === userId && socketsMap.has(relationship?.receiverId)) {
 

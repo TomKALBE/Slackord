@@ -27,16 +27,17 @@ export default () => {
             if (localStorage.getItem("user")) {
                 _user = JSON.parse(localStorage.getItem("user"));
                 await nextTick();
-                useState('user').value = _user;
+                user.value = _user;
             } else {
                 _user = {
                     id: 2,
                     email: "test1@test.com",
                     pseudo: "test1",
+                    state: "ONLINE"
                 };
                 localStorage.setItem("user", JSON.stringify(_user));
                 await nextTick();
-                useState('user').value = _user;
+                user.value = _user;
             }
 
         }
