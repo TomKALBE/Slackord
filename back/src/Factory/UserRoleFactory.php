@@ -47,8 +47,8 @@ final class UserRoleFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'name' => self::faker()->text(255),
-            'server' => ServerFactory::new(),
+            'name' => self::faker()->word(),
+            'server' => ServerFactory::randomOrCreate(),
         ];
     }
 

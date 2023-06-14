@@ -5,18 +5,24 @@ namespace App\Entity\Channel;
 use App\Entity\UserRole;
 use App\Entity\ChannelGroup;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ChannelRepository;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\ServerChannelRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
-#[ORM\Entity(repositoryClass: ChannelRepository::class)]
+#[ApiResource(normalizationContext: ['groups' => ['server_channel:read'], 'enable_max_depth' => true])]
+#[ORM\Entity(repositoryClass: ServerChannelRepository::class)]
 class ServerChannel extends AbstractChannel
 {
+    #[Groups(['server_channel:read', 'server:read'])]
+    #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: UserRole::class)]
     private Collection $authorized_roles;
 
-    #[ORM\ManyToOne(inversedBy: 'serverChannel')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'channels', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true)]
     private ?ChannelGroup $channelGroup = null;
 
     public function __construct()

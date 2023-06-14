@@ -2,32 +2,47 @@
 
 namespace App\Entity;
 
-use App\Repository\ServerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ServerRepository;
+use ApiPlatform\Metadata\ApiResource;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['server:read'], 'enable_max_depth' => true],
+)]
 #[ORM\Entity(repositoryClass: ServerRepository::class)]
 class Server
 {
+    #[Groups('user:read', 'server:read')]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups('user:read', 'server:read')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Groups('server:read')]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $admin = null;
 
+    #[Groups('server:read')]
+    #[MaxDepth(1)]
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'servers')]
     private Collection $members;
 
+    #[Groups('server:read')]
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'server', targetEntity: UserRole::class, orphanRemoval: true)]
     private Collection $userRoles;
 
+    #[Groups('server:read')]
+    #[MaxDepth(1)]
     #[ORM\OneToMany(mappedBy: 'server', targetEntity: ChannelGroup::class, orphanRemoval: true)]
     private Collection $channelGroups;
 

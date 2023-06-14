@@ -3,6 +3,8 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faCheck,
+  faCross,
+  faCircleCheck,
   faPlus,
   faUser,
   faChevronDown,
@@ -12,6 +14,9 @@ import {
   faUserGroup,
   faGear,
   faSignOut,
+  faPaperPlane,
+  faCircleExclamation,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faUser as faRegularUser,
@@ -19,6 +24,9 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 library.add(
   faCheck,
+  faXmark,
+  faCross,
+  faCircleCheck,
   faPlus,
   faUser,
   faRegularUser,
@@ -29,7 +37,9 @@ library.add(
   faMagnifyingGlass,
   faUserGroup,
   faGear,
-  faSignOut
+  faSignOut,
+  faPaperPlane,
+  faCircleExclamation
 );
 
 export default defineNuxtPlugin((nuxtApp) => {

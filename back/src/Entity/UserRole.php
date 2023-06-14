@@ -2,17 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRoleRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\UserRoleRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(normalizationContext: ['groups' => ['user_role'], 'enable_max_depth' => true])]
 #[ORM\Entity(repositoryClass: UserRoleRepository::class)]
 class UserRole
 {
+    #[Groups(['server:read', 'server_channel:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['server:read', 'server_channel:read'])]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 

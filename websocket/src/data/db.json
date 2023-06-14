@@ -1,0 +1,125 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "content": "Premier messsage",
+      "upvote": null,
+      "type": "PRIVATE",
+      "created_at": 17263571256731,
+      "updated_at": 17263571256731,
+      "deleted_at": null,
+      "user_id": 1,
+      "receiver_id": 2
+    },
+    {
+      "id": 2,
+      "content": "Deuxieme messsage",
+      "upvote": null,
+      "type": "PRIVATE",
+      "created_at": 17263571256731,
+      "updated_at": 17263571256731,
+      "deleted_at": null,
+      "user_id": 2,
+      "receiver_id": 1
+    },
+    {
+      "id": 3,
+      "content": "Premier messsage",
+      "upvote": null,
+      "type": "PRIVATE",
+      "created_at": 17263571256731,
+      "updated_at": 17263571256731,
+      "deleted_at": null,
+      "user_id": 3,
+      "receiver_id": 1
+    },
+    {
+      "content": "bonjour",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "PRIVATE",
+      "id": 4
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "test1@test.com",
+      "pseudo": "test1",
+      "privateChannels": 2,
+      "users": [
+        {
+          "id": 3
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "email": "test2@test.com",
+      "pseudo": "test2",
+      "privateChannels": 1,
+      "users": []
+    },
+    {
+      "id": 3,
+      "email": "test3@test.com",
+      "pseudo": "test3",
+      "privateChannels": 1,
+      "users": [
+        {
+          "id": 1
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 1
+    },
+    {
+      "sender_id": 1,
+      "receiver_id": 2,
+      "request_status": "PENDING",
+      "id": 2
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "ACCEPTED",
+      "id": 3
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 4
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 5
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 6
+    },
+    {
+      "sender_id": 1,
+      "receiver_id": " ",
+      "request_status": "PENDING",
+      "id": 7
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": "1",
+      "request_status": "PENDING",
+      "id": 8
+    }
+  ]
+}

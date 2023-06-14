@@ -32,7 +32,7 @@ export default defineNuxtConfig({
         server: {
             proxy: {
                 "^/api/.*": {
-                    target: process.env.API_URL,
+                    target: process.env.APP_ENV === "production" ? "https://local.zombocom.app" : process.env.API_URL,
                     changeOrigin: true,
                     secure: false,
                     rewrite: (path) => path.replace(/^\/api/, ""),
@@ -45,7 +45,8 @@ export default defineNuxtConfig({
         apiSecret: '', // can be overridden by NUXT_API_SECRET environment variable
         public: {
             apiUrl: process.env.API_URL,
-            socketUrl: process.env.SOCKET_URL
+            socketUrl: process.env.SOCKET_URL,
+            appEnv: process.env.APP_ENV,
         }
     },
 });
