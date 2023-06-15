@@ -37,27 +37,34 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
     },
 }).on("connection", async (socket) => {
     console.log("new connection");
-
-    socket.data.channelsId = new Map();
-
-    socket.on('ping', async (userId, callback) => {
+    socket.on("ping", async (userId: number, callback) => {
 
         socketsMap.set(userId, socket.id);
+        socket.data.userId = userId;
 
-        const response = await fetch(`${Env.API_URL}/relationships?senderId=${userId}&receiverId=${userId}`);
+        let response = await fetch(`${Env.API_URL}/users/${userId}`);
 
-        const relationships = await response.json() as Array<any>;
+        const user = await response.json() as UserResource;
 
-        relationships.forEach(relationship => {
-            if (relationship?.senderId === userId && socketsMap.has(relationship?.receiverId)) {
+        if (user.state !== "INVISIBLE") {
+            response = await fetch(`${Env.API_URL}/relationships?request_status_like=ACCEPTED&senderId=${userId}&receiverId=${userId}`);
 
-                const receiverSocketId = socketsMap.get(relationship?.receiver_id);
+            const relationships = await response.json() as Array<RelationshipResource>;
 
-                if (receiverSocketId)
-                    io.to(receiverSocketId)
-                        .emit('server.new-user-state', { state: 'ONLINE', id: userId });
-            }
-        })
+            relationships.forEach(relationship => {
+
+                const receiverId = (relationship?.sender_id === userId)
+                    ? relationship?.receiver_id
+                    : relationship?.sender_id;
+
+                if (socketsMap.has(receiverId)) {
+                    const receiverSocketId = socketsMap.get(receiverId);
+                    if (receiverSocketId)
+                        io.to(receiverSocketId)
+                            .emit('server.new-user-state', { state: user.state, id: userId });
+                }
+            });
+        }
 
         if (callback) {
             callback({ ok: true });
@@ -68,14 +75,17 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
         const userId = socket.data.userId;
 
-        const response = await fetch(`${Env.API_URL}/relationships?senderId=${userId}&receiverId=${userId}`);
+        const response = await fetch(`${Env.API_URL}/relationships?request_status_like=ACCEPTED&senderId=${userId}&receiverId=${userId}`);
 
-        const relationships = await response.json() as Array<any>;
+        const relationships = await response.json() as Array<RelationshipResource>;
+
         relationships.forEach(relationship => {
-            if (relationship?.senderId === userId && socketsMap.has(relationship?.receiverId)) {
+            const receiverId = (relationship?.sender_id === userId)
+                ? relationship?.receiver_id
+                : relationship?.sender_id;
 
-                const receiverSocketId = socketsMap.get(relationship?.receiver_id);
-
+            if (socketsMap.has(receiverId)) {
+                const receiverSocketId = socketsMap.get(receiverId);
                 if (receiverSocketId)
                     io.to(receiverSocketId)
                         .emit('server.new-user-state', { state: 'INVISIBLE', id: userId });
@@ -97,21 +107,22 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
             }
         ).then(async (response) => {
             if (response.ok) {
+                const response = await fetch(`${Env.API_URL}/relationships?request_status_like=ACCEPTED&senderId=${user.id}&receiverId=${user.id}`);
 
-                const response = await fetch(`${Env.API_URL}/relationships?senderId=${user.id}&receiverId=${user.id}`);
-
-                const relationships = await response.json() as Array<any>;
-
+                const relationships = await response.json() as Array<RelationshipResource>;
                 relationships.forEach(relationship => {
-                    if (relationship?.senderId === user.id && socketsMap.has(relationship?.receiverId)) {
+                    const receiverId = (relationship?.sender_id === user.id)
+                        ? relationship?.receiver_id
+                        : relationship?.sender_id;
 
-                        const receiverSocketId = socketsMap.get(relationship?.receiver_id);
-
+                    if (socketsMap.has(receiverId)) {
+                        const receiverSocketId = socketsMap.get(receiverId);
                         if (receiverSocketId)
                             io.to(receiverSocketId)
                                 .emit('server.new-user-state', { state: user.state, id: user.id });
                     }
                 });
+
             }
 
             if (callback) {
