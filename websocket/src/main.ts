@@ -38,7 +38,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
     socket.data.channelsId = new Map();
 
-    socket.on("ping", async (userId: number, callback) => {
+    socket.on('ping', async (userId, callback) => {
 
         socketsMap.set(userId, socket.id);
 
