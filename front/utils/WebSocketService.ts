@@ -79,10 +79,10 @@ const getClientSocket = (url: string) => {
     clientSocket.on(
         "server.new-user-state",
         (data: Partial<IUser>, callback) => {
-            console.log("new user state :", data);
-
+            useUser().updateFriendState(data.state, data.id);
             if (callback) {
                 callback({ ok: true });
+                
             }
         }
     );
@@ -126,9 +126,15 @@ export const SocketService = {
         })
     },
     sendNewUserState: (clientSocket: ClientSocket, data: IUser) => {
-        clientSocket.emit("client.new-user-state", data, (response: any) => {
-            // console.log(response);
-        });
+        return new Promise((resolve, reject) => {
+            clientSocket.emit(
+                "client.new-user-state",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
+        })        
     },
 };
 

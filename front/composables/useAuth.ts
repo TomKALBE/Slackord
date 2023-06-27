@@ -92,6 +92,15 @@ export default () => {
             console.log(e);
         }
     }
+    const updateStatus = (status) => {
+        if(status === user.value.state) return;
+        user.value = {
+            ...user.value,
+            state: status,
+        };
+        SocketService.sendNewUserState(useNuxtApp().$socket, user.value);
+    };
+
     const logout = () => {
         user.value = {
             isAuthenticated: false,
@@ -107,5 +116,6 @@ export default () => {
         login,
         logout,
         autoLogin,
+        updateStatus
     };
 };

@@ -53,7 +53,7 @@
           "id": 3
         }
       ],
-      "status": "ONLINE"
+      "state": "INVISIBLE"
     },
     {
       "id": 2,
@@ -61,7 +61,7 @@
       "pseudo": "test2",
       "privateChannels": 1,
       "users": [],
-      "status": "DO NOT DISTURB"
+      "state": "ONLINE"
     },
     {
       "id": 3,
@@ -73,7 +73,7 @@
           "id": 1
         }
       ],
-      "status": "INVISIBLE"
+      "state": "INVISIBLE"
     }
   ],
   "relationships": [
