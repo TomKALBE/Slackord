@@ -92,13 +92,20 @@ export default () => {
             console.log(e);
         }
     }
-    const updateStatus = (status) => {
+    const updateStatus = async (status) => {
         if(status === user.value.state) return;
+        const res = await SocketService.sendNewUserState(useNuxtApp().$socket, {id: user.value.id, state: status});
+        if (!res.ok) {
+            return useToast().add({
+                color: "rose",
+                icon: "circle-exclamation",
+                message: "Une erreur s'est produite",
+            });
+        }
         user.value = {
             ...user.value,
             state: status,
         };
-        SocketService.sendNewUserState(useNuxtApp().$socket, user.value);
     };
 
     const logout = () => {
