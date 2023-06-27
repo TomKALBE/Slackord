@@ -103,5 +103,9 @@ declare global {
         receiver_id: number
         request_status: "ACCEPTED" | "DECLINED" | "PENDING"
     }
-
+    interface IServer {
+        id: number;
+        user_id: number;
+        users: IUser[];
+    }
 }
