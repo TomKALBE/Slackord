@@ -107,5 +107,6 @@ declare global {
         id: number;
         user_id: number;
         name: string;
+        users: IUser[];
     }
 }
