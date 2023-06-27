@@ -5,7 +5,7 @@ const currentServer = ref(0);
 const currentConversation = ref(0);
 
 const { users, friendRequests, getRelatedUsers, getFriendRequests } = useUser();
-const { user } = useAuth();
+const { user, updateStatus } = useAuth();
 onMounted(async () => {
     setTimeout(async () => {
         // setChatScrollBarBottom();
@@ -76,11 +76,14 @@ const numberOfFriendRequests = computed(() => {
                             :icon="['far', 'user']"
                         />
                         <div
-                            class="w-3 h-3 absolute bg-red-400 bottom-[-0.125rem] left-[-0.125rem] rounded-full"
+                            class="w-3 h-3 absolute bottom-[-0.125rem] left-[-0.125rem] rounded-full"
+                            :class="{ 'bg-red-400': user?.state === 'DO NOT DISTURB', 'bg-green-400': user?.state === 'ONLINE','bg-gray-400' : user?.state === 'INVISIBLE' }"
                         ></div>
                         <div
-                            class="animate-ping w-3 h-3 absolute bg-red-400 bottom-[-0.125rem] left-[-0.125rem] rounded-full"
-                        ></div>
+                            class="animate-ping w-3 h-3 absolute bottom-[-0.125rem] left-[-0.125rem] rounded-full"
+                            :class="{ 'bg-red-400': user?.state === 'DO NOT DISTURB', 'bg-green-400': user?.state === 'ONLINE','bg-gray-400' : user?.state === 'INVISIBLE' }"
+
+                            ></div>
                     </div>
                     <div class="flex-1 mr-1">
                         <p
@@ -112,10 +115,12 @@ const numberOfFriendRequests = computed(() => {
                         <a
                             href="#"
                             class="flex ml-1 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
-                            >Ne pas déranger</a
+
+                            >{{user?.state === 'DO NOT DISTURB' ? 'Ne pas déranger' : user?.state === 'ONLINE' ? 'En ligne' : 'Invisible'}}</a
                         >
                         <span
-                            class="ml-2 w-3 h-3 mt-[3px] bg-red-400 rounded-full"
+                            class="ml-2 w-3 h-3 mt-[3px] rounded-full"
+                            :class="{ 'bg-red-400': user?.state === 'DO NOT DISTURB', 'bg-green-400': user?.state === 'ONLINE','bg-gray-400' : user?.state === 'INVISIBLE' }"
                         ></span>
                     </div>
                     <div
@@ -128,6 +133,7 @@ const numberOfFriendRequests = computed(() => {
                         >
                             <li
                                 class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+                                @click="updateStatus('ONLINE')"
                             >
                                 <span
                                     class="w-3 h-3 bg-green-400 rounded-full"
@@ -154,6 +160,7 @@ const numberOfFriendRequests = computed(() => {
                             </li>
                             <li
                                 class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+                                @click="updateStatus('DO NOT DISTURB')"
                             >
                                 <span
                                     class="w-3 h-3 bg-red-400 rounded-full"
@@ -161,11 +168,13 @@ const numberOfFriendRequests = computed(() => {
                                 <a
                                     href="#"
                                     class="flex ml-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
+                                    
                                     >Ne pas déranger</a
                                 >
                             </li>
                             <li
                                 class="flex items-center px-4 py-2 hover:bg-gray-600 hover:text-white cursor-pointer"
+                                @click="updateStatus('INVISIBLE')"
                             >
                                 <span
                                     class="w-3 h-3 bg-gray-400 rounded-full"

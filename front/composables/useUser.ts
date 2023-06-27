@@ -90,6 +90,13 @@ export default () => {
         );
         friendRequests.value = (await res.json()) as IRelationship[];
     }
+    async function updateFriendState(state, id){
+        //find the user in the list
+        const user = users.value.find(u => u.id === id);
+        if(user){
+            user.state = state;
+        }
+    }
     return {
         users,
         friendRequests,
@@ -97,5 +104,6 @@ export default () => {
         sendFriendRequest,
         answerFriendRequest,
         getFriendRequests,
+        updateFriendState
     };
 };

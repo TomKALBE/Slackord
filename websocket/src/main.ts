@@ -1,18 +1,20 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import Env from "./utils/env";
-import type { MessageResource, ChannelResource, RelationshipResource } from "./data/resources";
+import type { MessageResource, ChannelResource, RelationshipResource, UserResource } from "./data/resources";
 
 interface ServerToClientEvents {
     "server.new-message": (data: MessageResource, callback?: Function) => void;
     "server.new-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
+    "server.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
 }
 
 interface ClientToServerEvents {
     "client.new-message": (data: MessageResource, callback?: Function) => void;
     "client.new-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "client.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
+    "client.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
     ping: (data: number, callback?: any) => void;
 }
 
@@ -35,17 +37,107 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
     },
 }).on("connection", async (socket) => {
     console.log("new connection");
-
-    socket.data.channelsId = new Map();
-
-    socket.on('ping', async (userId, callback) => {
+    socket.on("ping", async (userId: number, callback) => {
 
         socketsMap.set(userId, socket.id);
+        socket.data.userId = userId;
+
+        let response = await fetch(`${Env.API_URL}/users/${userId}`);
+
+        const user = await response.json() as UserResource;
+
+        if (user.state !== "INVISIBLE") {
+            response = await fetch(`${Env.API_URL}/relationships?request_status_like=ACCEPTED&senderId=${userId}&receiverId=${userId}`);
+
+            const relationships = await response.json() as Array<RelationshipResource>;
+
+            relationships.forEach(relationship => {
+
+                const receiverId = (relationship?.sender_id === userId)
+                    ? relationship?.receiver_id
+                    : relationship?.sender_id;
+
+                if (socketsMap.has(receiverId)) {
+                    const receiverSocketId = socketsMap.get(receiverId);
+                    if (receiverSocketId)
+                        io.to(receiverSocketId)
+                            .emit('server.new-user-state', { state: user.state, id: userId });
+                }
+            });
+        }
 
         if (callback) {
             callback({ ok: true });
         }
     });
+
+    socket.on("disconnect", async (reason) => {
+
+        const userId = socket.data.userId;
+
+        const response = await fetch(`${Env.API_URL}/relationships?request_status_like=ACCEPTED&senderId=${userId}&receiverId=${userId}`);
+
+        const relationships = await response.json() as Array<RelationshipResource>;
+
+        relationships.forEach(relationship => {
+            const receiverId = (relationship?.sender_id === userId)
+                ? relationship?.receiver_id
+                : relationship?.sender_id;
+
+            if (socketsMap.has(receiverId)) {
+                const receiverSocketId = socketsMap.get(receiverId);
+                if (receiverSocketId)
+                    io.to(receiverSocketId)
+                        .emit('server.new-user-state', { state: 'INVISIBLE', id: userId });
+            }
+        });
+    });
+
+    socket.on("client.new-user-state", async (data, callback) => {
+
+        const user = data;
+
+        fetch(`${Env.API_URL}/users/${user.id}`,
+            {
+                method: "PATCH",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    state: user.state
+                })
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+                const response = await fetch(`${Env.API_URL}/relationships?request_status_like=ACCEPTED&senderId=${user.id}&receiverId=${user.id}`);
+
+                const relationships = await response.json() as Array<RelationshipResource>;
+                relationships.forEach(relationship => {
+                    const receiverId = (relationship?.sender_id === user.id)
+                        ? relationship?.receiver_id
+                        : relationship?.sender_id;
+
+                    if (socketsMap.has(receiverId)) {
+                        const receiverSocketId = socketsMap.get(receiverId);
+                        if (receiverSocketId)
+                            io.to(receiverSocketId)
+                                .emit('server.new-user-state', { state: user.state, id: user.id });
+                    }
+                });
+
+            }
+
+            if (callback) {
+                callback({ ok: true });
+            }
+
+        }).catch((error) => {
+            console.error(error);
+
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+
+        })
+    })
 
     socket.on("client.new-message", async (data, callback) => {
         fetch(`${Env.API_URL}/messages`,

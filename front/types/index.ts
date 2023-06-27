@@ -47,6 +47,12 @@ declare global {
         privateChannels: string[];
         userIdentifier: string;
         channelRoles: string[];
+        state: EUserState;
+    }
+    enum EUserState {
+        ONLINE = "ONLINE",
+        DO_NOT_DISTURB = "DO NOT DISTURB",
+        INVISIBLE = "INVISIBLE"
     }
     interface IMessage {
         content: string;

@@ -18,7 +18,7 @@ export type UserResource = {
     id: number,
     firstname: string;
     lastname: string;
-    state: "ONLINE" | "AFK" | "DO NOT DISTURB" | "INVISIBLE"
+    state: "ONLINE" | "DO NOT DISTURB" | "INVISIBLE"
 };
 
 export type RelationshipResource = {

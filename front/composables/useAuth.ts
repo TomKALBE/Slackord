@@ -27,16 +27,17 @@ export default () => {
             if (localStorage.getItem("user")) {
                 _user = JSON.parse(localStorage.getItem("user"));
                 await nextTick();
-                useState('user').value = _user;
+                user.value = _user;
             } else {
                 _user = {
                     id: 2,
                     email: "test1@test.com",
                     pseudo: "test1",
+                    state: "ONLINE"
                 };
                 localStorage.setItem("user", JSON.stringify(_user));
                 await nextTick();
-                useState('user').value = _user;
+                user.value = _user;
             }
 
         }
@@ -91,6 +92,22 @@ export default () => {
             console.log(e);
         }
     }
+    const updateStatus = async (status) => {
+        if(status === user.value.state) return;
+        const res = await SocketService.sendNewUserState(useNuxtApp().$socket, {id: user.value.id, state: status});
+        if (!res.ok) {
+            return useToast().add({
+                color: "rose",
+                icon: "circle-exclamation",
+                message: "Une erreur s'est produite",
+            });
+        }
+        user.value = {
+            ...user.value,
+            state: status,
+        };
+    };
+
     const logout = () => {
         user.value = {
             isAuthenticated: false,
@@ -106,5 +123,6 @@ export default () => {
         login,
         logout,
         autoLogin,
+        updateStatus
     };
 };

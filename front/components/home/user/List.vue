@@ -42,12 +42,21 @@ onMounted(async () => {
             >
                 <div class="flex items-center justify-start">
                     <div
-                        class="flex w-8 h-8 rounded-full bg-slate-500 justify-center items-center ml-6"
+                        class="flex w-8 h-8 rounded-full bg-slate-500 justify-center items-center ml-6 relative"
                     >
                         <FontAwesomeIcon
                             class="h-4 w-4 text-white"
                             :icon="['far', 'user']"
                         />
+                        <div
+                            class="w-3 h-3 absolute bottom-[-0.125rem] left-[-0.125rem] rounded-full"
+                            :class="{ 'bg-red-400': user?.state === 'DO NOT DISTURB', 'bg-green-400': user?.state === 'ONLINE','bg-gray-400' : user?.state === 'INVISIBLE' }"
+                        ></div>
+                        <div
+                            class="animate-ping w-3 h-3 absolute bottom-[-0.125rem] left-[-0.125rem] rounded-full"
+                            :class="{ 'bg-red-400': user?.state === 'DO NOT DISTURB', 'bg-green-400': user?.state === 'ONLINE','bg-gray-400' : user?.state === 'INVISIBLE' }"
+
+                            ></div>
                     </div>
                     <p class="text-slate-150 ml-3">{{ user?.pseudo }}</p>
                 </div>
