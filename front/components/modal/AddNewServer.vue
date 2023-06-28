@@ -1,18 +1,25 @@
 <script setup lang="ts">
+import { Modal } from 'flowbite'
+import type { ModalOptions, ModalInterface } from 'flowbite'
 import useServer from "~/composables/useServer";
-
 const createServer = ref(false);
 const joinServer = ref(false);
 const serverName = ref("");
 const serverNameError = ref(false);
 const { create } = useServer();
 const createNewServer = async () => {
+    const $modalElement: HTMLElement = document.querySelector('#' + ADD_SERVER_MODAL);
+    const modal: ModalInterface = new Modal($modalElement)
     if(serverName.value == "") return serverNameError.value = true;
     serverNameError.value = false;
     createServer.value = !createServer
-    await create({user_id: useAuth().user.value.id, name : serverName.value});
+    try {
+        await create({user_id: useAuth().user.value.id, name : serverName.value});
+        modal.hide();
+    } catch (error) {
+        return;
+    }
 }
-
 </script>
 <template>
     <div

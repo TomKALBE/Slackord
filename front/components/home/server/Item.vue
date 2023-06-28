@@ -36,5 +36,8 @@ const key = getCurrentInstance()?.vnode.key;
 bg-green-400
 bg-indigo-400
 bg-orange-400
+bg-amber-400
+bg-blue-400
+bg-red-400
 */
 </style>

@@ -27,6 +27,26 @@ const serverList = [
     hasNotification: null,
   },
   {
+    bgColor: "amber",
+    hasNotification: null,
+  },
+  {
+    bgColor: "rose",
+    hasNotification: true,
+  },
+  {
+    bgColor: "blue",
+    hasNotification: true,
+  },
+  {
+    bgColor: "blue",
+    hasNotification: true,
+  },
+  {
+    bgColor: "rose",
+    hasNotification: true,
+  },
+  {
     bgColor: "rose",
     hasNotification: true,
   },
@@ -41,7 +61,7 @@ const setSelectedServer = (index:number) => {
 };
 </script>
 <template>
-  <div class="flex w-8/12 items-center">
+  <div class="flex w-8/12 items-center overflow-x-scroll">
     <!-- SECTION Server without notification -->
     <HomeServerItem
       v-for="(server, index) in servers"
@@ -51,6 +71,7 @@ const setSelectedServer = (index:number) => {
       :isSelected="index === selectedServer"
       :setSelectedServer="setSelectedServer"
     />
+    <ModalAddNewServer />
     <div
       class="flex w-12 h-12 ml-2 items-center justify-center rounded-xl hover:border-2 hover:border-spacing-4 hover:border-gray-300 active:border-4 active:duration-100"
     >
@@ -62,6 +83,5 @@ const setSelectedServer = (index:number) => {
         <FontAwesomeIcon class="h-6 w-6 text-gray-100" :icon="`fa-plus`" />
       </div>
     </div>
-    <ModalAddNewServer />
   </div>
 </template>

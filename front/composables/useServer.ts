@@ -30,8 +30,10 @@ export default () => {
             if(!json)
                 throw new Error("Error while creating server");
             addMember({server_id : json.id, user_id : useAuth().user.value.id});
+            useToast().add({icon : "circle-check", color : "green", message : "Le serveur a bien été créé"});
         } catch (error) {
             console.log(error)
+            useToast().add({icon : "circle-exclamation", color : "red", message : "Une erreur est survenue lors de la création du serveur"});
         }
     };
     const addMember = async (data: { server_id:number, user_id:number }) => {
