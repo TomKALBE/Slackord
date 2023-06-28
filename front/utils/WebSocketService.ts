@@ -22,6 +22,10 @@ interface ServerToClientEvents {
         data: IServerMemberRequest,
         callback?: Function
     ) => void;
+    "server.new-channel": (
+        data: any,
+        callback?: Function
+    ) => void;
 }
 
 interface ClientToServerEvents {
@@ -48,6 +52,10 @@ interface ClientToServerEvents {
         data: IServerMemberRequest,
         callback?: Function
     ) => Promise<any>;
+    "client.new-channel": (
+        data: any,
+        callback?: Function
+    ) => void;
 }
 
 const getClientSocket = (url: string) => {
@@ -124,6 +132,17 @@ const getClientSocket = (url: string) => {
         }
     );
 
+    clientSocket.on(
+        "server.new-channel",
+        (data: any, callback) => {
+            console.log("new channel created :", data);
+
+            if (callback) {
+                callback({ ok: true });
+            }
+        }
+    );
+
     return clientSocket;
 };
 
@@ -188,6 +207,18 @@ export const SocketService = {
         return new Promise((resolve, reject) => {
             clientSocket.emit(
                 "client.answer-server-request",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
+        })
+    },
+
+    sendNewChannel: (clientSocket: ClientSocket, data: IUser) => {
+        return new Promise((resolve, reject) => {
+            clientSocket.emit(
+                "client.new-channel",
                 data,
                 (response: any) => {
                     resolve(response);
