@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { initModals } from "flowbite";
+import useServer from "~/composables/useServer";
 
 const emit = defineEmits(['handleServerChange'])
 
@@ -23,11 +24,15 @@ const serverList = [
   },
   {
     bgColor: "indigo",
+    hasNotification: null,
+  },
+  {
+    bgColor: "rose",
     hasNotification: true,
   },
 ];
 const selectedServer = ref(0);
-
+const { servers } = useServer();
 const setSelectedServer = (index:number) => {
   selectedServer.value = index;
   if (serverList[index].hasNotification)
@@ -39,8 +44,9 @@ const setSelectedServer = (index:number) => {
   <div class="flex w-8/12 items-center">
     <!-- SECTION Server without notification -->
     <HomeServerItem
-      v-for="(server, index) in serverList"
+      v-for="(server, index) in servers"
       v-bind="server"
+      :bgColor="serverList[index].bgColor"
       :key="index"
       :isSelected="index === selectedServer"
       :setSelectedServer="setSelectedServer"

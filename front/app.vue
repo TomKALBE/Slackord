@@ -1,4 +1,5 @@
 <script setup>
+import useServer from './composables/useServer';
 import getClientSocket from './utils/WebSocketService';
 
 const nuxtApp = useNuxtApp()
@@ -9,6 +10,7 @@ const { autoLogin } = useAuth();
 onMounted(async () => {
   nuxtApp.provide('socket', getClientSocket(useRuntimeConfig().public.socketUrl))
   await autoLogin();
+  await useServer().get();
 })
 
 </script>

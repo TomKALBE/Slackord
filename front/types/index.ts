@@ -106,6 +106,6 @@ declare global {
     interface IServer {
         id: number;
         user_id: number;
-        users: IUser[];
+        name: string;
     }
 }
