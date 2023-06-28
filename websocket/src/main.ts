@@ -9,6 +9,7 @@ interface ServerToClientEvents {
     "server.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
     "server.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
+    "server.new-channel": (data: any, callback?: Function) => void;
 }
 
 interface ClientToServerEvents {
@@ -17,6 +18,7 @@ interface ClientToServerEvents {
     "client.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "client.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
     "client.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
+    "client.new-channel": (data: any, callback?: Function) => void;
     ping: (data: number, callback?: any) => void;
 }
 
@@ -130,11 +132,11 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                     }
                 });
 
+                if (callback) {
+                    callback({ ok: true });
+                }
             }
 
-            if (callback) {
-                callback({ ok: true });
-            }
 
         }).catch((error) => {
             console.error(error);
@@ -290,10 +292,46 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
             }
         })
     })
+
+    socket.on("client.new-channel", async (data: any, callback) => {
+        fetch(`${Env.API_URL}/channels`,
+            {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(data)
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+
+                const members = await (fetch(`${Env.API_URL}/servers/${data.serverId}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
+
+                if (callback) {
+                    callback({ ok: true });
+                }
+
+                members.forEach((member: any) => {
+
+                    if (!socketsMap.has(member.userId)) {
+                        return;
+                    }
+
+                    const receiverSocketId = socketsMap.get(member.userId);
+
+                    if (receiverSocketId) {
+                        io.to(receiverSocketId)
+                            .emit('server.new-channel', data);
+                    }
+                });
+            }
+        }).catch((error) => {
+            console.error(error);
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+        })
+    })
 });
 
 httpServer.listen({ port: Number(Env.PORT) }, async () => {
     console.log('Server running on port', Env.PORT, '...')
-    const serverData = await (fetch(`${Env.API_URL}/servers`).then(res => res.json()));
-    console.log(serverData)
 });
