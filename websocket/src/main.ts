@@ -1,13 +1,14 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import Env from "./utils/env";
-import type { MessageResource, ChannelResource, RelationshipResource, UserResource } from "./data/resources";
+import type { MessageResource, ChannelResource, RelationshipResource, UserResource, ServerMemberRequestResource } from "./data/resources";
 
 interface ServerToClientEvents {
     "server.new-message": (data: MessageResource, callback?: Function) => void;
     "server.new-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
+    "server.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
 }
 
 interface ClientToServerEvents {
@@ -15,6 +16,7 @@ interface ClientToServerEvents {
     "client.new-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "client.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "client.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
+    "client.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
     ping: (data: number, callback?: any) => void;
 }
 
@@ -24,6 +26,7 @@ interface InterServerEvents {
 
 interface SocketData {
     userId: number,
+    user: UserResource,
     channelsId: Map<number, string>
 }
 
@@ -45,6 +48,10 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
         let response = await fetch(`${Env.API_URL}/users/${userId}`);
 
         const user = await response.json() as UserResource;
+
+        socket.data.user = {
+            ...user
+        }
 
         if (user.state !== "INVISIBLE") {
             response = await fetch(`${Env.API_URL}/relationships?request_status_like=ACCEPTED&senderId=${userId}&receiverId=${userId}`);
@@ -251,8 +258,42 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
         })
     })
+
+    socket.on("client.new-server-request", async (data, callback) => {
+
+        fetch(`${Env.API_URL}/server-requests`,
+            {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(data)
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+
+                const serverData = await (fetch(`${Env.API_URL}/servers/?=name${data.name}`).then(res => res.json()));
+
+                const receiverSocketId = socketsMap.get(serverData.userId);
+
+                if (receiverSocketId) {
+                    io.to(receiverSocketId)
+                        .emit('server.new-server-request', { ...data, user: socket.data.user })
+                }
+
+                if (callback) {
+                    callback({ ok: true });
+                }
+            }
+        }).catch((error) => {
+            console.error(error);
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+        })
+    })
 });
 
-httpServer.listen({ port: Number(Env.PORT) }, () => {
+httpServer.listen({ port: Number(Env.PORT) }, async () => {
     console.log('Server running on port', Env.PORT, '...')
+    const serverData = await (fetch(`${Env.API_URL}/servers`).then(res => res.json()));
+    console.log(serverData)
 });

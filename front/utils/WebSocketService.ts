@@ -14,6 +14,14 @@ interface ServerToClientEvents {
         data: Partial<IUser>,
         callback?: Function
     ) => void;
+    "server.new-server-request": (
+        data: IServerMemberRequest,
+        callback?: Function
+    ) => void;
+    "server.answer-server-request": (
+        data: IServerMemberRequest,
+        callback?: Function
+    ) => void;
 }
 
 interface ClientToServerEvents {
@@ -32,6 +40,14 @@ interface ClientToServerEvents {
         data: Partial<IUser>,
         callback?: Function
     ) => void;
+    "client.new-server-request": (
+        data: IServerMemberRequest,
+        callback?: Function
+    ) => void;
+    "client.answer-server-request": (
+        data: IServerMemberRequest,
+        callback?: Function
+    ) => Promise<any>;
 }
 
 const getClientSocket = (url: string) => {
@@ -82,7 +98,28 @@ const getClientSocket = (url: string) => {
             useUser().updateFriendState(data.state, data.id);
             if (callback) {
                 callback({ ok: true });
-                
+            }
+        }
+    );
+
+    clientSocket.on(
+        "server.answer-server-request",
+        (data: IServerMemberRequest, callback) => {
+            console.log("response for server request :", data);
+
+            if (callback) {
+                callback({ ok: true });
+            }
+        }
+    );
+
+    clientSocket.on(
+        "server.new-server-request",
+        (data: IServerMemberRequest, callback) => {
+            console.log("new server request :", data);
+
+            if (callback) {
+                callback({ ok: true });
             }
         }
     );
@@ -134,7 +171,29 @@ export const SocketService = {
                     resolve(response);
                 }
             );
-        })        
+        })
+    },
+    sendServerMemberRequest: async (clientSocket: ClientSocket, data: IServerMemberRequest) => {
+        return new Promise((resolve, reject) => {
+            clientSocket.emit(
+                "client.new-server-request",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
+        });
+    },
+    answerServerMemberRequest: async (clientSocket: ClientSocket, data: IServerMemberRequest): Promise<undefined> => {
+        return new Promise((resolve, reject) => {
+            clientSocket.emit(
+                "client.answer-server-request",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
+        })
     },
 };
 

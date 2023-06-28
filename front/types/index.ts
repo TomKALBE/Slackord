@@ -108,4 +108,10 @@ declare global {
         user_id: number;
         name: string;
     }
+    interface IServerMemberRequest {
+        serverId: number,
+        userId: number
+        user?: Partial<IUser>,
+        requestStatus: "ACCEPTED" | "DECLINED" | "PENDING"
+    }
 }
