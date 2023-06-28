@@ -426,6 +426,4 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
 httpServer.listen({ port: Number(Env.PORT) }, async () => {
     console.log('Server running on port', Env.PORT, '...')
-    const serverData = await (fetch(`${Env.API_URL}/servers`).then(res => res.json()));
-    console.log(serverData)
 });
