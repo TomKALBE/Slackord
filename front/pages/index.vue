@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { initModals, initDropdowns } from "flowbite";
+import useServer from "~/composables/useServer";
 
 const currentServer = ref(0);
 const currentConversation = ref(0);
 
 const { users, friendRequests, getRelatedUsers, getFriendRequests } = useUser();
 const { user, updateStatus } = useAuth();
+const { servers } = useServer();
 onMounted(async () => {
     setTimeout(async () => {
         // setChatScrollBarBottom();
@@ -222,7 +224,7 @@ const numberOfFriendRequests = computed(() => {
                                 class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer"
                                 @click="handleClick"
                             >
-                                <p class="text-xl text-white">Zombo Com</p>
+                                <p class="text-xl text-white">{{ servers[currentServer].server?.name }}</p>
                                 <FontAwesomeIcon
                                     class="w-4 text-gray-100 ml-2"
                                     :icon="`fa-chevron-down`"

@@ -125,5 +125,43 @@
       "request_status": "PENDING",
       "id": 8
     }
+  ],
+  "servers": [
+    {
+      "id": 1,
+      "userId": 1,
+      "name": "Test Server"
+    },
+    {
+      "user_id": 1,
+      "name": "test",
+      "id": 2
+    }
+  ],
+  "channels": [
+    {
+      "id": 1,
+      "serverId": 1,
+      "name": "channel 1",
+      "url": "channel-1"
+    },
+    {
+      "id": 2,
+      "serverId": 2,
+      "name": "channel 1",
+      "url": "channel-2"
+    }
+  ],
+  "members": [
+    {
+      "serverId": 1,
+      "userId": 1,
+      "id": 1
+    },
+    {
+      "serverId": 1,
+      "userId": 2,
+      "id": 2
+    }
   ]
 }
