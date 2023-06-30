@@ -215,7 +215,7 @@ export const SocketService = {
         })
     },
 
-    sendNewChannel: (clientSocket: ClientSocket, data: IUser) => {
+    sendNewChannel: (clientSocket: ClientSocket, data: any) => {
         return new Promise((resolve, reject) => {
             clientSocket.emit(
                 "client.new-channel",

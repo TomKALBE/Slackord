@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-    "dev": "tsc -w & node --watch dist/main.js",
+    "dev": "tsc -p tsconfig.json -w & node --watch dist/main.js",
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
     "serve": "node dist/main.js"
