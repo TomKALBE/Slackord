@@ -1,10 +1,10 @@
 export default () => {
     const channels = useState<IChannel[]>("channels", () => []);
     const selectedChannel = useState("selectedChannel", () => 0);
-    const setSelectedChannel = (channel:any) => {
+    const setSelectedChannel = (channel: any) => {
         selectedChannel.value = channel;
     };
-    const setChannels = (channels:any) => {
+    const setChannels = (channels: any) => {
         channels.value = channels;
     };
     const get = async () => {
@@ -17,11 +17,11 @@ export default () => {
         setSelectedChannel(data[0])
         setChannels(data);
     };
-    const modifyChannel = (channel:IChannel) => {
+    const modifyChannel = (channel: IChannel) => {
         const index = getChannelIndexById(channel.id)
         channels.value[index] = channel;
     }
-    const getChannelIndexById = (id:number) => {
+    const getChannelIndexById = (id: number) => {
         return channels.value.findIndex((channel) => channel.id === id)
     }
     return {

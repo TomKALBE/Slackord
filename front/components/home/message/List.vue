@@ -56,8 +56,8 @@ const handleFormSubmit = (e: Event) => {
                 <!-- SECTION Messages -->
                 <!-- Todo Gérer l'overflow -->
                 <div v-if="conversationMessages[getReceiverIdIndex(props.user.id, privateConversation ? 'PRIVATE' : 'CHANNEL')]"
-                    v-for="message in conversationMessages[getReceiverIdIndex(props.user.id, privateConversation ? 'PRIVATE' : 'CHANNEL')].messages" :key="message.id"
-                    class="flex min-h-[3.5rem] my-5">
+                    v-for="message in conversationMessages[getReceiverIdIndex(props.user.id, privateConversation ? 'PRIVATE' : 'CHANNEL')].messages"
+                    :key="message.id" class="flex min-h-[3.5rem] my-5">
                     <div class="flex w-14 justify-center items-center">
                         <div class="flex w-8 h-8 rounded-full bg-slate-500 justify-center items-center self-start mt-2">
                             <FontAwesomeIcon class="h-4 w-4 text-white" :icon="['far', 'user']" />
@@ -89,7 +89,8 @@ const handleFormSubmit = (e: Event) => {
                 <form class="w-11/12" @submit="handleFormSubmit">
                     <!-- TODO mettre une textarea -->
                     <input :disabled="props.user == 0" v-model="formMessage" placeholder="Envoyez un message"
-                        :class="{'cursor-not-allowed': props.user == 0}" class=" w-full h-full border-none bg-transparent text-white placeholder:text-slate-300 pb-1 focus:outline-none" />
+                        :class="{ 'cursor-not-allowed': props.user == 0 }"
+                        class=" w-full h-full border-none bg-transparent text-white placeholder:text-slate-300 pb-1 focus:outline-none" />
                 </form>
             </div>
         </div>
