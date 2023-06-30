@@ -114,4 +114,11 @@ declare global {
         user?: Partial<IUser>,
         requestStatus: "ACCEPTED" | "DECLINED" | "PENDING"
     }
+    interface IChannel {
+        id: number,
+        serverId: number,
+        name: string,
+        url: string,
+        index : number
+    }
 }

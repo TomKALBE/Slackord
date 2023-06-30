@@ -1,51 +1,104 @@
 <script setup lang="ts">
+import { Console } from "console";
+import { Dropdown, initDropdowns, initModals } from "flowbite";
 
+onMounted(async () => {
+    setTimeout(async () => {
+        // setChatScrollBarBottom();
+        initModals();
+        getChannels();
+    }, 10);
+    initDropdowns();
+    console.log(useChannel().selectedChannel.value == undefined);
+});
+watch(
+    () => useServer().selectedServer.value,
+    async () => {
+        console.log("ici")
+        getChannels();
+    }
+);
+const { channels } = useChannel();
+const getChannels = async () => {
+    const res = await fetch(
+        `api/servers/${useServer().selectedServer.value}/channels`
+    );
+    const data = (await res.json()) as IChannel[];
+    channels.value = data;
+    //add a property index to each channel
+    useChannel().setSelectedChannel(data[0])
+    useChannel().setChannels(data);
+};
+const openDropdown = (id:number) => {
+    const dropdown = document.getElementById('dropdown' + id);
+    const dropdownButton = document.getElementById('dropdownbutton' + id);
+    const _dropdown = new Dropdown(dropdown, dropdownButton, null);
+    if(_dropdown.isVisible()) return;
+    dropdown.classList.remove('hidden');
+}
 </script>
 <template>
-    <div class="flex justify-center scrollbar channel-max-height overflow-y-scroll">
+    <div
+        class="flex justify-center scrollbar channel-max-height overflow-y-scroll"
+    >
+        <ModalChannelCreate />
+        <ModalChannelModify />
         <div class="flex-col w-11/12 mt-4 space-y-3">
-            <div
-                class="flex w-full bg-slate-550 rounded-md h-10 items-center justify-between"
-            >
-                <p class="text-slate-150 ml-8"># Channel 1</p>
-                <FontAwesomeIcon
-                    data-dropdown-toggle="dropdown"
-                    class="w-4 text-gray-300 hover:text-gray-100 cursor-pointer mr-2"
-                    icon="fa-gear"
-                />
+            <template v-for="(channel, index) in channels" :key="channel.id">
                 <div
-                    id="dropdown"
-                    class="z-50 hidden divide-y divide-gray-100 rounded-lg shadow w-44 bg-slate-800 border-2 border-slate-600"
+                    v-if="useChannel().selectedChannel.value?.id == channel.id"
+                    class="flex w-full bg-slate-550 rounded-md h-10 items-center justify-between"
                 >
-                    <ul
-                        class="py-2 text-sm text-gray-200"
-                        aria-labelledby="dropdownDefaultButton"
+                    <p class="text-slate-150 ml-8"># {{ channel.name }}</p>
+                    <FontAwesomeIcon
+                        :data-dropdown-toggle="'dropdown' + channel.id"
+                        :id="'dropdownbutton' + channel.id"
+                        data-drop
+                        class="w-4 text-gray-300 hover:text-gray-100 cursor-pointer mr-2"
+                        icon="fa-gear"
+                        @click="openDropdown(channel.id)"
+                    />
+                    <div
+                        :id="'dropdown' + channel.id"
+                        class="z-50 divide-y hidden divide-gray-100 rounded-lg shadow w-44 bg-slate-800 border-2 border-slate-600"
                     >
-                        <li>
-                            <a
-                                href="#"
-                                class="block px-4 py-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
-                                >Modifier</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                class="block px-4 py-2 font-semibold text-orange-500 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
-                                >Supprimer</a
-                            >
-                        </li>
-                    </ul>
+                        <ul
+                            class="py-2 text-sm text-gray-200"
+                            aria-labelledby="dropdownDefaultButton"
+                        >
+                            <li>
+                                <a
+                                    href="#"
+                                    class="block px-4 py-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
+                                    >Modifier</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="#"
+                                    class="block px-4 py-2 font-semibold text-orange-500 hover:bg-gray-100 hover:bg-gray-600"
+                                    >Supprimer</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div class="flex w-full h-10 items-center">
-                <p class="text-slate-150 ml-8"># Channel 2</p>
-            </div>
-            <div class="flex w-full h-10 items-center">
-                <p class="text-slate-150 ml-8"># Channel 3</p>
-            </div>
-            <div class="flex w-full h-10 items-center">
-                <p class="text-slate-150 ml-8"># Channel 4</p>
+                <div
+                    v-else
+                    class="group flex w-full h-10 items-center cursor-pointer hover:bg-slate-600 rounded-md"
+                    @click="useChannel().setSelectedChannel({...channel})"
+                >
+                    <p class="text-slate-150 ml-8 group-hover:text-white">
+                        # {{ channel.name }}
+                    </p>
+                </div>
+            </template>
+            <div
+                :data-modal-target="CREATE_CHANNEL_MODAL"
+                :data-modal-toggle="CREATE_CHANNEL_MODAL"
+                class="group flex w-full h-10 items-center justify-center opacity-70 hover:opacity-100 active:bg-slate-550 bg-slate-750 rounded cursor-pointer hover:bg-slate-650"
+            >
+                <FontAwesomeIcon icon="fa-plus" class="text-white" />
             </div>
         </div>
     </div>

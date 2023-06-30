@@ -32,19 +32,19 @@ const serverList = [
   },
   {
     bgColor: "rose",
-    hasNotification: true,
+    hasNotification: null,
   },
   {
     bgColor: "blue",
-    hasNotification: true,
+    hasNotification: null,
   },
   {
     bgColor: "blue",
-    hasNotification: true,
+    hasNotification: null,
   },
   {
     bgColor: "rose",
-    hasNotification: true,
+    hasNotification: null,
   },
   {
     bgColor: "rose",
@@ -61,7 +61,7 @@ const setSelectedServer = (index:number) => {
 };
 </script>
 <template>
-  <div class="flex w-8/12 items-center overflow-x-scroll">
+  <div class="flex w-8/12 items-center overflow-x-scroll no-scrollbar">
     <!-- SECTION Server without notification -->
     <HomeServerItem
       v-for="(server, index) in servers"
