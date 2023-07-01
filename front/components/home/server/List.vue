@@ -71,7 +71,7 @@ const setSelectedServer = (index:number) => {
       :isSelected="index === selectedServer"
       :setSelectedServer="setSelectedServer"
     />
-    <ModalAddNewServer />
+    <ModalServerCreate />
     <div
       class="flex w-12 h-12 ml-2 items-center justify-center rounded-xl hover:border-2 hover:border-spacing-4 hover:border-gray-300 active:border-4 active:duration-100"
     >

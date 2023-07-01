@@ -32,6 +32,7 @@ export default () => {
             const json = await res.json();
             if(!json)
                 throw new Error("Error while creating server");
+            get();
             addMember({server_id : json.id, user_id : useAuth().user.value.id});
             useToast().add({icon : "circle-check", color : "green", message : "Le serveur a bien été créé"});
         } catch (error) {

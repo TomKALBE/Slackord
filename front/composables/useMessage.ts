@@ -10,7 +10,6 @@ export default () => {
 
     async function getRelatedConversationMessage(userId: number, receiver_id: number, type:string) {
         try {
-            console.log('getRelatedConversationMessage', userId, receiver_id, type)
             // if (getReceiverIdIndex(receiver_id) !== -1) return;
 
             if (useRuntimeConfig().public.appEnv === 'production') {
@@ -25,8 +24,12 @@ export default () => {
                 return json;
             }
             else {
-                console.log("la")
-                const res = await fetch(`/api/messages?receiver_id=${receiver_id}&user_id=${userId}&receiver_id=${userId}&user_id=${receiver_id}&type=${type}`);
+                let res;
+                if(type === "PRIVATE")
+                    res = await fetch(`/api/messages?receiver_id=${receiver_id}&user_id=${userId}&receiver_id=${userId}&user_id=${receiver_id}&type=${type}`);
+                else 
+                    res = await fetch(`/api/messages?receiver_id=${receiver_id}&type=${type}`);
+
                 const json = await res.json() as IMessage[];
                 console.log(json)
                 const conversationMessage: ConversationMessage = {
@@ -47,7 +50,7 @@ export default () => {
     }
 
     function addMessageToConversation(message: Partial<IMessage>) {
-        const index = getReceiverIdIndex(message.user_id);
+        const index = getReceiverIdIndex(message.user_id, message.type);
         console.log(index, message)
         if (index === -1) return;
         const newMessage: Partial<IMessage> = {

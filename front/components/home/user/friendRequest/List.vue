@@ -9,7 +9,6 @@ defineProps<Props>();
 const friendId = ref("");
 const _sendFriendRequest = () => {
     if (friendId.value !== "") {
-        console.log(friendId.value);
         sendFriendRequest(friendId.value);
     }
 };

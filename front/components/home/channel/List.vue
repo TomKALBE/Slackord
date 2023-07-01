@@ -7,14 +7,12 @@ onMounted(async () => {
         // setChatScrollBarBottom();
         initModals();
         getChannels();
+        initDropdowns();
     }, 10);
-    initDropdowns();
-    console.log(useChannel().selectedChannel.value == undefined);
 });
 watch(
     () => useServer().selectedServer.value,
     async () => {
-        console.log("ici")
         getChannels();
     }
 );
@@ -35,6 +33,10 @@ const openDropdown = (id:number) => {
     const _dropdown = new Dropdown(dropdown, dropdownButton, null);
     if(_dropdown.isVisible()) return;
     dropdown.classList.remove('hidden');
+}
+const modifyButton = ref()
+const triggerModify = () => {
+    modifyButton.value.click()
 }
 </script>
 <template>
@@ -66,16 +68,20 @@ const openDropdown = (id:number) => {
                             class="py-2 text-sm text-gray-200"
                             aria-labelledby="dropdownDefaultButton"
                         >
-                            <li>
+                            <li
+                            :data-modal-target="MODIFY_CHANNEL_MODAL"
+                            :data-modal-toggle="MODIFY_CHANNEL_MODAL"
+                            @click="triggerModify()"
+                            >
                                 <a
-                                    href="#"
+                                    :data-modal-target="MODIFY_CHANNEL_MODAL"
+                                    :data-modal-toggle="MODIFY_CHANNEL_MODAL"
                                     class="block px-4 py-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white"
                                     >Modifier</a
                                 >
                             </li>
                             <li>
                                 <a
-                                    href="#"
                                     class="block px-4 py-2 font-semibold text-orange-500 hover:bg-gray-100 hover:bg-gray-600"
                                     >Supprimer</a
                                 >
@@ -93,6 +99,13 @@ const openDropdown = (id:number) => {
                     </p>
                 </div>
             </template>
+            <div
+                :data-modal-target="MODIFY_CHANNEL_MODAL"
+                :data-modal-toggle="MODIFY_CHANNEL_MODAL"
+                class="hidden"
+                ref="modifyButton"
+            >
+            </div>
             <div
                 :data-modal-target="CREATE_CHANNEL_MODAL"
                 :data-modal-toggle="CREATE_CHANNEL_MODAL"

@@ -302,11 +302,11 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
             }
         ).then(async (response) => {
             if (response.ok) {
-
+                const channelInfo = await response.json()
                 const members = await (fetch(`${Env.API_URL}/servers/${data.serverId}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
 
                 if (callback) {
-                    callback({ ok: true });
+                    callback({ ok: true, ...channelInfo });
                 }
 
                 members.forEach((member: any) => {

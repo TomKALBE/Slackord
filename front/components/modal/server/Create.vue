@@ -26,7 +26,6 @@ const joinNewServer = async () => {
     if(serverName.value == "") return serverNameError.value = true;
     serverNameError.value = false;
     // joinServer.value = !joinServer
-    console.log("ici")
     try {
         await SocketService.sendServerMemberRequest(useNuxtApp().$socket,{userId: useAuth().user.value.id, name : serverName.value})
         // modal.hide();

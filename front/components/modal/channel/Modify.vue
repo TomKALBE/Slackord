@@ -2,13 +2,19 @@
 const channelName = ref("");
 const channelNameError = ref(false);
 const closeButton = ref(null);
-const createChannel = async () => {
+
+watch(
+    () => useChannel().selectedChannel.value,
+    () => {
+        channelName.value = useChannel().selectedChannel.value.name
+    }
+)
+const modifyChannel = async () => {
     if(channelName.value == "") return channelNameError.value = true;
     channelNameError.value = false;
     
     try {
         const res = await SocketService.sendNewChannel(useNuxtApp().$socket,{name: channelName.value, serverId: useServer().selectedServer.value, url:'channel'})
-        console.log(res)
         if(!res.ok)
             throw new Error()
         useToast().add({icon : "circle-check", color : "green", message : "Le channel a bien été créé"});
@@ -54,7 +60,7 @@ const createChannel = async () => {
                     <h3
                         class="mb-4 text-xl font-medium text-gray-900 dark:text-white"
                     >
-                        Créer un nouveau channel
+                        Modifier un channel
                     </h3>
                     <form class="space-y-6" action="#">
                         <div>
@@ -75,14 +81,14 @@ const createChannel = async () => {
                         </div>
 
                         <button
-                            @click="createChannel()"
+                            @click="modifyChannel()"
                             type="button"
                             class="text-white bg-rose-600 active:bg-rose-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >
-                            Créer un channel
+                            Modifier le nom du channel
                         </button>
                         <button
-                           
+                            :data-modal-hide="MODIFY_CHANNEL_MODAL"
                             type="button"
                             class="ml-4 text-white bg-gray-600 active:bg-gray-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >
