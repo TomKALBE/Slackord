@@ -77,8 +77,6 @@ onMounted(() => {
                 monElement.addEventListener(
                     "transitionend",
                     async () => {
-                        console.log("close button");
-
                         monElement.classList.add("hidden");
                         monElement.children[1].classList.add("hidden");
                         monElement.classList.remove(

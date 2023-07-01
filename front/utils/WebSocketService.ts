@@ -71,6 +71,7 @@ const getClientSocket = (url: string) => {
 
     clientSocket.on("server.new-message", (data: IMessage, callback) => {
         const { addMessageToConversation } = useMessage();
+        console.log("new message", data)
         addMessageToConversation(data);
         if (callback) {
             callback({ ok: true });

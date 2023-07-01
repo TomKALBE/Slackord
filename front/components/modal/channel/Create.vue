@@ -8,10 +8,14 @@ const createChannel = async () => {
     
     try {
         const res = await SocketService.sendNewChannel(useNuxtApp().$socket,{name: channelName.value, serverId: useServer().selectedServer.value, url:'channel'})
-        console.log(res)
         if(!res.ok)
             throw new Error()
+        delete res.ok
+        
+        useChannel().channels.value = [...useChannel().channels.value, res]
+        
         useToast().add({icon : "circle-check", color : "green", message : "Le channel a bien été créé"});
+        channelName.value = "";
         closeButton.value.click()
     } catch (error) {
         useToast().add({icon : "circle-exclamation", color : "red", message : "Une erreur est survenue lors de la création du channel"});
@@ -55,7 +59,7 @@ const createChannel = async () => {
                     >
                         Créer un nouveau channel
                     </h3>
-                    <form class="space-y-6" action="#">
+                    <form class="space-y-6" @submit.prevent="createChannel()">
                         <div>
                             <label
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -81,7 +85,7 @@ const createChannel = async () => {
                             Créer un channel
                         </button>
                         <button
-                           
+                            :data-modal-hide="CREATE_CHANNEL_MODAL"
                             type="button"
                             class="ml-4 text-white bg-gray-600 active:bg-gray-700 duration-300 hover:scale-105 tran focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                         >

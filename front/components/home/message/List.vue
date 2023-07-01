@@ -11,13 +11,11 @@ const props = defineProps<Props>();
 const { user } = useAuth();
 onMounted(async () => {
     // TODO: fix typescript error
-    console.log(user.value, props.user)
     messages.value = await getRelatedConversationMessage(
         user.value.id,
         props.user.id,
         props.privateConversation ? "PRIVATE" : "CHANNEL"
     );
-    console.log(messages.value);
 });
 watch(
     () => props.user,
@@ -32,19 +30,19 @@ watch(
 const { sendMessage } = SocketService;
 const nuxtApp = useNuxtApp();
 
-const handleFromSubmit = (e: Event) => {
+const handleFormSubmit = (e: Event) => {
     e.preventDefault();
     const newMessage: Partial<IMessage> = {
         content: formMessage.value,
         user_id: user.value.id,
         receiver_id: props.user.id,
-        type: "PRIVATE",
+        type: props.privateConversation ? "PRIVATE" : "CHANNEL",
     }
     const newMessage2: Partial<IMessage> = {
         content: formMessage.value,
         user_id: props.user.id,
         receiver_id: user.value.id,
-        type: "PRIVATE",
+        type: props.privateConversation ? "PRIVATE" : "CHANNEL",
     }
     addMessageToConversation(newMessage2)
     formMessage.value = "";
@@ -88,10 +86,10 @@ const handleFromSubmit = (e: Event) => {
                         <FontAwesomeIcon class="w-4 text-slate-700" icon="plus" />
                     </div>
                 </div>
-                <form class="w-11/12" @submit="handleFromSubmit">
+                <form class="w-11/12" @submit="handleFormSubmit">
                     <!-- TODO mettre une textarea -->
-                    <input v-model="formMessage" placeholder="Envoyez un message"
-                        class="w-full h-full border-none bg-transparent text-white placeholder:text-slate-300 pb-1 focus:outline-none" />
+                    <input :disabled="props.user == 0" v-model="formMessage" placeholder="Envoyez un message"
+                        :class="{'cursor-not-allowed': props.user == 0}" class=" w-full h-full border-none bg-transparent text-white placeholder:text-slate-300 pb-1 focus:outline-none" />
                 </form>
             </div>
         </div>
