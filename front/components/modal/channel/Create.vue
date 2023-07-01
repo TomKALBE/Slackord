@@ -7,7 +7,6 @@ const createChannel = async () => {
     channelNameError.value = false;
 
     try {
-        console.log(useServer().selectedServer.value)
         const res = await SocketService.sendNewChannel(useNuxtApp().$socket, { name: channelName.value, serverId: useServer().selectedServer.value.server.id, url: 'channel' })
         if (!res.ok)
             throw new Error()
