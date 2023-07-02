@@ -182,6 +182,17 @@ const getClientSocket = (url: string) => {
         }
     );
 
+    clientSocket.on(
+        "server.edit-channel",
+        (data: any, callback) => {
+            console.log("new server settings :", data);
+
+            if (callback) {
+                callback({ ok: true });
+            }
+        }
+    );
+
     return clientSocket;
 };
 
