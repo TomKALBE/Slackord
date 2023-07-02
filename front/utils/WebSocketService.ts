@@ -30,6 +30,10 @@ interface ServerToClientEvents {
         data: any,
         callback?: Function
     ) => void;
+    "server.edit-channel": (
+        data: any,
+        callback?: Function
+    ) => void;
 }
 
 interface ClientToServerEvents {
@@ -61,6 +65,10 @@ interface ClientToServerEvents {
         callback?: Function
     ) => void;
     "client.edit-server": (
+        data: any,
+        callback?: Function
+    ) => void;
+    "client.edit-channel": (
         data: any,
         callback?: Function
     ) => void;
@@ -163,6 +171,17 @@ const getClientSocket = (url: string) => {
         }
     );
 
+    clientSocket.on(
+        "server.edit-channel",
+        (data: any, callback) => {
+            console.log("new server settings :", data);
+
+            if (callback) {
+                callback({ ok: true });
+            }
+        }
+    );
+
     return clientSocket;
 };
 
@@ -251,6 +270,18 @@ export const SocketService = {
         return new Promise((resolve, reject) => {
             clientSocket.emit(
                 "client.edit-server",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
+        })
+    },
+
+    sendNewChannelSettings: (clientSocket: ClientSocket, data: any) => {
+        return new Promise((resolve, reject) => {
+            clientSocket.emit(
+                "client.edit-channel",
                 data,
                 (response: any) => {
                     resolve(response);
