@@ -9,6 +9,7 @@ onMounted(async () => {
         getChannels();
         initDropdowns();
     }, 10);
+    console.log("la",useServer().selectedServer.value.server.userId, useAuth().user.value?.id)
 });
 watch(
     () => useServer().selectedServer.value,
@@ -53,6 +54,7 @@ const triggerModify = () => {
                 >
                     <p class="text-slate-150 ml-8"># {{ channel.name }}</p>
                     <FontAwesomeIcon
+                        v-if="useServer().selectedServer.value.server.userId == useAuth().user.value?.id"
                         :data-dropdown-toggle="'dropdown' + channel.id"
                         :id="'dropdownbutton' + channel.id"
                         data-drop
@@ -107,6 +109,8 @@ const triggerModify = () => {
             >
             </div>
             <div
+                v-if="useServer().selectedServer.value.server.userId == useAuth().user.value?.id"
+
                 :data-modal-target="CREATE_CHANNEL_MODAL"
                 :data-modal-toggle="CREATE_CHANNEL_MODAL"
                 class="group flex w-full h-10 items-center justify-center opacity-70 hover:opacity-100 active:bg-slate-550 bg-slate-750 rounded cursor-pointer hover:bg-slate-650"
