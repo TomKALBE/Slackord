@@ -120,6 +120,5 @@ declare global {
         serverId: number,
         name: string,
         url: string,
-        index : number
     }
 }

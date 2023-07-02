@@ -14,10 +14,13 @@ const modifyChannel = async () => {
     channelNameError.value = false;
     
     try {
-        const res = await SocketService.sendNewChannel(useNuxtApp().$socket,{name: channelName.value, serverId: useServer().selectedServer.value, url:'channel'})
+        const res = await SocketService.sendNewChannelSettings(useNuxtApp().$socket,{id: useChannel().selectedChannel.value.id,name: channelName.value, serverId: useServer().selectedServer.value.serverId, url:'channel'})
         if(!res.ok)
             throw new Error()
-        useToast().add({icon : "circle-check", color : "green", message : "Le channel a bien été créé"});
+        useToast().add({icon : "circle-check", color : "green", message : "Le channel a bien été modifié"});
+        const newChannel = useChannel().selectedChannel.value;
+        newChannel.name = channelName.value;
+        useChannel().modifyChannel(newChannel);
         closeButton.value.click()
     } catch (error) {
         useToast().add({icon : "circle-exclamation", color : "red", message : "Une erreur est survenue lors de la création du channel"});
@@ -62,7 +65,7 @@ const modifyChannel = async () => {
                     >
                         Modifier un channel
                     </h3>
-                    <form class="space-y-6" action="#">
+                    <form class="space-y-6" @submit.prevent="modifyChannel()">
                         <div>
                             <label
                                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"

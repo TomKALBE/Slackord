@@ -6,7 +6,7 @@ onMounted(async () => {
     setTimeout(async () => {
         // setChatScrollBarBottom();
         initModals();
-        getChannels();
+        get();
         initDropdowns();
     }, 10);
     console.log("la",useServer().selectedServer.value.server.userId, useAuth().user.value?.id)
@@ -14,20 +14,10 @@ onMounted(async () => {
 watch(
     () => useServer().selectedServer.value,
     async () => {
-        getChannels();
+        get();
     }
 );
-const { channels } = useChannel();
-const getChannels = async () => {
-    const res = await fetch(
-        `api/servers/${useServer().selectedServer.value}/channels`
-    );
-    const data = (await res.json()) as IChannel[];
-    channels.value = data;
-    //add a property index to each channel
-    useChannel().setSelectedChannel(data[0])
-    useChannel().setChannels(data);
-};
+const { channels, get } = useChannel();
 const openDropdown = (id:number) => {
     const dropdown = document.getElementById('dropdown' + id);
     const dropdownButton = document.getElementById('dropdownbutton' + id);
