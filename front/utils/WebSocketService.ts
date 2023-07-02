@@ -185,8 +185,8 @@ const getClientSocket = (url: string) => {
     clientSocket.on(
         "server.edit-channel",
         (data: any, callback) => {
-            console.log("new server settings :", data);
-
+            console.log("new channel settings :", data);
+            useChannel().modifyChannel(data)
             if (callback) {
                 callback({ ok: true });
             }

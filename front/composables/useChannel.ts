@@ -18,8 +18,13 @@ export default () => {
         setChannels(data);
     };
     const modifyChannel = (channel: IChannel) => {
-        const index = getChannelIndexById(channel.id)
-        channels.value[index] = channel;
+
+        try {
+            const index = getChannelIndexById(channel.id)
+            channels.value[index] = channel;
+        } catch (error) {
+            console.log(error)
+        }
     }
     const getChannelIndexById = (id: number) => {
         return channels.value.findIndex((channel) => channel.id === id)
