@@ -1,8 +1,9 @@
 export default () => {
     const servers = useState<IServer[]>("servers", () => []);
-    const selectedServer = useState<number>("selectedServer", () => 1);
+    const selectedServer = useState<IServer>("selectedServer", () => 1);
     const setSelectedServer = (id: number) => {
-        selectedServer.value = id;
+
+        selectedServer.value = servers.value[id];
     };
     const getMembers = async (server_id: number) => {
         const { user } = useAuth();
