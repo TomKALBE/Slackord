@@ -335,7 +335,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
         })
     })
     socket.on("client.edit-server", async (data, callback) => {
-        console.log(data)
         fetch(`${Env.API_URL}/servers/${data.id}`,
             {
                 method: "PATCH",
@@ -345,8 +344,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                 })
             }
         ).then(async (response) => {
-            const json = await response.json();
-            console.log(json)
             if (response.ok) {
                 const members = await (fetch(`${Env.API_URL}/servers/${data.id}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
                 console.log("members", members)
