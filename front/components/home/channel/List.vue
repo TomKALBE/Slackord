@@ -8,7 +8,6 @@ onMounted(async () => {
         get();
         initDropdowns();
     }, 10);
-    console.log("la", useServer().selectedServer.value.server.userId, useAuth().user.value?.id)
 });
 watch(
     () => useServer().selectedServer.value,
