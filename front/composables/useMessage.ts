@@ -31,7 +31,6 @@ export default () => {
                     res = await fetch(`/api/messages?receiver_id=${receiver_id}&type=${type}`);
 
                 const json = await res.json() as IMessage[];
-                console.log(json)
                 const conversationMessage: ConversationMessage = {
                     receiver_id: receiver_id,
                     messages: json,
@@ -51,7 +50,6 @@ export default () => {
 
     function addMessageToConversation(message: Partial<IMessage>) {
         const index = getReceiverIdIndex(message.user_id, message.type);
-        console.log(index, message)
         if (index === -1) return;
         const newMessage: Partial<IMessage> = {
             content: message.content,
