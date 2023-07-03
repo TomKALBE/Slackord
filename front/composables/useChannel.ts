@@ -26,12 +26,27 @@ export default () => {
             console.log(error)
         }
     }
+
+    const deleteChannel = async (channel: IChannel) => {
+        try {
+            const index = getChannelIndexById(channel.id)
+            channels.value.splice(index, 1);
+            const res = await SocketService.sendDeletedChannel(useNuxtApp().$socket, { id: channel.id, serverId: channel.serverId })
+            if (!res.ok)
+                throw new Error("Erreur lors de la suppression du channel")
+            useToast().add({ icon: "circle-check", color: "green", message: "Le channel a bien été supprimé" });
+        } catch (error) {
+            useToast().add({ icon: "circle-exclamation", color: "red", message: "Une erreur est survenue lors de la suppression du channel" });
+        }
+    }
+
     const getChannelIndexById = (id: number) => {
         return channels.value.findIndex((channel) => channel.id === id)
     }
     return {
         channels,
         selectedChannel,
+        deleteChannel,
         modifyChannel,
         get,
         setSelectedChannel,

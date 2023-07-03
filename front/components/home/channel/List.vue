@@ -9,12 +9,12 @@ onMounted(async () => {
         initDropdowns();
     }, 10);
 });
-watch(
-    () => useServer().selectedServer.value,
-    async () => {
-        get();
-    }
-);
+// watch(
+//     () => useServer().selectedServer.value,
+//     async () => {
+//         get();
+//     }
+// );
 const { channels, get } = useChannel();
 const openDropdown = (id: number) => {
     const dropdown = document.getElementById('dropdown' + id);
@@ -26,6 +26,12 @@ const openDropdown = (id: number) => {
 const modifyButton = ref()
 const triggerModify = () => {
     modifyButton.value.click()
+}
+
+const deleteChannel = () => {
+    if(confirm('Vous êtes sur point de supprimer le channel, êtes vous sûr ?')){
+        useChannel().deleteChannel(useChannel().selectedChannel.value)
+    }
 }
 </script>
 <template>
@@ -49,7 +55,7 @@ const triggerModify = () => {
                                 <a :data-modal-target="MODIFY_CHANNEL_MODAL" :data-modal-toggle="MODIFY_CHANNEL_MODAL"
                                     class="block px-4 py-2 font-semibold text-slate-200 hover:bg-gray-100 hover:bg-gray-600 hover:text-white">Modifier</a>
                             </li>
-                            <li>
+                            <li @click="deleteChannel()">
                                 <a
                                     class="block px-4 py-2 font-semibold text-orange-500 hover:bg-gray-100 hover:bg-gray-600">Supprimer</a>
                             </li>

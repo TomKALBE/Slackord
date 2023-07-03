@@ -194,7 +194,7 @@ const getClientSocket = (url: string) => {
         "server.delete-channel",
         (data: any, callback) => {
             console.log("new channel deleted :", data);
-
+            useChannel().deleteChannel(data)
             if (callback) {
                 callback({ ok: true });
             }
