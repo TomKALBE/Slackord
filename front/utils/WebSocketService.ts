@@ -22,15 +22,11 @@ interface ServerToClientEvents {
         data: IServerMemberRequest,
         callback?: Function
     ) => void;
-    "server.edit-server": (
-        data: any,
-        callback?: Function
-    ) => void;
-    "server.delete-server": (
-        data: any,
-        callback?: Function
-    ) => void;
     "server.new-channel": (
+        data: any,
+        callback?: Function
+    ) => void;
+    "server.edit-server": (
         data: any,
         callback?: Function
     ) => void;
@@ -335,17 +331,6 @@ export const SocketService = {
         return new Promise((resolve, reject) => {
             clientSocket.emit(
                 "client.delete-channel",
-                data,
-                (response: any) => {
-                    resolve(response);
-                }
-            );
-        })
-    },
-    sendDeletedServer: (clientSocket: ClientSocket, data: any) => {
-        return new Promise((resolve, reject) => {
-            clientSocket.emit(
-                "client.delete-server",
                 data,
                 (response: any) => {
                     resolve(response);
