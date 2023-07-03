@@ -6,7 +6,8 @@ const closeButton = ref(null);
 watch(
     () => useServer().selectedServer.value,
     () => {
-        serverName.value = useServer().selectedServer.value.server.name
+        if(useServer().selectedServer.value.server)
+            serverName.value = useServer().selectedServer.value.server.name
     }
 )
 

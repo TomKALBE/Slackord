@@ -31,7 +31,6 @@ export default () => {
                     res = await fetch(`/api/messages?receiver_id=${receiver_id}&type=${type}`);
 
                 const json = await res.json() as IMessage[];
-
                 const conversationMessage: ConversationMessage = {
                     receiver_id: receiver_id,
                     messages: json,
