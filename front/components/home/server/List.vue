@@ -54,6 +54,7 @@ const serverList = [
 const selectedServer = ref(0);
 const { servers } = useServer();
 const setSelectedServer = (index:number) => {
+    console.log("is selected", index)
   selectedServer.value = index;
   if (serverList[index].hasNotification)
     serverList[index].hasNotification = false;

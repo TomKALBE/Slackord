@@ -34,6 +34,10 @@ interface ServerToClientEvents {
         data: any,
         callback?: Function
     ) => void;
+    "server.delete-channel": (
+        data: any,
+        callback?: Function
+    ) => void;
 }
 
 interface ClientToServerEvents {
@@ -69,6 +73,10 @@ interface ClientToServerEvents {
         callback?: Function
     ) => void;
     "client.edit-channel": (
+        data: any,
+        callback?: Function
+    ) => void;
+    "client.delete-channel": (
         data: any,
         callback?: Function
     ) => void;
@@ -182,6 +190,17 @@ const getClientSocket = (url: string) => {
         }
     );
 
+    clientSocket.on(
+        "server.delete-channel",
+        (data: any, callback) => {
+            console.log("new channel deleted :", data);
+            useChannel().deleteChannel(data)
+            if (callback) {
+                callback({ ok: true });
+            }
+        }
+    );
+
     return clientSocket;
 };
 
@@ -282,6 +301,17 @@ export const SocketService = {
         return new Promise((resolve, reject) => {
             clientSocket.emit(
                 "client.edit-channel",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
+        })
+    },
+    sendDeletedChannel: (clientSocket: ClientSocket, data: any) => {
+        return new Promise((resolve, reject) => {
+            clientSocket.emit(
+                "client.delete-channel",
                 data,
                 (response: any) => {
                     resolve(response);

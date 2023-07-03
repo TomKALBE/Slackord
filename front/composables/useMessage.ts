@@ -8,12 +8,12 @@ export default () => {
     const selectedUser = useState<IUser | null>('selectedUser', () => null);
     const conversationMessages = useState<Partial<ConversationMessage>[]>('conversationMessages', () => []);
 
-    async function getRelatedConversationMessage(userId: number, receiver_id: number, type:string) {
+    async function getRelatedConversationMessage(userId: number, receiver_id: number, type: string) {
         try {
             // if (getReceiverIdIndex(receiver_id) !== -1) return;
 
             if (useRuntimeConfig().public.appEnv === 'production') {
-                const res = await fetch('/api/messages/' + receiver_id,{
+                const res = await fetch('/api/messages/' + receiver_id, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + useAuth().user.value?.token,
@@ -25,13 +25,12 @@ export default () => {
             }
             else {
                 let res;
-                if(type === "PRIVATE")
+                if (type === "PRIVATE")
                     res = await fetch(`/api/messages?receiver_id=${receiver_id}&user_id=${userId}&receiver_id=${userId}&user_id=${receiver_id}&type=${type}`);
-                else 
+                else
                     res = await fetch(`/api/messages?receiver_id=${receiver_id}&type=${type}`);
 
                 const json = await res.json() as IMessage[];
-                console.log(json)
                 const conversationMessage: ConversationMessage = {
                     receiver_id: receiver_id,
                     messages: json,
@@ -45,13 +44,12 @@ export default () => {
         }
     }
 
-    function getReceiverIdIndex(receiver_id: number, type:string) {
+    function getReceiverIdIndex(receiver_id: number, type: string) {
         return conversationMessages.value.findIndex((conversationMessage) => conversationMessage.receiver_id === receiver_id && conversationMessage.type === type);
     }
 
     function addMessageToConversation(message: Partial<IMessage>) {
         const index = getReceiverIdIndex(message.user_id, message.type);
-        console.log(index, message)
         if (index === -1) return;
         const newMessage: Partial<IMessage> = {
             content: message.content,

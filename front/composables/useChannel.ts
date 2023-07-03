@@ -1,10 +1,10 @@
 export default () => {
     const channels = useState<IChannel[]>("channels", () => []);
     const selectedChannel = useState("selectedChannel", () => 0);
-    const setSelectedChannel = (channel:any) => {
+    const setSelectedChannel = (channel: any) => {
         selectedChannel.value = channel;
     };
-    const setChannels = (channels:any) => {
+    const setChannels = (channels: any) => {
         channels.value = channels;
     };
     const get = async () => {
@@ -17,16 +17,36 @@ export default () => {
         setSelectedChannel(data[0])
         setChannels(data);
     };
-    const modifyChannel = (channel:IChannel) => {
-        const index = getChannelIndexById(channel.id)
-        channels.value[index] = channel;
+    const modifyChannel = (channel: IChannel) => {
+
+        try {
+            const index = getChannelIndexById(channel.id)
+            channels.value[index] = channel;
+        } catch (error) {
+            console.log(error)
+        }
     }
-    const getChannelIndexById = (id:number) => {
+
+    const deleteChannel = async (channel: IChannel) => {
+        try {
+            const index = getChannelIndexById(channel.id)
+            channels.value.splice(index, 1);
+            const res = await SocketService.sendDeletedChannel(useNuxtApp().$socket, { id: channel.id, serverId: channel.serverId })
+            if (!res.ok)
+                throw new Error("Erreur lors de la suppression du channel")
+            useToast().add({ icon: "circle-check", color: "green", message: "Le channel a bien été supprimé" });
+        } catch (error) {
+            useToast().add({ icon: "circle-exclamation", color: "red", message: "Une erreur est survenue lors de la suppression du channel" });
+        }
+    }
+
+    const getChannelIndexById = (id: number) => {
         return channels.value.findIndex((channel) => channel.id === id)
     }
     return {
         channels,
         selectedChannel,
+        deleteChannel,
         modifyChannel,
         get,
         setSelectedChannel,
