@@ -9,6 +9,7 @@ interface ServerToClientEvents {
     "server.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
     "server.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
+    "server.answer-server-request": (data: any, callback?: Function) => void;
     "server.new-channel": (data: any, callback?: Function) => void;
     "server.edit-server": (data: any, callback?: Function) => void;
     "server.edit-channel": (data: any, callback?: Function) => void;
@@ -20,6 +21,7 @@ interface ClientToServerEvents {
     "client.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "client.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
     "client.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
+    "client.answer-server-request": (data: any, callback?: Function) => void;
     "client.new-channel": (data: any, callback?: Function) => void;
     "client.edit-server": (data: any, callback?: Function) => void;
     "client.edit-channel": (data: any, callback?: Function) => void;
@@ -285,6 +287,32 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                         .emit('server.new-server-request', { ...data, user: socket.data.user })
                 }
 
+                if (callback) {
+                    callback({ ok: true });
+                }
+            }
+        }).catch((error) => {
+            console.error(error);
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+        })
+    })
+    socket.on("client.answer-server-request", async (data, callback) => {
+        fetch(`${Env.API_URL}/server-requests/${data.id}`,
+            {
+                method: "PATCH",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ request_status: data.request_status })
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+                const serverData = await (fetch(`${Env.API_URL}/servers/?=name${data.name}`).then(res => res.json()));
+                const receiverSocketId = socketsMap.get(serverData.userId);
+                if (receiverSocketId) {
+                    io.to(receiverSocketId)
+                        .emit('server.new-server-request', { ...data, user: socket.data.user })
+                }
                 if (callback) {
                     callback({ ok: true });
                 }

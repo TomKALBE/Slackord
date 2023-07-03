@@ -31,46 +31,46 @@ export default () => {
                 body: JSON.stringify(server),
             });
             const json = await res.json();
-            if(!json)
+            if (!json)
                 throw new Error("Error while creating server");
             get();
-            addMember({server_id : json.id, user_id : useAuth().user.value.id});
-            useToast().add({icon : "circle-check", color : "green", message : "Le serveur a bien été créé"});
+            addMember({ server_id: json.id, user_id: useAuth().user.value.id });
+            useToast().add({ icon: "circle-check", color: "green", message: "Le serveur a bien été créé" });
         } catch (error) {
             console.log(error)
-            useToast().add({icon : "circle-exclamation", color : "red", message : "Une erreur est survenue lors de la création du serveur"});
+            useToast().add({ icon: "circle-exclamation", color: "red", message: "Une erreur est survenue lors de la création du serveur" });
         }
     };
-    const addMember = async (data: { server_id:number, user_id:number }) => {
+    const addMember = async (data: { server_id: number, user_id: number }) => {
         try {
             const res = await fetch(`api/members`, {
                 method: "POST",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify({serverId : data.server_id, userId : data.user_id}),
+                body: JSON.stringify({ serverId: data.server_id, userId: data.user_id }),
             });
             const json = await res.json();
-            
+
         } catch (error) {
             console.log(error)
         }
     };
-    const modifyServer = (server:IServer) => {
+    const modifyServer = (server: IServer) => {
         let index;
         console.log(server.server, server.server === undefined, server.id)
-        if(server.server === undefined){
+        if (server.server === undefined) {
             index = getChannelIndexById(server.id)
             servers.value[index].server = server;
         }
-        else{
+        else {
             index = getChannelIndexById(server.server.id)
             servers.value[index] = server;
         }
     }
-    const getChannelIndexById = (id:number) => {
+    const getChannelIndexById = (id: number) => {
         return servers.value.findIndex((server) => {
             console.log(server, server.serverId, id)
             return server.serverId === id
-        
+
         })
     }
     return {
