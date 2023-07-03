@@ -107,5 +107,18 @@ declare global {
         id: number;
         user_id: number;
         name: string;
+        users: IUser[];
+    }
+    interface IServerMemberRequest {
+        serverId: number,
+        userId: number
+        user?: Partial<IUser>,
+        requestStatus: "ACCEPTED" | "DECLINED" | "PENDING"
+    }
+    interface IChannel {
+        id: number,
+        serverId: number,
+        name: string,
+        url: string,
     }
 }

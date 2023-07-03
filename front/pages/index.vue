@@ -212,6 +212,7 @@ const numberOfFriendRequests = computed(() => {
             <div
                 class="lg:w-3/12 w-4/12 bg-slate-700 border-r-2 border-t-2 border-slate-800"
             >
+                <ModalServerInfo />
                 <!-- SECTION Header -->
                 <template v-if="currentServer">
                     <div
@@ -223,6 +224,8 @@ const numberOfFriendRequests = computed(() => {
                             <div
                                 class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer"
                                 @click="handleClick"
+                                :data-modal-target="MODIFY_SERVER_MODAL"
+                                :data-modal-toggle="MODIFY_SERVER_MODAL"
                             >
                                 <p class="text-xl text-white">{{ servers[currentServer].server?.name }}</p>
                                 <FontAwesomeIcon
@@ -289,7 +292,7 @@ const numberOfFriendRequests = computed(() => {
                     v-if="currentServer !== PRIVATE_CONVERSATION"
                     class="flex w-full h-14 border-b-2 border-slate-800 items-center justify-between"
                 >
-                    <p class="ml-6 text-xl text-white"># Channel 1</p>
+                    <p class="ml-6 text-xl text-white"># {{ useChannel().selectedChannel.value.name }}</p>
                     <div class="mr-6">
                         <FontAwesomeIcon
                             class="w-5 h-5 text-slate-150 mr-4"
@@ -326,8 +329,14 @@ const numberOfFriendRequests = computed(() => {
                 <!-- !SECTION Channel info-->
                 <!-- SECTION Chat -->
                 <HomeMessageList
-                    v-if="users?.length > 0 && currentConversation >= 0"
+                    v-if="currentServer !== PRIVATE_CONVERSATION"
+                    :privateConversation="false"
+                    :user="useChannel().selectedChannel.value"
+                    :channel="useChannel().selectedChannel.value"/>
+                <HomeMessageList
+                    v-else-if="users?.length > 0 && currentConversation >= 0"
                     :user="users[currentConversation]"
+                    :privateConversation="true"
                 />
                 <HomeUserFriendRequestList
                     v-else

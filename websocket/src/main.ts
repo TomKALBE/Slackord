@@ -1,13 +1,17 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import Env from "./utils/env";
-import type { MessageResource, ChannelResource, RelationshipResource, UserResource } from "./data/resources";
+import type { MessageResource, ChannelResource, RelationshipResource, UserResource, ServerMemberRequestResource } from "./data/resources";
 
 interface ServerToClientEvents {
     "server.new-message": (data: MessageResource, callback?: Function) => void;
     "server.new-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
+    "server.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
+    "server.new-channel": (data: any, callback?: Function) => void;
+    "server.edit-server": (data: any, callback?: Function) => void;
+    "server.edit-channel": (data: any, callback?: Function) => void;
 }
 
 interface ClientToServerEvents {
@@ -15,6 +19,10 @@ interface ClientToServerEvents {
     "client.new-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "client.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "client.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
+    "client.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
+    "client.new-channel": (data: any, callback?: Function) => void;
+    "client.edit-server": (data: any, callback?: Function) => void;
+    "client.edit-channel": (data: any, callback?: Function) => void;
     ping: (data: number, callback?: any) => void;
 }
 
@@ -24,6 +32,7 @@ interface InterServerEvents {
 
 interface SocketData {
     userId: number,
+    user: UserResource,
     channelsId: Map<number, string>
 }
 
@@ -45,6 +54,10 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
         let response = await fetch(`${Env.API_URL}/users/${userId}`);
 
         const user = await response.json() as UserResource;
+
+        socket.data.user = {
+            ...user
+        }
 
         if (user.state !== "INVISIBLE") {
             response = await fetch(`${Env.API_URL}/relationships?request_status_like=ACCEPTED&senderId=${userId}&receiverId=${userId}`);
@@ -123,11 +136,11 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                     }
                 });
 
+                if (callback) {
+                    callback({ ok: true });
+                }
             }
 
-            if (callback) {
-                callback({ ok: true });
-            }
 
         }).catch((error) => {
             console.error(error);
@@ -251,8 +264,166 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
         })
     })
+
+    socket.on("client.new-server-request", async (data, callback) => {
+
+        fetch(`${Env.API_URL}/server-requests`,
+            {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(data)
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+
+                const serverData = await (fetch(`${Env.API_URL}/servers/?=name${data.name}`).then(res => res.json()));
+
+                const receiverSocketId = socketsMap.get(serverData.userId);
+
+                if (receiverSocketId) {
+                    io.to(receiverSocketId)
+                        .emit('server.new-server-request', { ...data, user: socket.data.user })
+                }
+
+                if (callback) {
+                    callback({ ok: true });
+                }
+            }
+        }).catch((error) => {
+            console.error(error);
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+        })
+    })
+
+    socket.on("client.new-channel", async (data: any, callback) => {
+        fetch(`${Env.API_URL}/channels`,
+            {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(data)
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+                const channelInfo = await response.json()
+                const members = await (fetch(`${Env.API_URL}/servers/${data.id}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
+
+                if (callback) {
+                    callback({ ok: true, ...channelInfo });
+                }
+
+                members.forEach((member: any) => {
+
+                    if (!socketsMap.has(member.userId)) {
+                        return;
+                    }
+
+                    const receiverSocketId = socketsMap.get(member.userId);
+
+                    if (receiverSocketId) {
+                        io.to(receiverSocketId)
+                            .emit('server.new-channel', data);
+                    }
+                });
+            }
+        }).catch((error) => {
+            console.error(error);
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+        })
+    })
+    socket.on("client.edit-server", async (data, callback) => {
+        console.log(data)
+        fetch(`${Env.API_URL}/servers/${data.id}`,
+            {
+                method: "PATCH",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    ...data
+                })
+            }
+        ).then(async (response) => {
+            const json = await response.json();
+            console.log(json)
+            if (response.ok) {
+                const members = await (fetch(`${Env.API_URL}/servers/${data.id}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
+                console.log("members", members)
+                if (callback) {
+                    callback({ ok: true });
+                }
+
+                members.forEach((member: any) => {
+                    if (!socketsMap.has(member.userId)) {
+                        return;
+                    }
+
+                    const receiverSocketId = socketsMap.get(member.userId);
+
+                    if (receiverSocketId) {
+                        io.to(receiverSocketId)
+                            .emit('server.edit-server', data);
+                    }
+                });
+                if (callback) {
+                    callback({ ok: true });
+                }
+            }
+        }).catch((error) => {
+            console.error(error);
+
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+
+        })
+    })
+
+    socket.on("client.edit-channel", async (data, callback) => {
+        fetch(`${Env.API_URL}/channels/${data.id}`,
+            {
+                method: "PATCH",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    ...data
+                })
+            }
+        ).then(async (response) => {
+            if (response.ok) {
+                const members = await (fetch(`${Env.API_URL}/servers/${data.serverId}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
+
+                if (callback) {
+                    callback({ ok: true });
+                }
+
+                members.forEach((member: any) => {
+                    if (!socketsMap.has(member.userId)) {
+                        return;
+                    }
+
+                    const receiverSocketId = socketsMap.get(member.userId);
+
+                    if (receiverSocketId) {
+                        io.to(receiverSocketId)
+                            .emit('server.edit-channel', data);
+                    }
+                });
+                if (callback) {
+                    callback({ ok: true });
+                }
+            }
+        }).catch((error) => {
+            console.error(error);
+
+            if (callback) {
+                callback({ ok: false, msg: "Une erreur s'est produite" });
+            }
+
+        })
+    })
 });
 
-httpServer.listen({ port: Number(Env.PORT) }, () => {
+httpServer.listen({ port: Number(Env.PORT) }, async () => {
     console.log('Server running on port', Env.PORT, '...')
 });

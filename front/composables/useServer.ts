@@ -1,6 +1,10 @@
 export default () => {
     const servers = useState<IServer[]>("servers", () => []);
+    const selectedServer = useState<IServer>("selectedServer", () => 1);
+    const setSelectedServer = (id: number) => {
 
+        selectedServer.value = servers.value[id];
+    };
     const getMembers = async (server_id: number) => {
         const { user } = useAuth();
         const res = await fetch(
@@ -29,6 +33,7 @@ export default () => {
             const json = await res.json();
             if(!json)
                 throw new Error("Error while creating server");
+            get();
             addMember({server_id : json.id, user_id : useAuth().user.value.id});
             useToast().add({icon : "circle-check", color : "green", message : "Le serveur a bien été créé"});
         } catch (error) {
@@ -49,10 +54,31 @@ export default () => {
             console.log(error)
         }
     };
-                
+    const modifyServer = (server:IServer) => {
+        let index;
+        console.log(server.server, server.server === undefined, server.id)
+        if(server.server === undefined){
+            index = getChannelIndexById(server.id)
+            servers.value[index].server = server;
+        }
+        else{
+            index = getChannelIndexById(server.server.id)
+            servers.value[index] = server;
+        }
+    }
+    const getChannelIndexById = (id:number) => {
+        return servers.value.findIndex((server) => {
+            console.log(server, server.serverId, id)
+            return server.serverId === id
+        
+        })
+    }
     return {
+        servers,
+        selectedServer,
+        modifyServer,
+        setSelectedServer,
         get,
         create,
-        servers,
     };
 };
