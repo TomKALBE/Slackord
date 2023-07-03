@@ -54,9 +54,29 @@ export default () => {
             console.log(error)
         }
     };
+    const modifyServer = (server:IServer) => {
+        let index;
+        console.log(server.server, server.server === undefined, server.id)
+        if(server.server === undefined){
+            index = getChannelIndexById(server.id)
+            servers.value[index].server = server;
+        }
+        else{
+            index = getChannelIndexById(server.server.id)
+            servers.value[index] = server;
+        }
+    }
+    const getChannelIndexById = (id:number) => {
+        return servers.value.findIndex((server) => {
+            console.log(server, server.serverId, id)
+            return server.serverId === id
+        
+        })
+    }
     return {
         servers,
         selectedServer,
+        modifyServer,
         setSelectedServer,
         get,
         create,

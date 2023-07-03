@@ -164,7 +164,7 @@ const getClientSocket = (url: string) => {
         "server.edit-server",
         (data: any, callback) => {
             console.log("new server settings :", data);
-
+            useServer().modifyServer(data)
             if (callback) {
                 callback({ ok: true });
             }

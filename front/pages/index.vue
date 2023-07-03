@@ -212,6 +212,7 @@ const numberOfFriendRequests = computed(() => {
             <div
                 class="lg:w-3/12 w-4/12 bg-slate-700 border-r-2 border-t-2 border-slate-800"
             >
+                <ModalServerInfo />
                 <!-- SECTION Header -->
                 <template v-if="currentServer">
                     <div
@@ -223,6 +224,8 @@ const numberOfFriendRequests = computed(() => {
                             <div
                                 class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer"
                                 @click="handleClick"
+                                :data-modal-target="MODIFY_SERVER_MODAL"
+                                :data-modal-toggle="MODIFY_SERVER_MODAL"
                             >
                                 <p class="text-xl text-white">{{ servers[currentServer].server?.name }}</p>
                                 <FontAwesomeIcon
