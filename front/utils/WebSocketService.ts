@@ -337,6 +337,17 @@ export const SocketService = {
                 }
             );
         })
+    },
+    sendDeletedServer: (clientSocket: ClientSocket, data: any) => {
+        return new Promise((resolve, reject) => {
+            clientSocket.emit(
+                "client.delete-server",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
+        })
     }
 };
 
