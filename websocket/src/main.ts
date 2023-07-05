@@ -41,10 +41,10 @@ interface InterServerEvents {
 }
 
 interface SocketData {
-    userId?: number;
-    user_id?: number;
-    user: UserResource;
-    channelsId: Map<number, number>;
+    userId?: number,
+    user_id?: number,
+    user: UserResource,
+    channelsId: Map<number, number>
 }
 
 const socketsMap = new Map<number, string>();
@@ -62,6 +62,11 @@ const io = new Server<
     },
 }).on("connection", async (socket) => {
     console.log("new connection");
+
+
+    socket.data.channelsId = new Map<number, number>();
+
+    socket.on("ping", async (userId: number, callback) => {
 
     socket.data.channelsId = new Map<number, number>();
 
@@ -156,19 +161,34 @@ const io = new Server<
                                 ? relationship?.receiver_id
                                 : relationship?.sender_id;
 
-                        if (socketsMap.has(receiverId)) {
-                            const receiverSocketId = socketsMap.get(receiverId);
-                            if (receiverSocketId)
-                                io.to(receiverSocketId).emit(
-                                    "server.new-user-state",
-                                    { state: user.state, id: user.id }
-                                );
+                    if (["CHANNEL", 'PUBLIC'].includes(data.type)) {
+                        if (!socket.data.channelsId?.has(data.receiver_id)) {
+                            const res = await fetch(`${Env.API_URL}/channels/${data.receiver_id}`, {
+                                method: "GET"
+                            });
+
+                            const channel = await res.json() as ChannelResource;
+
+                            socket.data.channelsId?.set(data.receiver_id, channel.serverId)
                         }
                     });
 
-                    if (callback) {
-                        callback({ ok: true });
-                    }
+                        const serverId = socket.data.channelsId?.get(data.receiver_id) 
+
+                        const members = await (fetch(`${Env.API_URL}/servers/${serverId}/members?userId_ne=${socket.data.user_id || socket.data.userId}`).then(res => res.json()));
+
+                        members.forEach((member: any) => {
+                            if (!socketsMap.has(member.userId)) {
+                                return;
+                            }
+        
+                            const receiverSocketId = socketsMap.get(member.userId);
+        
+                            if (receiverSocketId) {
+                                io.to(receiverSocketId)
+                                    .emit('server.new-message', data);
+                            }
+                        });                    }
                 }
             })
             .catch((error) => {
@@ -385,9 +405,6 @@ const io = new Server<
         ).then(async (response) => {
             if (response.ok) {
                 const members = await (fetch(`${Env.API_URL}/servers/${data.id}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
-                if (callback) {
-                    callback({ ok: true });
-                }
 
                 members.forEach((member: any) => {
                     if (!socketsMap.has(member.userId)) {
