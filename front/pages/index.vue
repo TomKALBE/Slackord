@@ -18,11 +18,6 @@ onMounted(async () => {
     }, 10);
 });
 
-const setChatScrollBarBottom = () => {
-    const chat = document.getElementById("chat") as HTMLDivElement;
-    chat.scrollTop = chat?.scrollHeight;
-};
-
 const logout = () => {
     useAuth().logout();
 };
@@ -97,7 +92,7 @@ const numberOfFriendRequests = computed(() => {
                         <p
                             class="text-white group-hover:border-b-2 cursor-pointer inline-block"
                         >
-                            DieuDonné Allognon {{ useAuth().user.value?.id }}
+                            {{ useAuth().user.value?.pseudo }}
                         </p>
                     </div>
                 </div>
@@ -295,7 +290,7 @@ const numberOfFriendRequests = computed(() => {
                 <!-- SECTION Channel info -->
 
                 <div
-                    v-if="currentServer !== PRIVATE_CONVERSATION"
+                    v-if="currentServer?.serverId"
                     class="flex w-full h-14 border-b-2 border-slate-800 items-center justify-between"
                 >
                     <p class="ml-6 text-xl text-white"># {{ useChannel().selectedChannel.value.name }}</p>
@@ -335,12 +330,12 @@ const numberOfFriendRequests = computed(() => {
                 <!-- !SECTION Channel info-->
                 <!-- SECTION Chat -->
                 <HomeMessageList
-                    v-if="currentServer !== PRIVATE_CONVERSATION"
+                    v-if="currentServer?.serverId"
                     :privateConversation="false"
                     :user="useChannel().selectedChannel.value"
                     :channel="useChannel().selectedChannel.value"/>
                 <HomeMessageList
-                    v-else-if="users?.length > 0 && currentConversation >= 0"
+                    v-else-if="currentConversation >= 0"
                     :user="users[currentConversation]"
                     :privateConversation="true"
                 />

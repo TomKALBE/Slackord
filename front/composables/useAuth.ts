@@ -32,7 +32,7 @@ export default () => {
                 _user = {
                     id: 2,
                     email: "test1@test.com",
-                    pseudo: "test1",
+                    pseudo: "Dieudonné",
                     state: "ONLINE"
                 };
                 localStorage.setItem("user", JSON.stringify(_user));
@@ -102,6 +102,7 @@ export default () => {
                 message: "Une erreur s'est produite",
             });
         }
+        localStorage.setItem("user", JSON.stringify({...user.value, state: status}));
         user.value = {
             ...user.value,
             state: status,

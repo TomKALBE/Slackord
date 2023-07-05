@@ -6,6 +6,7 @@ export default () => {
     }
 
     const selectedUser = useState<IUser | null>('selectedUser', () => null);
+    const newMessage = useState('newMessage', () => 0);
     const conversationMessages = useState<Partial<ConversationMessage>[]>('conversationMessages', () => []);
 
     async function getRelatedConversationMessage(userId: number, receiver_id: number, type: string) {
@@ -36,7 +37,9 @@ export default () => {
                     messages: json,
                     type: type
                 }
-                conversationMessages.value.push(conversationMessage);
+                const index = getReceiverIdIndex(receiver_id, type);
+                if(index === -1)
+                    conversationMessages.value.push(conversationMessage);
                 return json;
             }
         } catch (e) {
@@ -49,17 +52,19 @@ export default () => {
     }
 
     function addMessageToConversation(message: Partial<IMessage>) {
-        const index = getReceiverIdIndex(message.user_id, message.type);
+        const index = getReceiverIdIndex(message.receiver_id, message.type);
+        console.log(index, message)
         if (index === -1) return;
         const newMessage: Partial<IMessage> = {
             content: message.content,
-            user_id: message.receiver_id,
-            receiver_id: message.user_id,
-            type: "PRIVATE"
+            user_id: message.user_id,
+            receiver_id: message.receiver_id,
+            type: message.type  
         }
         conversationMessages.value[index].messages.push(newMessage);
     }
     return {
+        newMessage,
         conversationMessages,
         selectedUser,
         getRelatedConversationMessage,

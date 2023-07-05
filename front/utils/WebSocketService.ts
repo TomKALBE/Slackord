@@ -103,8 +103,12 @@ const getClientSocket = (url: string) => {
 
     clientSocket.on("server.new-message", (data: IMessage, callback) => {
         const { addMessageToConversation } = useMessage();
-        console.log("new message", data)
-        addMessageToConversation(data);
+        const _data = {...data}
+        if(data.type === "PRIVATE")
+            _data.receiver_id = data.user_id
+        console.log("new message", _data)
+        useMessage().newMessage.value ++
+        addMessageToConversation(_data);
         if (callback) {
             callback({ ok: true });
         }

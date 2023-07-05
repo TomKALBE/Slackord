@@ -35,9 +35,10 @@ interface InterServerEvents {
 }
 
 interface SocketData {
-    userId: number,
+    userId?: number,
+    user_id?: number,
     user: UserResource,
-    channelsId: Map<number, string>
+    channelsId: Map<number, number>
 }
 
 const socketsMap = new Map<number, string>();
@@ -50,6 +51,10 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
     },
 }).on("connection", async (socket) => {
     console.log("new connection");
+
+
+    socket.data.channelsId = new Map<number, number>();
+
     socket.on("ping", async (userId: number, callback) => {
 
         socketsMap.set(userId, socket.id);
@@ -179,17 +184,25 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
                             const channel = await res.json() as ChannelResource;
 
-                            socket.data.channelsId?.set(data.receiver_id, channel.name)
-
-                            socket.join(channel.name);
+                            socket.data.channelsId?.set(data.receiver_id, channel.serverId)
                         }
 
-                        const channelRoom = socket.data.channelsId?.get(data.user_id)
+                        const serverId = socket.data.channelsId?.get(data.receiver_id) 
 
-                        if (channelRoom) {
-                            socket.to(channelRoom).emit('server.new-message', data);
-                        }
-                    }
+                        const members = await (fetch(`${Env.API_URL}/servers/${serverId}/members?userId_ne=${socket.data.user_id || socket.data.userId}`).then(res => res.json()));
+
+                        members.forEach((member: any) => {
+                            if (!socketsMap.has(member.userId)) {
+                                return;
+                            }
+        
+                            const receiverSocketId = socketsMap.get(member.userId);
+        
+                            if (receiverSocketId) {
+                                io.to(receiverSocketId)
+                                    .emit('server.new-message', data);
+                            }
+                        });                    }
                 }
 
                 if (callback) {
@@ -310,9 +323,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
         ).then(async (response) => {
             if (response.ok) {
                 const members = await (fetch(`${Env.API_URL}/servers/${data.id}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
-                if (callback) {
-                    callback({ ok: true });
-                }
 
                 members.forEach((member: any) => {
                     if (!socketsMap.has(member.userId)) {

@@ -12,6 +12,7 @@ export type MessageResource = {
 export type ChannelResource = {
     id: number;
     name: string;
+    serverId: number;
 };
 
 export type UserResource = {
