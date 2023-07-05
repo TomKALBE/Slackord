@@ -341,6 +341,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
     })
 
     socket.on("client.delete-server", async (data, callback) => {
+        const members = await (fetch(`${Env.API_URL}/servers/${data.id}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
         fetch(`${Env.API_URL}/servers/${data.id}`,
             {
                 method: "DELETE",
@@ -351,7 +352,6 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
             }
         ).then(async (response) => {
             if (response.ok) {
-                const members = await (fetch(`${Env.API_URL}/servers/${data.id}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
                 console.log("members", members)
                 if (callback) {
                     callback({ ok: true });

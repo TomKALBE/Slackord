@@ -9,12 +9,12 @@ onMounted(async () => {
         initDropdowns();
     }, 10);
 });
-// watch(
-//     () => useServer().selectedServer.value,
-//     async () => {
-//         get();
-//     }
-// );
+watch(
+    () => useServer().selectedServer.value,
+    async () => {
+        get();
+    }
+);
 const { channels, get } = useChannel();
 const openDropdown = (id: number) => {
     const dropdown = document.getElementById('dropdown' + id);

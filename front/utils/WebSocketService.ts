@@ -179,7 +179,7 @@ const getClientSocket = (url: string) => {
         "server.delete-server",
         (data: any, callback) => {
             console.log("deleted server :", data);
-
+            useServer().deleteServer({serverId: data.id})
             if (callback) {
                 callback({ ok: true });
             }
@@ -341,7 +341,7 @@ export const SocketService = {
     sendDeletedServer: (clientSocket: ClientSocket, data: any) => {
         return new Promise((resolve, reject) => {
             clientSocket.emit(
-                "client.delete-channel",
+                "client.delete-server",
                 data,
                 (response: any) => {
                     resolve(response);
