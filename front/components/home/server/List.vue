@@ -69,8 +69,8 @@ const setSelectedServer = (index:number) => {
       v-bind="server"
       :bgColor="serverList[index].bgColor"
       :key="index"
-      :isSelected="index === selectedServer"
-      :setSelectedServer="setSelectedServer"
+      :isSelected="useServer().selectedServer.value.serverId === server.serverId"
+      :server="server"
     />
     <ModalServerCreate />
     <div

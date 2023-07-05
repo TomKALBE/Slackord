@@ -26,6 +26,12 @@ const setChatScrollBarBottom = () => {
 const logout = () => {
     useAuth().logout();
 };
+watch(
+    () => useServer().selectedServer.value,
+    () => {
+        currentServer.value = useServer().selectedServer.value;
+    }
+);
 const handleServerChange = (server: number) => {
     currentServer.value = server;
 };
@@ -214,7 +220,7 @@ const numberOfFriendRequests = computed(() => {
             >
                 <ModalServerInfo />
                 <!-- SECTION Header -->
-                <template v-if="currentServer">
+                <template v-if="currentServer.serverId">
                     <div
                         class="w-full h-14 flex items-center border-b-2 border-slate-800"
                     >
@@ -227,7 +233,7 @@ const numberOfFriendRequests = computed(() => {
                                 :data-modal-target="MODIFY_SERVER_MODAL"
                                 :data-modal-toggle="MODIFY_SERVER_MODAL"
                             >
-                                <p class="text-xl text-white">{{ servers[currentServer].server?.name }}</p>
+                                <p class="text-xl text-white">{{ currentServer.server?.name }}</p>
                                 <FontAwesomeIcon
                                     class="w-4 text-gray-100 ml-2"
                                     :icon="`fa-chevron-down`"

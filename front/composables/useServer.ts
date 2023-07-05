@@ -57,15 +57,28 @@ export default () => {
     const modifyServer = (server: IServer) => {
         let index;
         if (server.server === undefined) {
-            index = getChannelIndexById(server.id)
+            index = getServerIndexById(server.id)
             servers.value[index].server = server;
         }
         else {
-            index = getChannelIndexById(server.server.id)
+            index = getServerIndexById(server.server.id)
             servers.value[index] = server;
         }
     }
-    const getChannelIndexById = (id: number) => {
+    const deleteServer = async (server: IServer) => {
+        try {
+            const index = getServerIndexById(server.serverId)
+            servers.value.splice(index, 1);
+            const res = await SocketService.sendDeletedServer(useNuxtApp().$socket, { id: server.serverId })
+            if (!res.ok)
+                throw new Error("Erreur lors de la suppression du channel")
+            selectedServer.value = servers.value[0]
+            useToast().add({ icon: "circle-check", color: "green", message: "Le serveur a bien été supprimé" });
+        } catch (error) {
+            useToast().add({ icon: "circle-exclamation", color: "red", message: "Une erreur est survenue lors de la suppression du serveur" });
+        }
+    }
+    const getServerIndexById = (id: number) => {
         return servers.value.findIndex((server) => {
             return server.serverId === id
 
@@ -75,6 +88,7 @@ export default () => {
         servers,
         selectedServer,
         modifyServer,
+        deleteServer,
         setSelectedServer,
         get,
         create,

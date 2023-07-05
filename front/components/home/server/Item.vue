@@ -3,7 +3,7 @@ type Props = {
   isSelected: boolean;
   hasNotification?: boolean | null;
   bgColor: string;
-  setSelectedServer: Function;
+  server: IServer;
 };
 defineProps<Props>();
 const key = getCurrentInstance()?.vnode.key;
@@ -11,7 +11,7 @@ const key = getCurrentInstance()?.vnode.key;
 <template>
     <div class="flex items-center justify-center">
         <div
-          @click="setSelectedServer(key), useServer().setSelectedServer(key)"
+          @click="useServer().setSelectedServer(server.serverId), useServer().setSelectedServer(key)"
           class="flex w-12 h-12 ml-2 items-center justify-center rounded-xl hover:border-2 hover:border-spacing-4 hover:border-gray-300 active:border-4 active:duration-100"
         >
           <div

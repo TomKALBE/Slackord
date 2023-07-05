@@ -36,8 +36,9 @@ const modifyServer = async () => {
     }
 }
 
-const deleteServer = () => {
+const deleteServer = async () => {
     if (confirm('Vous êtes sur point de supprimer le serveur, êtes vous sûr ?')) {
+        useServer().deleteServer(useServer().selectedServer.value)
         closeButton.value.click()
     }
 }

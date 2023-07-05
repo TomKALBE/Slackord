@@ -22,11 +22,15 @@ interface ServerToClientEvents {
         data: IServerMemberRequest,
         callback?: Function
     ) => void;
-    "server.new-channel": (
+    "server.edit-server": (
         data: any,
         callback?: Function
     ) => void;
-    "server.edit-server": (
+    "server.delete-server": (
+        data: any,
+        callback?: Function
+    ) => void;
+    "server.new-channel": (
         data: any,
         callback?: Function
     ) => void;
@@ -64,11 +68,15 @@ interface ClientToServerEvents {
         data: IServerMemberRequest,
         callback?: Function
     ) => Promise<any>;
-    "client.new-channel": (
+    "client.edit-server": (
         data: any,
         callback?: Function
     ) => void;
-    "client.edit-server": (
+    "client.delete-server": (
+        data: any,
+        callback?: Function
+    ) => void;
+    "client.new-channel": (
         data: any,
         callback?: Function
     ) => void;
@@ -158,6 +166,27 @@ const getClientSocket = (url: string) => {
     );
 
     clientSocket.on(
+        "server.edit-server",
+        (data: any, callback) => {
+            console.log("new server settings :", data);
+            useServer().modifyServer(data)
+            if (callback) {
+                callback({ ok: true });
+            }
+        }
+    );
+    clientSocket.on(
+        "server.delete-server",
+        (data: any, callback) => {
+            console.log("deleted server :", data);
+            useServer().deleteServer({serverId: data.id})
+            if (callback) {
+                callback({ ok: true });
+            }
+        }
+    );
+
+    clientSocket.on(
         "server.new-channel",
         (data: any, callback) => {
             console.log("new channel created :", data);
@@ -168,16 +197,6 @@ const getClientSocket = (url: string) => {
         }
     );
 
-    clientSocket.on(
-        "server.edit-server",
-        (data: any, callback) => {
-            console.log("new server settings :", data);
-            useServer().modifyServer(data)
-            if (callback) {
-                callback({ ok: true });
-            }
-        }
-    );
 
     clientSocket.on(
         "server.edit-channel",
@@ -312,6 +331,17 @@ export const SocketService = {
         return new Promise((resolve, reject) => {
             clientSocket.emit(
                 "client.delete-channel",
+                data,
+                (response: any) => {
+                    resolve(response);
+                }
+            );
+        })
+    },
+    sendDeletedServer: (clientSocket: ClientSocket, data: any) => {
+        return new Promise((resolve, reject) => {
+            clientSocket.emit(
+                "client.delete-server",
                 data,
                 (response: any) => {
                     resolve(response);

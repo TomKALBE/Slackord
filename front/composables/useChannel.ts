@@ -9,7 +9,7 @@ export default () => {
     };
     const get = async () => {
         const res = await fetch(
-            `api/servers/${useServer().selectedServer.value.server.id}/channels`
+            `api/servers/${useServer().selectedServer.value.serverId}/channels`
         );
         const data = (await res.json()) as IChannel[];
         channels.value = data;
