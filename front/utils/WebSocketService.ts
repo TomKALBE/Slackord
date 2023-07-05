@@ -162,7 +162,7 @@ const getClientSocket = (url: string) => {
         "server.new-server-request",
         (data: IServerMemberRequest, callback) => {
             console.log("new server request :", data);
-            useServer().get()
+
             if (callback) {
                 callback({ ok: true });
             }
@@ -183,9 +183,7 @@ const getClientSocket = (url: string) => {
         "server.delete-server",
         (data: any, callback) => {
             console.log("deleted server :", data);
-            const index =useServer().getServerIndexById(data.id)
-            useServer().servers.value.splice(index, 1);
-            useServer().selectedServer.value = useServer().servers.value[1]
+            useServer().deleteServer({serverId: data.id})
             if (callback) {
                 callback({ ok: true });
             }
@@ -196,7 +194,6 @@ const getClientSocket = (url: string) => {
         "server.new-channel",
         (data: any, callback) => {
             console.log("new channel created :", data);
-            useChannel().channels.value = [...useChannel().channels.value, data]
 
             if (callback) {
                 callback({ ok: true });

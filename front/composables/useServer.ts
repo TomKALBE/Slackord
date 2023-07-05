@@ -96,12 +96,10 @@ export default () => {
         try {
             const index = getServerIndexById(server.serverId)
             servers.value.splice(index, 1);
-            console.log("deleete la")
             const res = await SocketService.sendDeletedServer(useNuxtApp().$socket, { id: server.serverId })
             if (!res.ok)
                 throw new Error("Erreur lors de la suppression du channel")
-            console.log("deleete la")
-            selectedServer.value = servers.value[1]
+            selectedServer.value = servers.value[0]
             useToast().add({ icon: "circle-check", color: "green", message: "Le serveur a bien été supprimé" });
         } catch (error) {
             useToast().add({ icon: "circle-exclamation", color: "red", message: "Une erreur est survenue lors de la suppression du serveur" });
