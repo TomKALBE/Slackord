@@ -9,6 +9,8 @@ interface ServerToClientEvents {
     "server.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
     "server.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
+    "server.answer-server-request": (data: any, callback?: Function) => void;
+    "server.new-channel": (data: any, callback?: Function) => void;
     "server.edit-server": (data: any, callback?: Function) => void;
     "server.edit-channel": (data: any, callback?: Function) => void;
 }
@@ -268,8 +270,10 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
     socket.on("client.new-server-request", async (data, callback) => {
 
         const serverData = await (fetch(`${Env.API_URL}/servers?name=${data.name}`).then(res => res.json()));
-        console.log(serverData)
-        if (serverData)
+
+        const oldRequest = await (fetch(`${Env.API_URL}/users/${socket.data.userId}/servers-requests?serverId=${data.name}&requestStatus_ne=DECLINED`).then(res => res.json()))
+
+        if (serverData && oldRequest?.length === 0) {
             fetch(`${Env.API_URL}/server-requests`,
                 {
                     method: "POST",
@@ -299,6 +303,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                     callback({ ok: false, msg: "Une erreur s'est produite" });
                 }
             })
+        }
     })
     socket.on("client.answer-server-request", async (data, callback) => {
         fetch(`${Env.API_URL}/server-requests/${data.id}`,
@@ -312,8 +317,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                 const json = await response.json();
                 const serverData = await (fetch(`${Env.API_URL}/servers?id=${data.serverId}`).then(res => res.json()));
                 const receiverSocketId = socketsMap.get(data.userId);
-                console.log(socketsMap)
-                if(data.requestStatus === 'ACCEPTED'){
+                if (data.requestStatus === 'ACCEPTED') {
                     await fetch(`${Env.API_URL}/members`, {
                         method: 'POST',
                         headers: { "content-type": "application/json" },
@@ -323,10 +327,12 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                         })
                     })
                 }
+
                 if (receiverSocketId) {
                     io.to(receiverSocketId)
-                        .emit('server.new-server-request', { server:{ id: data.id, userId: serverData[0].user_id, name:'name' }, serverId: data.id, userId: serverData[0].user_id })
+                        .emit('server.answer-server-request', { ...data })
                 }
+
                 if (callback) {
                     callback(json);
                 }
