@@ -110,25 +110,304 @@
       "receiver_id": 1,
       "type": "CHANNEL",
       "id": 14
+    },
+    {
+      "content": "eee",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 15
+    },
+    {
+      "content": "eee",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 16
+    },
+    {
+      "content": "zeknfoznfoznfozenf",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 17
+    },
+    {
+      "content": "zeo,fzeofozf",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 18
+    },
+    {
+      "content": "Bonjour",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 19
+    },
+    {
+      "content": "Bonjour",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 20
+    },
+    {
+      "content": "sss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 21
+    },
+    {
+      "content": "sss",
+      "user_id": 1,
+      "receiver_id": 3,
+      "type": "CHANNEL",
+      "id": 22
+    },
+    {
+      "content": "sss",
+      "user_id": 2,
+      "receiver_id": 3,
+      "type": "CHANNEL",
+      "id": 23
+    },
+    {
+      "content": "ssss",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "PRIVATE",
+      "id": 24
+    },
+    {
+      "content": "ssss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 25
+    },
+    {
+      "content": "ssss",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 26
+    },
+    {
+      "content": "sss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 27
+    },
+    {
+      "content": "dddd",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 28
+    },
+    {
+      "content": "sss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 29
+    },
+    {
+      "content": "ssss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 30
+    },
+    {
+      "content": "ssss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 31
+    },
+    {
+      "content": "sss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 32
+    },
+    {
+      "content": "dd",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 33
+    },
+    {
+      "content": "sss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 34
+    },
+    {
+      "content": "ss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 35
+    },
+    {
+      "content": "ssss",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 36
+    },
+    {
+      "content": "sss",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 37
+    },
+    {
+      "content": "ffffffffffffff",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 38
+    },
+    {
+      "content": "ddddddddddd",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 39
+    },
+    {
+      "content": "tttttttttt",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 40
+    },
+    {
+      "content": "yyyyyyyy",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 41
+    },
+    {
+      "content": "eeeeeeeeeeeee",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 42
+    },
+    {
+      "content": "hnuhnuni",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 43
+    },
+    {
+      "content": "ssssssssss",
+      "user_id": 1,
+      "receiver_id": 3,
+      "type": "CHANNEL",
+      "id": 44
+    },
+    {
+      "content": "uhnuhnunu",
+      "user_id": 2,
+      "receiver_id": 5,
+      "type": "CHANNEL",
+      "id": 45
+    },
+    {
+      "content": ",nkjnk",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 46
+    },
+    {
+      "content": "test",
+      "user_id": 2,
+      "type": "CHANNEL",
+      "id": 47
+    },
+    {
+      "content": "dede",
+      "user_id": 1,
+      "receiver_id": 12,
+      "type": "CHANNEL",
+      "id": 48
+    },
+    {
+      "content": "ici",
+      "user_id": 2,
+      "receiver_id": 8,
+      "type": "CHANNEL",
+      "id": 49
+    },
+    {
+      "content": "coucou",
+      "user_id": 2,
+      "receiver_id": 8,
+      "type": "CHANNEL",
+      "id": 50
+    },
+    {
+      "content": "ii",
+      "user_id": 2,
+      "receiver_id": 8,
+      "type": "CHANNEL",
+      "id": 51
+    },
+    {
+      "content": "eeee",
+      "user_id": 1,
+      "receiver_id": 8,
+      "type": "CHANNEL",
+      "id": 52
+    },
+    {
+      "content": "eroinneozrignzr",
+      "user_id": 2,
+      "receiver_id": 8,
+      "type": "CHANNEL",
+      "id": 53
+    },
+    {
+      "content": "zejofnzeofjnz",
+      "user_id": 1,
+      "receiver_id": 8,
+      "type": "CHANNEL",
+      "id": 54
     }
   ],
   "users": [
     {
       "id": 1,
       "email": "test1@test.com",
-      "pseudo": "test1",
+      "pseudo": "Tom",
       "privateChannels": 2,
       "users": [
         {
           "id": 3
         }
       ],
-      "state": "ONLINE"
+      "state": "DO NOT DISTURB"
     },
     {
       "id": 2,
       "email": "test2@test.com",
-      "pseudo": "test2",
+      "pseudo": "Dieudonné",
       "privateChannels": 1,
       "users": [],
       "state": "ONLINE"
@@ -203,22 +482,22 @@
       "name": "Test Server"
     },
     {
-      "user_id": 1,
+      "userId": 1,
       "name": "test",
       "id": 2
     },
     {
-      "user_id": 1,
+      "userId": 1,
       "name": "dede",
       "id": 3
     },
     {
-      "user_id": 1,
+      "userId": 1,
       "name": "Server de détente",
       "id": 4
     },
     {
-      "user_id": 1,
+      "userId": 1,
       "name": "test de nouveau",
       "id": 5
     }
@@ -265,6 +544,36 @@
       "serverId": 1,
       "url": "channel",
       "id": 7
+    },
+    {
+      "name": "Premier channel",
+      "serverId": 3,
+      "url": "channel",
+      "id": 8
+    },
+    {
+      "name": "deuxieme",
+      "serverId": 3,
+      "url": "channel",
+      "id": 9
+    },
+    {
+      "name": "Troisieme",
+      "serverId": 3,
+      "url": "channel",
+      "id": 10
+    },
+    {
+      "name": "quatrieme",
+      "serverId": 3,
+      "url": "channel",
+      "id": 11
+    },
+    {
+      "name": "Cinquieme",
+      "serverId": 3,
+      "url": "channel",
+      "id": 12
     }
   ],
   "members": [
@@ -289,10 +598,18 @@
       "id": 4
     },
     {
-      "serverId": 5,
-      "userId": 1,
+      "serverId": 3,
+      "userId": 2,
       "id": 5
     }
   ],
-  "server-requests": []
+  "server-requests": [
+    {
+      "userId": 2,
+      "name": "dede",
+      "requestStatus": "ACCEPTED",
+      "serverId": 3,
+      "id": 1
+    }
+  ]
 }

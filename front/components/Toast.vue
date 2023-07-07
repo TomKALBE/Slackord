@@ -163,7 +163,8 @@ function timeout(ms: number) {
 <template>
     <div
         id="mon-element"
-        class="hidden absolute right-0 left-0 w-10 ml-auto mr-auto top-0 flex items-center justify-center bg-slate-800 opacity-40 overflow-hidden z-10"
+        style="z-index: 1000;"
+        class="hidden absolute right-0 left-0 w-10 ml-auto mr-auto top-0 flex items-center justify-center bg-slate-800 opacity-40 overflow-hidden"
         role="alert"
     >
         <FontAwesomeIcon id="toast-icon" :icon="['fa', icon]" style="width: 20px; height: 20px;" :class="'text-' + color + '-500'" />

@@ -213,6 +213,7 @@ const numberOfFriendRequests = computed(() => {
                 class="lg:w-3/12 w-4/12 bg-slate-700 border-r-2 border-t-2 border-slate-800"
             >
                 <ModalServerInfo />
+                <ModalServerInvitation/>
                 <!-- SECTION Header -->
                 <template v-if="currentServer">
                     <div
@@ -236,6 +237,9 @@ const numberOfFriendRequests = computed(() => {
                             <div
                                 id="mon-bouton"
                                 class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10"
+                                :data-modal-target="INVITATION_SERVER_MODAL"
+                                :data-modal-toggle="INVITATION_SERVER_MODAL"
+                                @click="useServer().getServerInvitation()"
                             >
                                 <FontAwesomeIcon
                                     class="w-5 h-5 text-white"

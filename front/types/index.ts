@@ -121,10 +121,11 @@ declare global {
         name: string,
         url: string,
     }
-    interface IServerMemberRequest {
-        serverId: number,
-        userId: number
-        user?: Partial<IUser>,
+    interface IServerInvitation {
+        id: number;
+        userId: number;
+        serverId: number;
+        name: string;
         requestStatus: "ACCEPTED" | "DECLINED" | "PENDING"
     }
 }

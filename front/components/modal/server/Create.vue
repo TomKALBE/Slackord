@@ -22,13 +22,14 @@ const createNewServer = async () => {
 }
 const joinNewServer = async () => {
     const $modalElement: HTMLElement = document.querySelector('#' + ADD_SERVER_MODAL);
-    const modal: ModalInterface = new Modal($modalElement)
+    const modal: ModalInterface = new Modal($modalElement, {backdropClasses:"",
+    backdrop:'static'})
     if (serverName.value == "") return serverNameError.value = true;
     serverNameError.value = false;
     // joinServer.value = !joinServer
     try {
         await SocketService.sendServerMemberRequest(useNuxtApp().$socket, { userId: useAuth().user.value.id, name: serverName.value })
-        // modal.hide();
+        modal.hide()
     } catch (error) {
         console.log(error)
     }

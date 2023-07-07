@@ -9,8 +9,6 @@ interface ServerToClientEvents {
     "server.answer-friend-request": (data: RelationshipResource, callback?: Function) => void;
     "server.new-user-state": (data: Partial<UserResource>, callback?: Function) => void;
     "server.new-server-request": (data: ServerMemberRequestResource, callback?: Function) => void;
-    "server.answer-server-request": (data: any, callback?: Function) => void;
-    "server.new-channel": (data: any, callback?: Function) => void;
     "server.edit-server": (data: any, callback?: Function) => void;
     "server.edit-channel": (data: any, callback?: Function) => void;
 }
@@ -185,7 +183,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
                         }
 
                         const channelRoom = socket.data.channelsId?.get(data.user_id)
-
+                        console.log(channelRoom, data, socket.data)
                         if (channelRoom) {
                             socket.to(channelRoom).emit('server.new-message', data);
                         }
@@ -269,52 +267,68 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
 
     socket.on("client.new-server-request", async (data, callback) => {
 
-        fetch(`${Env.API_URL}/server-requests`,
-            {
-                method: "POST",
-                headers: { "content-type": "application/json" },
-                body: JSON.stringify(data)
-            }
-        ).then(async (response) => {
-            if (response.ok) {
-
-                const serverData = await (fetch(`${Env.API_URL}/servers/?=name${data.name}`).then(res => res.json()));
-
-                const receiverSocketId = socketsMap.get(serverData.userId);
-
-                if (receiverSocketId) {
-                    io.to(receiverSocketId)
-                        .emit('server.new-server-request', { ...data, user: socket.data.user })
+        const serverData = await (fetch(`${Env.API_URL}/servers?name=${data.name}`).then(res => res.json()));
+        console.log(serverData)
+        if (serverData)
+            fetch(`${Env.API_URL}/server-requests`,
+                {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify({
+                        ...data,
+                        requestStatus: data?.requestStatus ?? "PENDING",
+                        serverId: serverData[0].id
+                    })
                 }
+            ).then(async (response) => {
+                if (response.ok) {
+                    const receiverSocketId = socketsMap.get(serverData.userId);
 
+                    if (receiverSocketId) {
+                        io.to(receiverSocketId)
+                            .emit('server.new-server-request', { ...data, user: socket.data.user })
+                    }
+
+                    if (callback) {
+                        callback({ ok: true });
+                    }
+                }
+            }).catch((error) => {
+                console.error(error);
                 if (callback) {
-                    callback({ ok: true });
+                    callback({ ok: false, msg: "Une erreur s'est produite" });
                 }
-            }
-        }).catch((error) => {
-            console.error(error);
-            if (callback) {
-                callback({ ok: false, msg: "Une erreur s'est produite" });
-            }
-        })
+            })
     })
     socket.on("client.answer-server-request", async (data, callback) => {
         fetch(`${Env.API_URL}/server-requests/${data.id}`,
             {
                 method: "PATCH",
                 headers: { "content-type": "application/json" },
-                body: JSON.stringify({ request_status: data.request_status })
+                body: JSON.stringify({ requestStatus: data.requestStatus })
             }
         ).then(async (response) => {
             if (response.ok) {
-                const serverData = await (fetch(`${Env.API_URL}/servers/?=name${data.name}`).then(res => res.json()));
-                const receiverSocketId = socketsMap.get(serverData.userId);
+                const json = await response.json();
+                const serverData = await (fetch(`${Env.API_URL}/servers?id=${data.serverId}`).then(res => res.json()));
+                const receiverSocketId = socketsMap.get(data.userId);
+                console.log(socketsMap)
+                if(data.requestStatus === 'ACCEPTED'){
+                    await fetch(`${Env.API_URL}/members`, {
+                        method: 'POST',
+                        headers: { "content-type": "application/json" },
+                        body: JSON.stringify({
+                            serverId: serverData[0].id,
+                            userId: data.userId
+                        })
+                    })
+                }
                 if (receiverSocketId) {
                     io.to(receiverSocketId)
-                        .emit('server.new-server-request', { ...data, user: socket.data.user })
+                        .emit('server.new-server-request', { server:{ id: data.id, userId: serverData[0].user_id, name:'name' }, serverId: data.id, userId: serverData[0].user_id })
                 }
                 if (callback) {
-                    callback({ ok: true });
+                    callback(json);
                 }
             }
         }).catch((error) => {
@@ -335,8 +349,7 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEve
         ).then(async (response) => {
             if (response.ok) {
                 const channelInfo = await response.json()
-                const members = await (fetch(`${Env.API_URL}/servers/${data.id}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
-
+                const members = await (fetch(`${Env.API_URL}/servers/${data.serverId}/members?userId_ne=${socket.data.userId}`).then(res => res.json()));
                 if (callback) {
                     callback({ ok: true, ...channelInfo });
                 }
