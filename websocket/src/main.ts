@@ -471,6 +471,8 @@ const io = new Server<
             if (callback) {
                 callback({ ok: false, msg: "Une erreur s'est produite" });
             }
+        })
+    })
 
     socket.on("client.new-channel", async (data: any, callback) => {
         fetch(`${Env.API_URL}/channels`,
