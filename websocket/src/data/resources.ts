@@ -31,8 +31,10 @@ export type RelationshipResource = {
 
 export type ServerMemberRequestResource = {
     id: number;
+    userId?: number;
     user?: Partial<UserResource>;
     serverId: number;
+    server?: any;
     name: string;
     requestStatus: "ACCEPTED" | "DECLINED" | "PENDING"
 };

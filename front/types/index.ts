@@ -121,4 +121,11 @@ declare global {
         name: string,
         url: string,
     }
+    interface IServerInvitation {
+        id: number;
+        userId: number;
+        serverId: number;
+        name: string;
+        requestStatus: "ACCEPTED" | "DECLINED" | "PENDING"
+    }
 }

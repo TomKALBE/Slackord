@@ -327,6 +327,97 @@
       "receiver_id": 5,
       "type": "CHANNEL",
       "id": 45
+    },
+    {
+      "content": "coucou",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "PRIVATE",
+      "id": 46
+    },
+    {
+      "content": "salut",
+      "user_id": 1,
+      "receiver_id": 2,
+      "type": "PRIVATE",
+      "id": 47
+    },
+    {
+      "content": "You",
+      "user_id": 1,
+      "receiver_id": 6,
+      "type": "CHANNEL",
+      "id": 48
+    },
+    {
+      "content": "Salut",
+      "user_id": 2,
+      "receiver_id": 6,
+      "type": "CHANNEL",
+      "id": 49
+    },
+    {
+      "content": "Salut",
+      "user_id": 2,
+      "receiver_id": 8,
+      "type": "CHANNEL",
+      "id": 50
+    },
+    {
+      "content": "ici",
+      "user_id": 1,
+      "receiver_id": 13,
+      "type": "CHANNEL",
+      "id": 51
+    },
+    {
+      "content": "Salut",
+      "user_id": 1,
+      "receiver_id": 19,
+      "type": "CHANNEL",
+      "id": 52
+    },
+    {
+      "content": "ça va bien ?",
+      "user_id": 2,
+      "receiver_id": 19,
+      "type": "CHANNEL",
+      "id": 53
+    },
+    {
+      "content": "Super channel non ?",
+      "user_id": 1,
+      "receiver_id": 19,
+      "type": "CHANNEL",
+      "id": 54
+    },
+    {
+      "content": "Yo",
+      "user_id": 2,
+      "receiver_id": 3,
+      "type": "CHANNEL",
+      "id": 55
+    },
+    {
+      "content": "ça va ?",
+      "user_id": 1,
+      "receiver_id": 3,
+      "type": "CHANNEL",
+      "id": 56
+    },
+    {
+      "content": "jsp",
+      "user_id": 1,
+      "receiver_id": 20,
+      "type": "CHANNEL",
+      "id": 57
+    },
+    {
+      "content": "nickel",
+      "user_id": 2,
+      "receiver_id": 20,
+      "type": "CHANNEL",
+      "id": 58
     }
   ],
   "users": [
@@ -420,24 +511,24 @@
       "name": "Test Server"
     },
     {
-      "user_id": 1,
+      "userId": 1,
       "name": "test",
       "id": 2
     },
     {
-      "user_id": 1,
-      "name": "dede",
-      "id": 3
-    },
-    {
-      "user_id": 1,
+      "userId": 1,
       "name": "Server de détente",
       "id": 4
     },
     {
-      "user_id": 1,
+      "userId": 1,
       "name": "test de nouveau",
       "id": 5
+    },
+    {
+      "user_id": 1,
+      "name": "dede",
+      "id": 6
     }
   ],
   "channels": [
@@ -491,25 +582,43 @@
       "id": 1
     },
     {
-      "serverId": 1,
-      "userId": 2,
-      "id": 2
-    },
-    {
-      "serverId": 3,
-      "userId": 1,
-      "id": 3
-    },
-    {
       "serverId": 4,
       "userId": 1,
       "id": 4
     },
     {
-      "serverId": 5,
-      "userId": 1,
+      "serverId": 1,
+      "userId": 2,
       "id": 5
+    },
+    {
+      "serverId": 6,
+      "userId": 1,
+      "id": 6
     }
   ],
-  "server-requests": []
+  "server-requests": [
+    {
+      "userId": 2,
+      "name": "Test Server",
+      "requestStatus": "ACCEPTED",
+      "serverId": 1,
+      "id": 1
+    },
+    {
+      "userId": 2,
+      "name": "Test Server",
+      "requestStatus": "ACCEPTED",
+      "serverId": 1,
+      "id": 3
+    },
+    {
+      "userId": 2,
+      "userName": "Dieudonné",
+      "name": "Dieudonné",
+      "requestStatus": "PENDING",
+      "serverId": 6,
+      "id": 4
+    }
+  ]
 }

@@ -1,6 +1,20 @@
 export default () => {
     const servers = useState<IServer[]>("servers", () => []);
     const selectedServer = useState<IServer>("selectedServer", () => 1);
+    const serversInvitations = useState<IServerInvitation[]>("serverInvitation", () => []);
+
+    const getServerInvitation = async () => {
+        try{
+            console.log("ici")
+            const res = await fetch(`api/servers/${selectedServer.value.serverId}/server-requests`);
+            const json = await res.json()
+            serversInvitations.value = json
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+
     const setSelectedServer = (id: number) => {
 
         selectedServer.value = servers.value[id];
@@ -54,6 +68,19 @@ export default () => {
             console.log(error)
         }
     };
+    const acceptMember = async (index:Number, type: 'DECLINED' | 'ACCEPTED') => {
+        try {
+            const res = await SocketService.answerServerMemberRequest(useNuxtApp().$socket, {...serversInvitations.value[index], requestStatus: type} )
+            if(!res)
+                throw new Error("Error while accepting member")
+            serversInvitations.value[index] = res;
+            useToast().add({ icon: "circle-check", color: "green", message: `Utilisateur ${res.requestStatus === 'ACCEPTED' ? 'accepté' : 'refusé'}` });
+
+        } catch (error) {
+            useToast().add({ icon: "circle-exclamation", color: "red", message: "Une erreur est survenue" });
+            console.log(error)
+        }
+    }
     const modifyServer = (server: IServer) => {
         let index;
         if (server.server === undefined) {
@@ -69,10 +96,12 @@ export default () => {
         try {
             const index = getServerIndexById(server.serverId)
             servers.value.splice(index, 1);
+            console.log("deleete la")
             const res = await SocketService.sendDeletedServer(useNuxtApp().$socket, { id: server.serverId })
             if (!res.ok)
                 throw new Error("Erreur lors de la suppression du channel")
-            selectedServer.value = servers.value[0]
+            console.log("deleete la")
+            selectedServer.value = servers.value[1]
             useToast().add({ icon: "circle-check", color: "green", message: "Le serveur a bien été supprimé" });
         } catch (error) {
             useToast().add({ icon: "circle-exclamation", color: "red", message: "Une erreur est survenue lors de la suppression du serveur" });
@@ -86,7 +115,11 @@ export default () => {
     }
     return {
         servers,
+        serversInvitations,
         selectedServer,
+        getServerInvitation,
+        acceptMember,
+        getServerIndexById,
         modifyServer,
         deleteServer,
         setSelectedServer,

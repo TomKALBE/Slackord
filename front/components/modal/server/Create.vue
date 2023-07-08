@@ -11,6 +11,7 @@ const createNewServer = async () => {
     const $modalElement: HTMLElement = document.querySelector('#' + ADD_SERVER_MODAL);
     const modal: ModalInterface = new Modal($modalElement)
     if (serverName.value == "") return serverNameError.value = true;
+    if (serverName.value == "") return serverNameError.value = true;
     serverNameError.value = false;
     createServer.value = !createServer
     try {
@@ -22,15 +23,20 @@ const createNewServer = async () => {
 }
 const joinNewServer = async () => {
     const $modalElement: HTMLElement = document.querySelector('#' + ADD_SERVER_MODAL);
-    const modal: ModalInterface = new Modal($modalElement)
+    const modal: ModalInterface = new Modal($modalElement, {backdropClasses:"",
+    backdrop:'static'})
     if (serverName.value == "") return serverNameError.value = true;
     serverNameError.value = false;
     // joinServer.value = !joinServer
     try {
-        await SocketService.sendServerMemberRequest(useNuxtApp().$socket, { userId: useAuth().user.value.id, name: serverName.value })
-        // modal.hide();
+        const res = await SocketService.sendServerMemberRequest(useNuxtApp().$socket, { userId: useAuth().user.value.id, userName: useAuth().user.value.pseudo,  name: serverName.value })
+        if(!res.ok)
+            throw new Error("Une erreur est survenue")
+        useToast().add({ icon: "circle-check", color: "green", message: "La demande a été envoyé" });
+        modal.hide()
     } catch (error) {
         console.log(error)
+        useToast().add({ icon: "circle-exclamation", color: "red", message: "Le serveur n'existe pas" });
     }
 }
 </script>
