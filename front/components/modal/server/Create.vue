@@ -15,7 +15,7 @@ const createNewServer = async () => {
     serverNameError.value = false;
     createServer.value = !createServer
     try {
-        await create({ user_id: useAuth().user.value.id, name: serverName.value });
+        await create({ userId: useAuth().user.value.id, name: serverName.value });
         modal.hide();
     } catch (error) {
         return;
