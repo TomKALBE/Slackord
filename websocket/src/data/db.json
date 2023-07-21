@@ -1,0 +1,298 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "content": "Premier messsage",
+      "upvote": null,
+      "type": "PRIVATE",
+      "created_at": 17263571256731,
+      "updated_at": 17263571256731,
+      "deleted_at": null,
+      "user_id": 1,
+      "receiver_id": 2
+    },
+    {
+      "id": 2,
+      "content": "Deuxieme messsage",
+      "upvote": null,
+      "type": "PRIVATE",
+      "created_at": 17263571256731,
+      "updated_at": 17263571256731,
+      "deleted_at": null,
+      "user_id": 2,
+      "receiver_id": 1
+    },
+    {
+      "id": 3,
+      "content": "Premier messsage",
+      "upvote": null,
+      "type": "PRIVATE",
+      "created_at": 17263571256731,
+      "updated_at": 17263571256731,
+      "deleted_at": null,
+      "user_id": 3,
+      "receiver_id": 1,
+      "status": "INVISIBLE"
+    },
+    {
+      "content": "bonjour",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "PRIVATE",
+      "id": 4
+    },
+    {
+      "content": "test",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "PRIVATE",
+      "id": 5
+    },
+    {
+      "content": "test",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "PRIVATE",
+      "id": 6
+    },
+    {
+      "content": "Yo",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 7
+    },
+    {
+      "content": "test",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 8
+    },
+    {
+      "content": "Coucou",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 9
+    },
+    {
+      "content": "New message",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "PRIVATE",
+      "id": 10
+    },
+    {
+      "content": "On test",
+      "user_id": 1,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 11
+    },
+    {
+      "content": "ici",
+      "user_id": 1,
+      "receiver_id": 2,
+      "type": "PRIVATE",
+      "id": 12
+    },
+    {
+      "content": "ici",
+      "user_id": 1,
+      "receiver_id": 2,
+      "type": "PRIVATE",
+      "id": 13
+    },
+    {
+      "content": "test",
+      "user_id": 2,
+      "receiver_id": 1,
+      "type": "CHANNEL",
+      "id": 14
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "test1@test.com",
+      "pseudo": "test1",
+      "privateChannels": 2,
+      "users": [
+        {
+          "id": 3
+        }
+      ],
+      "state": "ONLINE"
+    },
+    {
+      "id": 2,
+      "email": "test2@test.com",
+      "pseudo": "test2",
+      "privateChannels": 1,
+      "users": [],
+      "state": "ONLINE"
+    },
+    {
+      "id": 3,
+      "email": "test3@test.com",
+      "pseudo": "test3",
+      "privateChannels": 1,
+      "users": [
+        {
+          "id": 1
+        }
+      ],
+      "state": "INVISIBLE"
+    }
+  ],
+  "relationships": [
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 1
+    },
+    {
+      "sender_id": 1,
+      "receiver_id": 2,
+      "request_status": "PENDING",
+      "id": 2
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "ACCEPTED",
+      "id": 3
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 4
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 5
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": 1,
+      "request_status": "DECLINED",
+      "id": 6
+    },
+    {
+      "sender_id": 1,
+      "receiver_id": " ",
+      "request_status": "PENDING",
+      "id": 7
+    },
+    {
+      "sender_id": 2,
+      "receiver_id": "1",
+      "request_status": "PENDING",
+      "id": 8
+    }
+  ],
+  "servers": [
+    {
+      "id": 1,
+      "userId": 1,
+      "name": "Test Server"
+    },
+    {
+      "user_id": 1,
+      "name": "test",
+      "id": 2
+    },
+    {
+      "user_id": 1,
+      "name": "dede",
+      "id": 3
+    },
+    {
+      "user_id": 1,
+      "name": "Server de détente",
+      "id": 4
+    },
+    {
+      "user_id": 1,
+      "name": "test de nouveau",
+      "id": 5
+    }
+  ],
+  "channels": [
+    {
+      "id": 1,
+      "serverId": 1,
+      "name": "channel 1 1",
+      "url": "channel-1"
+    },
+    {
+      "id": 2,
+      "serverId": 2,
+      "name": "channel 1 2",
+      "url": "channel-2"
+    },
+    {
+      "name": "Channel 2 1",
+      "serverId": 1,
+      "url": "channel",
+      "id": 3
+    },
+    {
+      "name": "channel 3 1",
+      "serverId": 1,
+      "url": "channel",
+      "id": 4
+    },
+    {
+      "name": "test",
+      "serverId": 1,
+      "url": "channel",
+      "id": 5
+    },
+    {
+      "name": "test2",
+      "serverId": 1,
+      "url": "channel",
+      "id": 6
+    },
+    {
+      "name": "test3",
+      "serverId": 1,
+      "url": "channel",
+      "id": 7
+    }
+  ],
+  "members": [
+    {
+      "serverId": 1,
+      "userId": 1,
+      "id": 1
+    },
+    {
+      "serverId": 1,
+      "userId": 2,
+      "id": 2
+    },
+    {
+      "serverId": 3,
+      "userId": 1,
+      "id": 3
+    },
+    {
+      "serverId": 4,
+      "userId": 1,
+      "id": 4
+    },
+    {
+      "serverId": 5,
+      "userId": 1,
+      "id": 5
+    }
+  ],
+  "server-requests": []
+}
