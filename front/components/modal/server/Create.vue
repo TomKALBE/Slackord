@@ -32,7 +32,7 @@ const joinNewServer = async () => {
         const res = await SocketService.sendServerMemberRequest(useNuxtApp().$socket, { userId: useAuth().user.value.id, userName: useAuth().user.value.pseudo,  name: serverName.value })
         if(!res.ok)
             throw new Error("Une erreur est survenue")
-        useToast().add({ icon: "circle-check", color: "green", message: "La demande a été envoyé" });
+        useToast().add({ icon: "circle-check", color: "green", message: "La demande a été envoyée" });
         modal.hide()
     } catch (error) {
         console.log(error)

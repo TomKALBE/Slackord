@@ -228,7 +228,18 @@ const numberOfFriendRequests = computed(() => {
                                 @click="handleClick"
                                 :data-modal-target="MODIFY_SERVER_MODAL"
                                 :data-modal-toggle="MODIFY_SERVER_MODAL"
+                                v-if="useServer().selectedServer.value.server.userId == useAuth().user.value?.id"
                             >
+                                <p class="text-xl text-white">{{ currentServer.server?.name }}</p>
+                                <FontAwesomeIcon
+                                    class="w-4 text-gray-100 ml-2"
+                                    :icon="`fa-chevron-down`"
+                                />
+                            </div>
+                            <div
+                                class="inline-flex items-center p-2 hover:bg-slate-550 hover:rounded cursor-pointer"
+                                v-else
+                                >
                                 <p class="text-xl text-white">{{ currentServer.server?.name }}</p>
                                 <FontAwesomeIcon
                                     class="w-4 text-gray-100 ml-2"
@@ -241,6 +252,15 @@ const numberOfFriendRequests = computed(() => {
                                 :data-modal-target="INVITATION_SERVER_MODAL"
                                 :data-modal-toggle="INVITATION_SERVER_MODAL"
                                 @click="useServer().getServerInvitation()"
+                                v-if="useServer().selectedServer.value.server.userId == useAuth().user.value?.id"
+                            >
+                                <FontAwesomeIcon
+                                    class="w-5 h-5 text-white"
+                                    :icon="['far', 'bell']"
+                                />
+                            </div>
+                            <div v-else 
+                                class="flex items-center justify-center hover:bg-slate-550 hover:rounded-full cursor-pointer w-10 h-10"
                             >
                                 <FontAwesomeIcon
                                     class="w-5 h-5 text-white"
